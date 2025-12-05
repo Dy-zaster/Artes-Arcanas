@@ -61,8 +61,31 @@ At runtime `TcoleccionGraficosTablero` loads each bitmap whose descriptor has `d
 
 UI boards (`fondo.bmp`, `menu.jpg`, `barra.bmp`, `obj.jpg`, `ros.jpg`, `cjr.jpg`) are loaded through `Graficador` helpers. They already use conventional bitmap/JPEG formats, so data extraction mainly involves lossless conversion to PNG and mapping sprite rectangles by reading existing constants in `Juego.pas`/`UCliente.pas`.
 
+## Atlas builder
+
+The repository now includes a small CLI (`Tools/AtlasBuilder`) that repacks the legacy `grf/*.bmp` files into Texture2D-friendly atlases alongside a JSON manifest. The MonoGame client automatically loads the manifest/atlases (if present) and falls back to the raw BMPs when they are missing.
+
+```bash
+cd Tools/AtlasBuilder
+DOTNET_CLI_HOME="$PWD" dotnet run -- \
+    --source "../../Original Pascal/Laa/grf" \
+    --output "../../MonoGameClient/content/graphics/atlases" \
+    --atlas-size 2048
+```
+
+- `--source` defaults to the legacy `Original Pascal/Laa/grf` folder.
+- `--output` defaults to `MonoGameClient/content/graphics/atlases`.
+- `--atlas-size` controls the square dimensions of each atlas (pixels). Increase it if you want fewer atlas files, decrease it to avoid GPU limits.
+
+The command produces:
+
+- `atlas_manifest.json` – describes every sprite’s atlas/rectangle coordinates.
+- `atlas_00.png`, `atlas_01.png`, … – the packed textures.
+
+Drop the generated folder under `MonoGameClient/content/graphics/atlases` (already part of the fallback search roots). When absent, the client continues to stream the original BMPs directly from `Original Pascal/Laa/grf`.
+
 ## Action items
 
 - [ ] Write a converter that walks `grf/`, finds each `.cr9`, and emits JSON descriptors plus PNG atlases.
-- [ ] Recreate the `oc.b` metadata in a cross-platform format and generate a lookup table to drive MonoGame's tile renderer.
+- [x] Recreate the `oc.b` metadata in a cross-platform format and generate a lookup table to drive MonoGame's tile renderer.
 - [ ] Document per-asset transparency expectations (magenta key vs. alpha) so SpriteBatch settings match the Delphi behavior.

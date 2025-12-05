@@ -1,0 +1,250 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using Laa.Content.Core.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace Laa.Monogame.Client.Rendering;
+
+public sealed class GraphicTextureProvider : IDisposable
+{
+    private readonly GraphicsDevice _graphicsDevice;
+    private readonly GraphicDocument _document;
+    private readonly List<string> _searchRoots;
+    private readonly Dictionary<int, GraphicTextureEntry> _cache = new();
+    private readonly Dictionary<string, AtlasSpriteEntry> _atlasEntries = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, Texture2D> _atlasTextures = new(StringComparer.OrdinalIgnoreCase);
+    private readonly List<Texture2D> _ownedTextures = new();
+
+    public GraphicTextureProvider(GraphicsDevice graphicsDevice, GraphicDocument document, IEnumerable<string> searchRoots)
+    {
+        _graphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
+        _document = document ?? throw new ArgumentNullException(nameof(document));
+        _searchRoots = searchRoots?.Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Where(Directory.Exists)
+            .ToList() ?? new List<string>();
+        LoadAtlasManifests();
+    }
+
+    public bool TryGetTexture(int descriptorIndex, out GraphicTextureEntry entry)
+    {
+        entry = default;
+        if (descriptorIndex < 0 || descriptorIndex >= _document.Descriptors.Count)
+        {
+            return false;
+        }
+
+        if (_cache.TryGetValue(descriptorIndex, out var cached))
+        {
+            entry = cached;
+            return true;
+        }
+
+        var descriptor = _document.Descriptors[descriptorIndex];
+        var key = ResolveTextureKey(descriptorIndex);
+        if (key is not null && _atlasEntries.TryGetValue(key, out var atlasSprite))
+        {
+            var atlasTexture = GetAtlasTexture(atlasSprite);
+            var atlasEntry = new GraphicTextureEntry(
+                atlasTexture,
+                new Rectangle(atlasSprite.X, atlasSprite.Y, atlasSprite.Width, atlasSprite.Height),
+                descriptor.PosX,
+                descriptor.PosY,
+                descriptor.ReflectedPosX,
+                descriptor.AlignY);
+            _cache[descriptorIndex] = atlasEntry;
+            entry = atlasEntry;
+            return true;
+        }
+
+        var fileName = ResolveFileName(descriptorIndex);
+        if (fileName is null)
+        {
+            return false;
+        }
+
+        var filePath = FindExistingFile(fileName);
+        if (filePath is null)
+        {
+            return false;
+        }
+
+        using var stream = File.OpenRead(filePath);
+        var texture = Texture2D.FromStream(_graphicsDevice, stream);
+        _ownedTextures.Add(texture);
+
+            var created = new GraphicTextureEntry(
+                texture,
+                null,
+                descriptor.PosX,
+                descriptor.PosY,
+                descriptor.ReflectedPosX,
+                descriptor.AlignY);
+
+        _cache[descriptorIndex] = created;
+        entry = created;
+        return true;
+    }
+
+    private void LoadAtlasManifests()
+    {
+        foreach (var root in _searchRoots)
+        {
+            var manifestPath = Path.Combine(root, "atlas_manifest.json");
+            if (!File.Exists(manifestPath))
+            {
+                manifestPath = Path.Combine(root, "atlases", "atlas_manifest.json");
+            }
+
+            if (!File.Exists(manifestPath))
+            {
+                continue;
+            }
+
+            try
+            {
+                using var stream = File.OpenRead(manifestPath);
+                var manifest = JsonSerializer.Deserialize<AtlasManifest>(stream, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (manifest is null)
+                {
+                    continue;
+                }
+
+                var manifestRoot = Path.GetDirectoryName(manifestPath) ?? root;
+                foreach (var sprite in manifest.Sprites)
+                {
+                    var key = sprite.Key;
+                    if (string.IsNullOrWhiteSpace(key))
+                    {
+                        continue;
+                    }
+
+                    _atlasEntries[key] = new AtlasSpriteEntry(
+                        key,
+                        sprite.Atlas,
+                        manifestRoot,
+                        sprite.X,
+                        sprite.Y,
+                        sprite.Width,
+                        sprite.Height);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Failed to load atlas manifest '{manifestPath}': {ex.Message}");
+            }
+        }
+    }
+
+    private Texture2D GetAtlasTexture(AtlasSpriteEntry sprite)
+    {
+        if (_atlasTextures.TryGetValue(sprite.Atlas, out var texture))
+        {
+            return texture;
+        }
+
+        var fullPath = Path.Combine(sprite.Root, sprite.Atlas);
+        if (!File.Exists(fullPath))
+        {
+            throw new FileNotFoundException($"Atlas image '{fullPath}' not found.");
+        }
+
+        using var stream = File.OpenRead(fullPath);
+        var loaded = Texture2D.FromStream(_graphicsDevice, stream);
+        _atlasTextures[sprite.Atlas] = loaded;
+        return loaded;
+    }
+
+    private string? FindExistingFile(string fileName)
+    {
+        foreach (var root in _searchRoots)
+        {
+            var bmpPath = Path.Combine(root, fileName);
+            if (File.Exists(bmpPath))
+            {
+                return bmpPath;
+            }
+
+            var pngCandidate = Path.ChangeExtension(bmpPath, ".png");
+            if (File.Exists(pngCandidate))
+            {
+                return pngCandidate;
+            }
+        }
+
+        return null;
+    }
+
+    private static string? ResolveFileName(int descriptorIndex)
+    {
+        if (descriptorIndex < 0)
+        {
+            return null;
+        }
+
+        if (descriptorIndex < 256)
+        {
+            return $"{descriptorIndex}.bmp";
+        }
+
+        if (descriptorIndex < 512)
+        {
+            return $"c{descriptorIndex - 256}.bmp";
+        }
+
+        return $"x{descriptorIndex - 512}.bmp";
+    }
+
+    private static string? ResolveTextureKey(int descriptorIndex)
+    {
+        if (descriptorIndex < 0)
+        {
+            return null;
+        }
+
+        if (descriptorIndex < 256)
+        {
+            return descriptorIndex.ToString();
+        }
+
+        if (descriptorIndex < 512)
+        {
+            return $"c{descriptorIndex - 256}";
+        }
+
+        return $"x{descriptorIndex - 512}";
+    }
+
+    public void Dispose()
+    {
+        foreach (var texture in _ownedTextures)
+        {
+            texture.Dispose();
+        }
+
+        foreach (var texture in _atlasTextures.Values)
+        {
+            texture.Dispose();
+        }
+
+        _ownedTextures.Clear();
+        _atlasTextures.Clear();
+        _cache.Clear();
+    }
+}
+
+public sealed record GraphicTextureEntry(Texture2D Texture, Rectangle? SourceRectangle, int OffsetX, int OffsetY, int ReflectedOffsetX, byte AlignY);
+
+internal sealed record AtlasManifest(int AtlasSize, IReadOnlyList<string> Atlases, IReadOnlyList<AtlasSprite> Sprites);
+
+internal sealed record AtlasSprite(string Key, string Atlas, int X, int Y, int Width, int Height);
+
+internal sealed record AtlasSpriteEntry(string Key, string Atlas, string Root, int X, int Y, int Width, int Height);

@@ -55,11 +55,14 @@ Additional packages (serialization, networking, UI widgets, etc.) will be introd
 
 ## Current MonoGame client snapshot
 
-The new client already boots with the extracted JSON data and renders the sample maps via a camera-driven tile renderer.
+The new client already boots with the extracted JSON data and renders the sample maps via a camera-driven tile renderer plus oc.b-driven textures pulled directly from the legacy `grf/*.bmp` files (or from `content/graphics` if you provide PNG exports).
 
 - Use `dotnet run` under `MonoGameClient/src/Laa.Monogame.Client` to launch the prototype scene.
 - Pan with `WASD`/arrow keys, zoom with the mouse wheel or `+`/`-`.
+- Keep the original assets under `Original Pascal/Laa/grf` (relative to the repo) or copy the converted images into `MonoGameClient/content/graphics`; the renderer auto-discovers both locations and draws the real sprites with oc.b offsets, falling back to gray placeholders only when files are missing.
+- Switch between exported maps with `[` `]` (or PageDown/PageUp) and inspect counts/controls through the built-in HUD (`F1` toggles it).
 - Toggle metadata overlays: `Tab` cycles through sensors → nests → merchants → all → off, number keys `0-4` jump directly to None/Sensors/Nests/Merchants/All.
+- Inspect exported data via panels: `I` (items), `S` (spells), `M` (monsters), `C` (commerce), `F2` (map sensors/nests/merchants). Panels render on the lower-right corner using the built-in debug font; press the same key again to hide them.
 - Console logs report which map and content payloads were loaded; this helps validate repository wiring before gameplay systems exist.
 
 Refer to `Docs/MigrationPlan.md` for the step-by-step porting strategy.

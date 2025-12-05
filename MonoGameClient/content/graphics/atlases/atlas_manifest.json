@@ -1,0 +1,2326 @@
+{
+  "AtlasSize": 2048,
+  "Atlases": [
+    "atlas_00.png",
+    "atlas_01.png",
+    "atlas_02.png",
+    "atlas_03.png",
+    "atlas_04.png",
+    "atlas_05.png",
+    "atlas_06.png"
+  ],
+  "Sprites": [
+    {
+      "Key": "!hdfx",
+      "Atlas": "atlas_00.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 1280,
+      "Height": 592
+    },
+    {
+      "Key": "0",
+      "Atlas": "atlas_00.png",
+      "X": 1280,
+      "Y": 0,
+      "Width": 172,
+      "Height": 230
+    },
+    {
+      "Key": "1",
+      "Atlas": "atlas_00.png",
+      "X": 1452,
+      "Y": 0,
+      "Width": 162,
+      "Height": 200
+    },
+    {
+      "Key": "10",
+      "Atlas": "atlas_00.png",
+      "X": 1614,
+      "Y": 0,
+      "Width": 180,
+      "Height": 210
+    },
+    {
+      "Key": "120",
+      "Atlas": "atlas_00.png",
+      "X": 1794,
+      "Y": 0,
+      "Width": 44,
+      "Height": 50
+    },
+    {
+      "Key": "128",
+      "Atlas": "atlas_00.png",
+      "X": 1838,
+      "Y": 0,
+      "Width": 70,
+      "Height": 102
+    },
+    {
+      "Key": "129",
+      "Atlas": "atlas_00.png",
+      "X": 1908,
+      "Y": 0,
+      "Width": 74,
+      "Height": 93
+    },
+    {
+      "Key": "130",
+      "Atlas": "atlas_00.png",
+      "X": 0,
+      "Y": 592,
+      "Width": 81,
+      "Height": 102
+    },
+    {
+      "Key": "131",
+      "Atlas": "atlas_00.png",
+      "X": 81,
+      "Y": 592,
+      "Width": 78,
+      "Height": 100
+    },
+    {
+      "Key": "132",
+      "Atlas": "atlas_00.png",
+      "X": 159,
+      "Y": 592,
+      "Width": 79,
+      "Height": 102
+    },
+    {
+      "Key": "135",
+      "Atlas": "atlas_00.png",
+      "X": 238,
+      "Y": 592,
+      "Width": 70,
+      "Height": 88
+    },
+    {
+      "Key": "136",
+      "Atlas": "atlas_00.png",
+      "X": 308,
+      "Y": 592,
+      "Width": 70,
+      "Height": 86
+    },
+    {
+      "Key": "137",
+      "Atlas": "atlas_00.png",
+      "X": 378,
+      "Y": 592,
+      "Width": 70,
+      "Height": 78
+    },
+    {
+      "Key": "138",
+      "Atlas": "atlas_00.png",
+      "X": 448,
+      "Y": 592,
+      "Width": 66,
+      "Height": 88
+    },
+    {
+      "Key": "139",
+      "Atlas": "atlas_00.png",
+      "X": 514,
+      "Y": 592,
+      "Width": 70,
+      "Height": 88
+    },
+    {
+      "Key": "140",
+      "Atlas": "atlas_00.png",
+      "X": 584,
+      "Y": 592,
+      "Width": 203,
+      "Height": 301
+    },
+    {
+      "Key": "158",
+      "Atlas": "atlas_00.png",
+      "X": 787,
+      "Y": 592,
+      "Width": 94,
+      "Height": 48
+    },
+    {
+      "Key": "159",
+      "Atlas": "atlas_00.png",
+      "X": 881,
+      "Y": 592,
+      "Width": 142,
+      "Height": 80
+    },
+    {
+      "Key": "160",
+      "Atlas": "atlas_00.png",
+      "X": 1023,
+      "Y": 592,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "161",
+      "Atlas": "atlas_00.png",
+      "X": 1165,
+      "Y": 592,
+      "Width": 72,
+      "Height": 96
+    },
+    {
+      "Key": "162",
+      "Atlas": "atlas_00.png",
+      "X": 1237,
+      "Y": 592,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "163",
+      "Atlas": "atlas_00.png",
+      "X": 1379,
+      "Y": 592,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "164",
+      "Atlas": "atlas_00.png",
+      "X": 1521,
+      "Y": 592,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "165",
+      "Atlas": "atlas_00.png",
+      "X": 1663,
+      "Y": 592,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "166",
+      "Atlas": "atlas_00.png",
+      "X": 1805,
+      "Y": 592,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "167",
+      "Atlas": "atlas_00.png",
+      "X": 0,
+      "Y": 893,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "168",
+      "Atlas": "atlas_00.png",
+      "X": 142,
+      "Y": 893,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "169",
+      "Atlas": "atlas_00.png",
+      "X": 284,
+      "Y": 893,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "170",
+      "Atlas": "atlas_00.png",
+      "X": 426,
+      "Y": 893,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "171",
+      "Atlas": "atlas_00.png",
+      "X": 568,
+      "Y": 893,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "172",
+      "Atlas": "atlas_00.png",
+      "X": 710,
+      "Y": 893,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "173",
+      "Atlas": "atlas_00.png",
+      "X": 852,
+      "Y": 893,
+      "Width": 142,
+      "Height": 96
+    },
+    {
+      "Key": "2",
+      "Atlas": "atlas_00.png",
+      "X": 994,
+      "Y": 893,
+      "Width": 178,
+      "Height": 308
+    },
+    {
+      "Key": "200",
+      "Atlas": "atlas_00.png",
+      "X": 1172,
+      "Y": 893,
+      "Width": 148,
+      "Height": 94
+    },
+    {
+      "Key": "201",
+      "Atlas": "atlas_00.png",
+      "X": 1320,
+      "Y": 893,
+      "Width": 150,
+      "Height": 100
+    },
+    {
+      "Key": "202",
+      "Atlas": "atlas_00.png",
+      "X": 1470,
+      "Y": 893,
+      "Width": 150,
+      "Height": 100
+    },
+    {
+      "Key": "203",
+      "Atlas": "atlas_00.png",
+      "X": 1620,
+      "Y": 893,
+      "Width": 150,
+      "Height": 100
+    },
+    {
+      "Key": "204",
+      "Atlas": "atlas_00.png",
+      "X": 1770,
+      "Y": 893,
+      "Width": 150,
+      "Height": 100
+    },
+    {
+      "Key": "205",
+      "Atlas": "atlas_00.png",
+      "X": 1920,
+      "Y": 893,
+      "Width": 112,
+      "Height": 88
+    },
+    {
+      "Key": "206",
+      "Atlas": "atlas_00.png",
+      "X": 0,
+      "Y": 1201,
+      "Width": 116,
+      "Height": 88
+    },
+    {
+      "Key": "207",
+      "Atlas": "atlas_00.png",
+      "X": 116,
+      "Y": 1201,
+      "Width": 80,
+      "Height": 64
+    },
+    {
+      "Key": "208",
+      "Atlas": "atlas_00.png",
+      "X": 196,
+      "Y": 1201,
+      "Width": 86,
+      "Height": 56
+    },
+    {
+      "Key": "209",
+      "Atlas": "atlas_00.png",
+      "X": 282,
+      "Y": 1201,
+      "Width": 80,
+      "Height": 58
+    },
+    {
+      "Key": "210",
+      "Atlas": "atlas_00.png",
+      "X": 362,
+      "Y": 1201,
+      "Width": 84,
+      "Height": 58
+    },
+    {
+      "Key": "211",
+      "Atlas": "atlas_00.png",
+      "X": 446,
+      "Y": 1201,
+      "Width": 112,
+      "Height": 36
+    },
+    {
+      "Key": "212",
+      "Atlas": "atlas_00.png",
+      "X": 558,
+      "Y": 1201,
+      "Width": 136,
+      "Height": 100
+    },
+    {
+      "Key": "213",
+      "Atlas": "atlas_00.png",
+      "X": 694,
+      "Y": 1201,
+      "Width": 144,
+      "Height": 80
+    },
+    {
+      "Key": "214",
+      "Atlas": "atlas_00.png",
+      "X": 838,
+      "Y": 1201,
+      "Width": 128,
+      "Height": 100
+    },
+    {
+      "Key": "215",
+      "Atlas": "atlas_00.png",
+      "X": 966,
+      "Y": 1201,
+      "Width": 148,
+      "Height": 76
+    },
+    {
+      "Key": "216",
+      "Atlas": "atlas_00.png",
+      "X": 1114,
+      "Y": 1201,
+      "Width": 80,
+      "Height": 48
+    },
+    {
+      "Key": "217",
+      "Atlas": "atlas_00.png",
+      "X": 1194,
+      "Y": 1201,
+      "Width": 62,
+      "Height": 44
+    },
+    {
+      "Key": "218",
+      "Atlas": "atlas_00.png",
+      "X": 1256,
+      "Y": 1201,
+      "Width": 80,
+      "Height": 48
+    },
+    {
+      "Key": "219",
+      "Atlas": "atlas_00.png",
+      "X": 1336,
+      "Y": 1201,
+      "Width": 84,
+      "Height": 44
+    },
+    {
+      "Key": "220",
+      "Atlas": "atlas_00.png",
+      "X": 1420,
+      "Y": 1201,
+      "Width": 150,
+      "Height": 98
+    },
+    {
+      "Key": "221",
+      "Atlas": "atlas_00.png",
+      "X": 1570,
+      "Y": 1201,
+      "Width": 112,
+      "Height": 72
+    },
+    {
+      "Key": "222",
+      "Atlas": "atlas_00.png",
+      "X": 1682,
+      "Y": 1201,
+      "Width": 102,
+      "Height": 68
+    },
+    {
+      "Key": "223",
+      "Atlas": "atlas_00.png",
+      "X": 1784,
+      "Y": 1201,
+      "Width": 64,
+      "Height": 34
+    },
+    {
+      "Key": "24",
+      "Atlas": "atlas_00.png",
+      "X": 1848,
+      "Y": 1201,
+      "Width": 54,
+      "Height": 43
+    },
+    {
+      "Key": "25",
+      "Atlas": "atlas_00.png",
+      "X": 1902,
+      "Y": 1201,
+      "Width": 36,
+      "Height": 100
+    },
+    {
+      "Key": "3",
+      "Atlas": "atlas_00.png",
+      "X": 0,
+      "Y": 1301,
+      "Width": 114,
+      "Height": 152
+    },
+    {
+      "Key": "32",
+      "Atlas": "atlas_00.png",
+      "X": 114,
+      "Y": 1301,
+      "Width": 51,
+      "Height": 43
+    },
+    {
+      "Key": "33",
+      "Atlas": "atlas_00.png",
+      "X": 165,
+      "Y": 1301,
+      "Width": 53,
+      "Height": 48
+    },
+    {
+      "Key": "34",
+      "Atlas": "atlas_00.png",
+      "X": 218,
+      "Y": 1301,
+      "Width": 76,
+      "Height": 68
+    },
+    {
+      "Key": "35",
+      "Atlas": "atlas_00.png",
+      "X": 294,
+      "Y": 1301,
+      "Width": 42,
+      "Height": 40
+    },
+    {
+      "Key": "4",
+      "Atlas": "atlas_00.png",
+      "X": 336,
+      "Y": 1301,
+      "Width": 200,
+      "Height": 188
+    },
+    {
+      "Key": "40",
+      "Atlas": "atlas_00.png",
+      "X": 536,
+      "Y": 1301,
+      "Width": 88,
+      "Height": 54
+    },
+    {
+      "Key": "41",
+      "Atlas": "atlas_00.png",
+      "X": 624,
+      "Y": 1301,
+      "Width": 88,
+      "Height": 67
+    },
+    {
+      "Key": "42",
+      "Atlas": "atlas_00.png",
+      "X": 712,
+      "Y": 1301,
+      "Width": 44,
+      "Height": 66
+    },
+    {
+      "Key": "43",
+      "Atlas": "atlas_00.png",
+      "X": 756,
+      "Y": 1301,
+      "Width": 86,
+      "Height": 76
+    },
+    {
+      "Key": "48",
+      "Atlas": "atlas_00.png",
+      "X": 842,
+      "Y": 1301,
+      "Width": 47,
+      "Height": 46
+    },
+    {
+      "Key": "5",
+      "Atlas": "atlas_00.png",
+      "X": 889,
+      "Y": 1301,
+      "Width": 178,
+      "Height": 212
+    },
+    {
+      "Key": "6",
+      "Atlas": "atlas_00.png",
+      "X": 1067,
+      "Y": 1301,
+      "Width": 152,
+      "Height": 245
+    },
+    {
+      "Key": "64",
+      "Atlas": "atlas_00.png",
+      "X": 1219,
+      "Y": 1301,
+      "Width": 224,
+      "Height": 176
+    },
+    {
+      "Key": "7",
+      "Atlas": "atlas_00.png",
+      "X": 1443,
+      "Y": 1301,
+      "Width": 147,
+      "Height": 162
+    },
+    {
+      "Key": "8",
+      "Atlas": "atlas_00.png",
+      "X": 1590,
+      "Y": 1301,
+      "Width": 203,
+      "Height": 237
+    },
+    {
+      "Key": "9",
+      "Atlas": "atlas_00.png",
+      "X": 1793,
+      "Y": 1301,
+      "Width": 201,
+      "Height": 218
+    },
+    {
+      "Key": "a0",
+      "Atlas": "atlas_00.png",
+      "X": 0,
+      "Y": 1546,
+      "Width": 57,
+      "Height": 310
+    },
+    {
+      "Key": "a1",
+      "Atlas": "atlas_00.png",
+      "X": 57,
+      "Y": 1546,
+      "Width": 61,
+      "Height": 432
+    },
+    {
+      "Key": "a2",
+      "Atlas": "atlas_00.png",
+      "X": 118,
+      "Y": 1546,
+      "Width": 60,
+      "Height": 265
+    },
+    {
+      "Key": "a3",
+      "Atlas": "atlas_00.png",
+      "X": 178,
+      "Y": 1546,
+      "Width": 42,
+      "Height": 199
+    },
+    {
+      "Key": "a4",
+      "Atlas": "atlas_00.png",
+      "X": 220,
+      "Y": 1546,
+      "Width": 29,
+      "Height": 352
+    },
+    {
+      "Key": "a5",
+      "Atlas": "atlas_00.png",
+      "X": 249,
+      "Y": 1546,
+      "Width": 52,
+      "Height": 274
+    },
+    {
+      "Key": "a6",
+      "Atlas": "atlas_00.png",
+      "X": 301,
+      "Y": 1546,
+      "Width": 45,
+      "Height": 239
+    },
+    {
+      "Key": "arder",
+      "Atlas": "atlas_01.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 68,
+      "Height": 592
+    },
+    {
+      "Key": "b0",
+      "Atlas": "atlas_01.png",
+      "X": 68,
+      "Y": 0,
+      "Width": 52,
+      "Height": 1000
+    },
+    {
+      "Key": "b1",
+      "Atlas": "atlas_01.png",
+      "X": 120,
+      "Y": 0,
+      "Width": 52,
+      "Height": 1000
+    },
+    {
+      "Key": "b2",
+      "Atlas": "atlas_01.png",
+      "X": 172,
+      "Y": 0,
+      "Width": 52,
+      "Height": 1000
+    },
+    {
+      "Key": "b3",
+      "Atlas": "atlas_01.png",
+      "X": 224,
+      "Y": 0,
+      "Width": 52,
+      "Height": 1000
+    },
+    {
+      "Key": "barra",
+      "Atlas": "atlas_01.png",
+      "X": 276,
+      "Y": 0,
+      "Width": 116,
+      "Height": 56
+    },
+    {
+      "Key": "bolsa",
+      "Atlas": "atlas_01.png",
+      "X": 392,
+      "Y": 0,
+      "Width": 28,
+      "Height": 144
+    },
+    {
+      "Key": "c0",
+      "Atlas": "atlas_01.png",
+      "X": 420,
+      "Y": 0,
+      "Width": 36,
+      "Height": 72
+    },
+    {
+      "Key": "c1",
+      "Atlas": "atlas_01.png",
+      "X": 456,
+      "Y": 0,
+      "Width": 68,
+      "Height": 133
+    },
+    {
+      "Key": "c10",
+      "Atlas": "atlas_01.png",
+      "X": 524,
+      "Y": 0,
+      "Width": 191,
+      "Height": 473
+    },
+    {
+      "Key": "c100",
+      "Atlas": "atlas_01.png",
+      "X": 715,
+      "Y": 0,
+      "Width": 68,
+      "Height": 95
+    },
+    {
+      "Key": "c101",
+      "Atlas": "atlas_01.png",
+      "X": 783,
+      "Y": 0,
+      "Width": 68,
+      "Height": 95
+    },
+    {
+      "Key": "c102",
+      "Atlas": "atlas_01.png",
+      "X": 851,
+      "Y": 0,
+      "Width": 45,
+      "Height": 81
+    },
+    {
+      "Key": "c103",
+      "Atlas": "atlas_01.png",
+      "X": 896,
+      "Y": 0,
+      "Width": 38,
+      "Height": 59
+    },
+    {
+      "Key": "c104",
+      "Atlas": "atlas_01.png",
+      "X": 934,
+      "Y": 0,
+      "Width": 91,
+      "Height": 112
+    },
+    {
+      "Key": "c11",
+      "Atlas": "atlas_01.png",
+      "X": 1025,
+      "Y": 0,
+      "Width": 216,
+      "Height": 432
+    },
+    {
+      "Key": "c112",
+      "Atlas": "atlas_01.png",
+      "X": 1241,
+      "Y": 0,
+      "Width": 53,
+      "Height": 103
+    },
+    {
+      "Key": "c113",
+      "Atlas": "atlas_01.png",
+      "X": 1294,
+      "Y": 0,
+      "Width": 53,
+      "Height": 103
+    },
+    {
+      "Key": "c114",
+      "Atlas": "atlas_01.png",
+      "X": 1347,
+      "Y": 0,
+      "Width": 54,
+      "Height": 104
+    },
+    {
+      "Key": "c115",
+      "Atlas": "atlas_01.png",
+      "X": 1401,
+      "Y": 0,
+      "Width": 54,
+      "Height": 104
+    },
+    {
+      "Key": "c116",
+      "Atlas": "atlas_01.png",
+      "X": 1455,
+      "Y": 0,
+      "Width": 54,
+      "Height": 103
+    },
+    {
+      "Key": "c117",
+      "Atlas": "atlas_01.png",
+      "X": 1509,
+      "Y": 0,
+      "Width": 54,
+      "Height": 103
+    },
+    {
+      "Key": "c118",
+      "Atlas": "atlas_01.png",
+      "X": 1563,
+      "Y": 0,
+      "Width": 53,
+      "Height": 108
+    },
+    {
+      "Key": "c119",
+      "Atlas": "atlas_01.png",
+      "X": 1616,
+      "Y": 0,
+      "Width": 54,
+      "Height": 103
+    },
+    {
+      "Key": "c120",
+      "Atlas": "atlas_01.png",
+      "X": 1670,
+      "Y": 0,
+      "Width": 20,
+      "Height": 65
+    },
+    {
+      "Key": "c121",
+      "Atlas": "atlas_01.png",
+      "X": 1690,
+      "Y": 0,
+      "Width": 98,
+      "Height": 67
+    },
+    {
+      "Key": "c122",
+      "Atlas": "atlas_01.png",
+      "X": 1788,
+      "Y": 0,
+      "Width": 54,
+      "Height": 74
+    },
+    {
+      "Key": "c123",
+      "Atlas": "atlas_01.png",
+      "X": 1842,
+      "Y": 0,
+      "Width": 11,
+      "Height": 75
+    },
+    {
+      "Key": "c128",
+      "Atlas": "atlas_01.png",
+      "X": 1853,
+      "Y": 0,
+      "Width": 38,
+      "Height": 76
+    },
+    {
+      "Key": "c129",
+      "Atlas": "atlas_01.png",
+      "X": 1891,
+      "Y": 0,
+      "Width": 20,
+      "Height": 63
+    },
+    {
+      "Key": "c130",
+      "Atlas": "atlas_01.png",
+      "X": 1911,
+      "Y": 0,
+      "Width": 63,
+      "Height": 93
+    },
+    {
+      "Key": "c131",
+      "Atlas": "atlas_01.png",
+      "X": 1974,
+      "Y": 0,
+      "Width": 63,
+      "Height": 92
+    },
+    {
+      "Key": "c132",
+      "Atlas": "atlas_01.png",
+      "X": 0,
+      "Y": 1000,
+      "Width": 63,
+      "Height": 92
+    },
+    {
+      "Key": "c133",
+      "Atlas": "atlas_01.png",
+      "X": 63,
+      "Y": 1000,
+      "Width": 18,
+      "Height": 63
+    },
+    {
+      "Key": "c134",
+      "Atlas": "atlas_01.png",
+      "X": 81,
+      "Y": 1000,
+      "Width": 18,
+      "Height": 64
+    },
+    {
+      "Key": "c135",
+      "Atlas": "atlas_01.png",
+      "X": 99,
+      "Y": 1000,
+      "Width": 70,
+      "Height": 62
+    },
+    {
+      "Key": "c140",
+      "Atlas": "atlas_01.png",
+      "X": 169,
+      "Y": 1000,
+      "Width": 98,
+      "Height": 67
+    },
+    {
+      "Key": "c141",
+      "Atlas": "atlas_01.png",
+      "X": 267,
+      "Y": 1000,
+      "Width": 58,
+      "Height": 110
+    },
+    {
+      "Key": "c142",
+      "Atlas": "atlas_01.png",
+      "X": 325,
+      "Y": 1000,
+      "Width": 58,
+      "Height": 105
+    },
+    {
+      "Key": "c143",
+      "Atlas": "atlas_01.png",
+      "X": 383,
+      "Y": 1000,
+      "Width": 24,
+      "Height": 68
+    },
+    {
+      "Key": "c144",
+      "Atlas": "atlas_01.png",
+      "X": 407,
+      "Y": 1000,
+      "Width": 18,
+      "Height": 79
+    },
+    {
+      "Key": "c145",
+      "Atlas": "atlas_01.png",
+      "X": 425,
+      "Y": 1000,
+      "Width": 48,
+      "Height": 58
+    },
+    {
+      "Key": "c146",
+      "Atlas": "atlas_01.png",
+      "X": 473,
+      "Y": 1000,
+      "Width": 58,
+      "Height": 105
+    },
+    {
+      "Key": "c147",
+      "Atlas": "atlas_01.png",
+      "X": 531,
+      "Y": 1000,
+      "Width": 58,
+      "Height": 105
+    },
+    {
+      "Key": "c148",
+      "Atlas": "atlas_01.png",
+      "X": 589,
+      "Y": 1000,
+      "Width": 62,
+      "Height": 56
+    },
+    {
+      "Key": "c149",
+      "Atlas": "atlas_01.png",
+      "X": 651,
+      "Y": 1000,
+      "Width": 57,
+      "Height": 104
+    },
+    {
+      "Key": "c150",
+      "Atlas": "atlas_01.png",
+      "X": 708,
+      "Y": 1000,
+      "Width": 56,
+      "Height": 100
+    },
+    {
+      "Key": "c151",
+      "Atlas": "atlas_01.png",
+      "X": 764,
+      "Y": 1000,
+      "Width": 57,
+      "Height": 105
+    },
+    {
+      "Key": "c152",
+      "Atlas": "atlas_01.png",
+      "X": 821,
+      "Y": 1000,
+      "Width": 58,
+      "Height": 138
+    },
+    {
+      "Key": "c153",
+      "Atlas": "atlas_01.png",
+      "X": 879,
+      "Y": 1000,
+      "Width": 58,
+      "Height": 105
+    },
+    {
+      "Key": "c154",
+      "Atlas": "atlas_01.png",
+      "X": 937,
+      "Y": 1000,
+      "Width": 96,
+      "Height": 63
+    },
+    {
+      "Key": "c155",
+      "Atlas": "atlas_01.png",
+      "X": 1033,
+      "Y": 1000,
+      "Width": 51,
+      "Height": 68
+    },
+    {
+      "Key": "c16",
+      "Atlas": "atlas_01.png",
+      "X": 1084,
+      "Y": 1000,
+      "Width": 61,
+      "Height": 66
+    },
+    {
+      "Key": "c17",
+      "Atlas": "atlas_01.png",
+      "X": 1145,
+      "Y": 1000,
+      "Width": 54,
+      "Height": 68
+    },
+    {
+      "Key": "c192",
+      "Atlas": "atlas_01.png",
+      "X": 1199,
+      "Y": 1000,
+      "Width": 96,
+      "Height": 64
+    },
+    {
+      "Key": "c193",
+      "Atlas": "atlas_01.png",
+      "X": 1295,
+      "Y": 1000,
+      "Width": 119,
+      "Height": 158
+    },
+    {
+      "Key": "c194",
+      "Atlas": "atlas_01.png",
+      "X": 1414,
+      "Y": 1000,
+      "Width": 108,
+      "Height": 150
+    },
+    {
+      "Key": "c195",
+      "Atlas": "atlas_01.png",
+      "X": 1522,
+      "Y": 1000,
+      "Width": 108,
+      "Height": 150
+    },
+    {
+      "Key": "c196",
+      "Atlas": "atlas_01.png",
+      "X": 1630,
+      "Y": 1000,
+      "Width": 116,
+      "Height": 116
+    },
+    {
+      "Key": "c197",
+      "Atlas": "atlas_01.png",
+      "X": 1746,
+      "Y": 1000,
+      "Width": 116,
+      "Height": 117
+    },
+    {
+      "Key": "c198",
+      "Atlas": "atlas_01.png",
+      "X": 1862,
+      "Y": 1000,
+      "Width": 96,
+      "Height": 126
+    },
+    {
+      "Key": "c199",
+      "Atlas": "atlas_01.png",
+      "X": 1958,
+      "Y": 1000,
+      "Width": 4,
+      "Height": 4
+    },
+    {
+      "Key": "c20",
+      "Atlas": "atlas_01.png",
+      "X": 0,
+      "Y": 1158,
+      "Width": 155,
+      "Height": 428
+    },
+    {
+      "Key": "c220",
+      "Atlas": "atlas_01.png",
+      "X": 155,
+      "Y": 1158,
+      "Width": 51,
+      "Height": 84
+    },
+    {
+      "Key": "c221",
+      "Atlas": "atlas_01.png",
+      "X": 206,
+      "Y": 1158,
+      "Width": 109,
+      "Height": 110
+    },
+    {
+      "Key": "c222",
+      "Atlas": "atlas_01.png",
+      "X": 315,
+      "Y": 1158,
+      "Width": 91,
+      "Height": 83
+    },
+    {
+      "Key": "c223",
+      "Atlas": "atlas_01.png",
+      "X": 406,
+      "Y": 1158,
+      "Width": 83,
+      "Height": 69
+    },
+    {
+      "Key": "c224",
+      "Atlas": "atlas_01.png",
+      "X": 489,
+      "Y": 1158,
+      "Width": 84,
+      "Height": 72
+    },
+    {
+      "Key": "c225",
+      "Atlas": "atlas_01.png",
+      "X": 573,
+      "Y": 1158,
+      "Width": 144,
+      "Height": 113
+    },
+    {
+      "Key": "c226",
+      "Atlas": "atlas_01.png",
+      "X": 717,
+      "Y": 1158,
+      "Width": 145,
+      "Height": 100
+    },
+    {
+      "Key": "c227",
+      "Atlas": "atlas_01.png",
+      "X": 862,
+      "Y": 1158,
+      "Width": 145,
+      "Height": 83
+    },
+    {
+      "Key": "c228",
+      "Atlas": "atlas_01.png",
+      "X": 1007,
+      "Y": 1158,
+      "Width": 83,
+      "Height": 89
+    },
+    {
+      "Key": "c229",
+      "Atlas": "atlas_01.png",
+      "X": 1090,
+      "Y": 1158,
+      "Width": 83,
+      "Height": 71
+    },
+    {
+      "Key": "c230",
+      "Atlas": "atlas_01.png",
+      "X": 1173,
+      "Y": 1158,
+      "Width": 91,
+      "Height": 69
+    },
+    {
+      "Key": "c239",
+      "Atlas": "atlas_01.png",
+      "X": 1264,
+      "Y": 1158,
+      "Width": 24,
+      "Height": 16
+    },
+    {
+      "Key": "c24",
+      "Atlas": "atlas_01.png",
+      "X": 1288,
+      "Y": 1158,
+      "Width": 82,
+      "Height": 121
+    },
+    {
+      "Key": "c240",
+      "Atlas": "atlas_01.png",
+      "X": 1370,
+      "Y": 1158,
+      "Width": 46,
+      "Height": 34
+    },
+    {
+      "Key": "c241",
+      "Atlas": "atlas_01.png",
+      "X": 1416,
+      "Y": 1158,
+      "Width": 156,
+      "Height": 102
+    },
+    {
+      "Key": "c242",
+      "Atlas": "atlas_01.png",
+      "X": 1572,
+      "Y": 1158,
+      "Width": 98,
+      "Height": 67
+    },
+    {
+      "Key": "c243",
+      "Atlas": "atlas_01.png",
+      "X": 1670,
+      "Y": 1158,
+      "Width": 98,
+      "Height": 67
+    },
+    {
+      "Key": "c25",
+      "Atlas": "atlas_01.png",
+      "X": 1768,
+      "Y": 1158,
+      "Width": 83,
+      "Height": 171
+    },
+    {
+      "Key": "c26",
+      "Atlas": "atlas_01.png",
+      "X": 1851,
+      "Y": 1158,
+      "Width": 83,
+      "Height": 165
+    },
+    {
+      "Key": "c27",
+      "Atlas": "atlas_01.png",
+      "X": 0,
+      "Y": 1586,
+      "Width": 127,
+      "Height": 167
+    },
+    {
+      "Key": "c28",
+      "Atlas": "atlas_01.png",
+      "X": 127,
+      "Y": 1586,
+      "Width": 45,
+      "Height": 116
+    },
+    {
+      "Key": "c29",
+      "Atlas": "atlas_01.png",
+      "X": 172,
+      "Y": 1586,
+      "Width": 58,
+      "Height": 105
+    },
+    {
+      "Key": "c4",
+      "Atlas": "atlas_01.png",
+      "X": 230,
+      "Y": 1586,
+      "Width": 154,
+      "Height": 88
+    },
+    {
+      "Key": "c5",
+      "Atlas": "atlas_01.png",
+      "X": 384,
+      "Y": 1586,
+      "Width": 154,
+      "Height": 98
+    },
+    {
+      "Key": "c64",
+      "Atlas": "atlas_01.png",
+      "X": 538,
+      "Y": 1586,
+      "Width": 92,
+      "Height": 92
+    },
+    {
+      "Key": "c65",
+      "Atlas": "atlas_01.png",
+      "X": 630,
+      "Y": 1586,
+      "Width": 44,
+      "Height": 68
+    },
+    {
+      "Key": "c66",
+      "Atlas": "atlas_01.png",
+      "X": 674,
+      "Y": 1586,
+      "Width": 36,
+      "Height": 38
+    },
+    {
+      "Key": "c67",
+      "Atlas": "atlas_01.png",
+      "X": 710,
+      "Y": 1586,
+      "Width": 42,
+      "Height": 41
+    },
+    {
+      "Key": "c68",
+      "Atlas": "atlas_01.png",
+      "X": 752,
+      "Y": 1586,
+      "Width": 72,
+      "Height": 70
+    },
+    {
+      "Key": "c69",
+      "Atlas": "atlas_01.png",
+      "X": 824,
+      "Y": 1586,
+      "Width": 64,
+      "Height": 71
+    },
+    {
+      "Key": "c70",
+      "Atlas": "atlas_01.png",
+      "X": 888,
+      "Y": 1586,
+      "Width": 72,
+      "Height": 70
+    },
+    {
+      "Key": "c71",
+      "Atlas": "atlas_01.png",
+      "X": 960,
+      "Y": 1586,
+      "Width": 75,
+      "Height": 75
+    },
+    {
+      "Key": "c72",
+      "Atlas": "atlas_01.png",
+      "X": 1035,
+      "Y": 1586,
+      "Width": 70,
+      "Height": 65
+    },
+    {
+      "Key": "c80",
+      "Atlas": "atlas_01.png",
+      "X": 1105,
+      "Y": 1586,
+      "Width": 97,
+      "Height": 104
+    },
+    {
+      "Key": "c81",
+      "Atlas": "atlas_01.png",
+      "X": 1202,
+      "Y": 1586,
+      "Width": 91,
+      "Height": 117
+    },
+    {
+      "Key": "c82",
+      "Atlas": "atlas_01.png",
+      "X": 1293,
+      "Y": 1586,
+      "Width": 22,
+      "Height": 49
+    },
+    {
+      "Key": "c9",
+      "Atlas": "atlas_01.png",
+      "X": 1315,
+      "Y": 1586,
+      "Width": 248,
+      "Height": 431
+    },
+    {
+      "Key": "c90",
+      "Atlas": "atlas_01.png",
+      "X": 1563,
+      "Y": 1586,
+      "Width": 16,
+      "Height": 16
+    },
+    {
+      "Key": "c91",
+      "Atlas": "atlas_01.png",
+      "X": 1579,
+      "Y": 1586,
+      "Width": 16,
+      "Height": 16
+    },
+    {
+      "Key": "c92",
+      "Atlas": "atlas_01.png",
+      "X": 1595,
+      "Y": 1586,
+      "Width": 16,
+      "Height": 16
+    },
+    {
+      "Key": "c93",
+      "Atlas": "atlas_01.png",
+      "X": 1611,
+      "Y": 1586,
+      "Width": 16,
+      "Height": 16
+    },
+    {
+      "Key": "c94",
+      "Atlas": "atlas_01.png",
+      "X": 1627,
+      "Y": 1586,
+      "Width": 12,
+      "Height": 22
+    },
+    {
+      "Key": "c95",
+      "Atlas": "atlas_01.png",
+      "X": 1639,
+      "Y": 1586,
+      "Width": 12,
+      "Height": 21
+    },
+    {
+      "Key": "c96",
+      "Atlas": "atlas_01.png",
+      "X": 1651,
+      "Y": 1586,
+      "Width": 22,
+      "Height": 26
+    },
+    {
+      "Key": "c97",
+      "Atlas": "atlas_01.png",
+      "X": 1673,
+      "Y": 1586,
+      "Width": 22,
+      "Height": 21
+    },
+    {
+      "Key": "c98",
+      "Atlas": "atlas_01.png",
+      "X": 1695,
+      "Y": 1586,
+      "Width": 15,
+      "Height": 31
+    },
+    {
+      "Key": "cadaver",
+      "Atlas": "atlas_01.png",
+      "X": 1710,
+      "Y": 1586,
+      "Width": 44,
+      "Height": 176
+    },
+    {
+      "Key": "chispas",
+      "Atlas": "atlas_02.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 75,
+      "Height": 724
+    },
+    {
+      "Key": "esfera",
+      "Atlas": "atlas_02.png",
+      "X": 75,
+      "Y": 0,
+      "Width": 42,
+      "Height": 308
+    },
+    {
+      "Key": "fogata",
+      "Atlas": "atlas_02.png",
+      "X": 117,
+      "Y": 0,
+      "Width": 32,
+      "Height": 329
+    },
+    {
+      "Key": "fondo",
+      "Atlas": "atlas_02.png",
+      "X": 149,
+      "Y": 0,
+      "Width": 1280,
+      "Height": 144
+    },
+    {
+      "Key": "ingreso",
+      "Atlas": "atlas_02.png",
+      "X": 1429,
+      "Y": 0,
+      "Width": 83,
+      "Height": 731
+    },
+    {
+      "Key": "letras",
+      "Atlas": "atlas_02.png",
+      "X": 1512,
+      "Y": 0,
+      "Width": 288,
+      "Height": 105
+    },
+    {
+      "Key": "liq",
+      "Atlas": "atlas_02.png",
+      "X": 1800,
+      "Y": 0,
+      "Width": 144,
+      "Height": 144
+    },
+    {
+      "Key": "llu",
+      "Atlas": "atlas_02.png",
+      "X": 0,
+      "Y": 731,
+      "Width": 160,
+      "Height": 1024
+    },
+    {
+      "Key": "logo",
+      "Atlas": "atlas_02.png",
+      "X": 160,
+      "Y": 731,
+      "Width": 640,
+      "Height": 280
+    },
+    {
+      "Key": "m0",
+      "Atlas": "atlas_02.png",
+      "X": 800,
+      "Y": 731,
+      "Width": 198,
+      "Height": 1039
+    },
+    {
+      "Key": "m1",
+      "Atlas": "atlas_02.png",
+      "X": 998,
+      "Y": 731,
+      "Width": 233,
+      "Height": 1076
+    },
+    {
+      "Key": "m101",
+      "Atlas": "atlas_02.png",
+      "X": 1231,
+      "Y": 731,
+      "Width": 149,
+      "Height": 245
+    },
+    {
+      "Key": "m102",
+      "Atlas": "atlas_02.png",
+      "X": 1380,
+      "Y": 731,
+      "Width": 144,
+      "Height": 243
+    },
+    {
+      "Key": "m103",
+      "Atlas": "atlas_02.png",
+      "X": 1524,
+      "Y": 731,
+      "Width": 255,
+      "Height": 430
+    },
+    {
+      "Key": "m104",
+      "Atlas": "atlas_02.png",
+      "X": 1779,
+      "Y": 731,
+      "Width": 213,
+      "Height": 352
+    },
+    {
+      "Key": "m105",
+      "Atlas": "atlas_03.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 204,
+      "Height": 422
+    },
+    {
+      "Key": "m106",
+      "Atlas": "atlas_03.png",
+      "X": 204,
+      "Y": 0,
+      "Width": 204,
+      "Height": 422
+    },
+    {
+      "Key": "m107",
+      "Atlas": "atlas_03.png",
+      "X": 408,
+      "Y": 0,
+      "Width": 268,
+      "Height": 447
+    },
+    {
+      "Key": "m110",
+      "Atlas": "atlas_03.png",
+      "X": 676,
+      "Y": 0,
+      "Width": 222,
+      "Height": 335
+    },
+    {
+      "Key": "m111",
+      "Atlas": "atlas_03.png",
+      "X": 898,
+      "Y": 0,
+      "Width": 333,
+      "Height": 482
+    },
+    {
+      "Key": "m112",
+      "Atlas": "atlas_03.png",
+      "X": 1231,
+      "Y": 0,
+      "Width": 191,
+      "Height": 446
+    },
+    {
+      "Key": "m113",
+      "Atlas": "atlas_03.png",
+      "X": 1422,
+      "Y": 0,
+      "Width": 280,
+      "Height": 537
+    },
+    {
+      "Key": "m114",
+      "Atlas": "atlas_03.png",
+      "X": 1702,
+      "Y": 0,
+      "Width": 274,
+      "Height": 496
+    },
+    {
+      "Key": "m115",
+      "Atlas": "atlas_03.png",
+      "X": 0,
+      "Y": 537,
+      "Width": 275,
+      "Height": 536
+    },
+    {
+      "Key": "m116",
+      "Atlas": "atlas_03.png",
+      "X": 275,
+      "Y": 537,
+      "Width": 287,
+      "Height": 585
+    },
+    {
+      "Key": "m120",
+      "Atlas": "atlas_03.png",
+      "X": 562,
+      "Y": 537,
+      "Width": 324,
+      "Height": 524
+    },
+    {
+      "Key": "m121",
+      "Atlas": "atlas_03.png",
+      "X": 886,
+      "Y": 537,
+      "Width": 317,
+      "Height": 516
+    },
+    {
+      "Key": "m122",
+      "Atlas": "atlas_03.png",
+      "X": 1203,
+      "Y": 537,
+      "Width": 282,
+      "Height": 492
+    },
+    {
+      "Key": "m123",
+      "Atlas": "atlas_03.png",
+      "X": 1485,
+      "Y": 537,
+      "Width": 282,
+      "Height": 479
+    },
+    {
+      "Key": "m124",
+      "Atlas": "atlas_03.png",
+      "X": 0,
+      "Y": 1122,
+      "Width": 285,
+      "Height": 483
+    },
+    {
+      "Key": "m125",
+      "Atlas": "atlas_03.png",
+      "X": 285,
+      "Y": 1122,
+      "Width": 264,
+      "Height": 507
+    },
+    {
+      "Key": "m126",
+      "Atlas": "atlas_03.png",
+      "X": 549,
+      "Y": 1122,
+      "Width": 324,
+      "Height": 861
+    },
+    {
+      "Key": "m128",
+      "Atlas": "atlas_03.png",
+      "X": 873,
+      "Y": 1122,
+      "Width": 277,
+      "Height": 579
+    },
+    {
+      "Key": "m129",
+      "Atlas": "atlas_03.png",
+      "X": 1150,
+      "Y": 1122,
+      "Width": 242,
+      "Height": 556
+    },
+    {
+      "Key": "m130",
+      "Atlas": "atlas_03.png",
+      "X": 1392,
+      "Y": 1122,
+      "Width": 228,
+      "Height": 369
+    },
+    {
+      "Key": "m131",
+      "Atlas": "atlas_03.png",
+      "X": 1620,
+      "Y": 1122,
+      "Width": 229,
+      "Height": 355
+    },
+    {
+      "Key": "m132",
+      "Atlas": "atlas_04.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 374,
+      "Height": 526
+    },
+    {
+      "Key": "m136",
+      "Atlas": "atlas_04.png",
+      "X": 374,
+      "Y": 0,
+      "Width": 176,
+      "Height": 446
+    },
+    {
+      "Key": "m137",
+      "Atlas": "atlas_04.png",
+      "X": 550,
+      "Y": 0,
+      "Width": 176,
+      "Height": 446
+    },
+    {
+      "Key": "m140",
+      "Atlas": "atlas_04.png",
+      "X": 726,
+      "Y": 0,
+      "Width": 184,
+      "Height": 512
+    },
+    {
+      "Key": "m141",
+      "Atlas": "atlas_04.png",
+      "X": 910,
+      "Y": 0,
+      "Width": 277,
+      "Height": 498
+    },
+    {
+      "Key": "m142",
+      "Atlas": "atlas_04.png",
+      "X": 1187,
+      "Y": 0,
+      "Width": 282,
+      "Height": 672
+    },
+    {
+      "Key": "m144",
+      "Atlas": "atlas_04.png",
+      "X": 1469,
+      "Y": 0,
+      "Width": 308,
+      "Height": 575
+    },
+    {
+      "Key": "m145",
+      "Atlas": "atlas_04.png",
+      "X": 0,
+      "Y": 672,
+      "Width": 389,
+      "Height": 686
+    },
+    {
+      "Key": "m146",
+      "Atlas": "atlas_04.png",
+      "X": 389,
+      "Y": 672,
+      "Width": 389,
+      "Height": 688
+    },
+    {
+      "Key": "m147",
+      "Atlas": "atlas_04.png",
+      "X": 778,
+      "Y": 672,
+      "Width": 389,
+      "Height": 688
+    },
+    {
+      "Key": "m148",
+      "Atlas": "atlas_04.png",
+      "X": 1167,
+      "Y": 672,
+      "Width": 382,
+      "Height": 691
+    },
+    {
+      "Key": "m150",
+      "Atlas": "atlas_04.png",
+      "X": 1549,
+      "Y": 672,
+      "Width": 277,
+      "Height": 605
+    },
+    {
+      "Key": "m151",
+      "Atlas": "atlas_04.png",
+      "X": 0,
+      "Y": 1363,
+      "Width": 231,
+      "Height": 505
+    },
+    {
+      "Key": "m153",
+      "Atlas": "atlas_04.png",
+      "X": 231,
+      "Y": 1363,
+      "Width": 267,
+      "Height": 509
+    },
+    {
+      "Key": "m154",
+      "Atlas": "atlas_04.png",
+      "X": 498,
+      "Y": 1363,
+      "Width": 267,
+      "Height": 509
+    },
+    {
+      "Key": "m155",
+      "Atlas": "atlas_04.png",
+      "X": 765,
+      "Y": 1363,
+      "Width": 273,
+      "Height": 510
+    },
+    {
+      "Key": "m159",
+      "Atlas": "atlas_04.png",
+      "X": 1038,
+      "Y": 1363,
+      "Width": 228,
+      "Height": 470
+    },
+    {
+      "Key": "m160",
+      "Atlas": "atlas_04.png",
+      "X": 1266,
+      "Y": 1363,
+      "Width": 169,
+      "Height": 468
+    },
+    {
+      "Key": "m161",
+      "Atlas": "atlas_04.png",
+      "X": 1435,
+      "Y": 1363,
+      "Width": 151,
+      "Height": 427
+    },
+    {
+      "Key": "m163",
+      "Atlas": "atlas_04.png",
+      "X": 1586,
+      "Y": 1363,
+      "Width": 228,
+      "Height": 495
+    },
+    {
+      "Key": "m164",
+      "Atlas": "atlas_04.png",
+      "X": 1814,
+      "Y": 1363,
+      "Width": 229,
+      "Height": 490
+    },
+    {
+      "Key": "m165",
+      "Atlas": "atlas_05.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 367,
+      "Height": 678
+    },
+    {
+      "Key": "m166",
+      "Atlas": "atlas_05.png",
+      "X": 367,
+      "Y": 0,
+      "Width": 368,
+      "Height": 679
+    },
+    {
+      "Key": "m169",
+      "Atlas": "atlas_05.png",
+      "X": 735,
+      "Y": 0,
+      "Width": 132,
+      "Height": 420
+    },
+    {
+      "Key": "m170",
+      "Atlas": "atlas_05.png",
+      "X": 867,
+      "Y": 0,
+      "Width": 132,
+      "Height": 420
+    },
+    {
+      "Key": "m175",
+      "Atlas": "atlas_05.png",
+      "X": 999,
+      "Y": 0,
+      "Width": 316,
+      "Height": 509
+    },
+    {
+      "Key": "m179",
+      "Atlas": "atlas_05.png",
+      "X": 1315,
+      "Y": 0,
+      "Width": 32,
+      "Height": 53
+    },
+    {
+      "Key": "m180",
+      "Atlas": "atlas_05.png",
+      "X": 1347,
+      "Y": 0,
+      "Width": 329,
+      "Height": 858
+    },
+    {
+      "Key": "m181",
+      "Atlas": "atlas_05.png",
+      "X": 1676,
+      "Y": 0,
+      "Width": 220,
+      "Height": 505
+    },
+    {
+      "Key": "m182",
+      "Atlas": "atlas_05.png",
+      "X": 0,
+      "Y": 858,
+      "Width": 234,
+      "Height": 355
+    },
+    {
+      "Key": "m183",
+      "Atlas": "atlas_05.png",
+      "X": 234,
+      "Y": 858,
+      "Width": 296,
+      "Height": 498
+    },
+    {
+      "Key": "m2",
+      "Atlas": "atlas_05.png",
+      "X": 530,
+      "Y": 858,
+      "Width": 207,
+      "Height": 887
+    },
+    {
+      "Key": "m20",
+      "Atlas": "atlas_05.png",
+      "X": 737,
+      "Y": 858,
+      "Width": 241,
+      "Height": 1160
+    },
+    {
+      "Key": "m21",
+      "Atlas": "atlas_05.png",
+      "X": 978,
+      "Y": 858,
+      "Width": 242,
+      "Height": 1064
+    },
+    {
+      "Key": "m22",
+      "Atlas": "atlas_05.png",
+      "X": 1220,
+      "Y": 858,
+      "Width": 248,
+      "Height": 1127
+    },
+    {
+      "Key": "m23",
+      "Atlas": "atlas_05.png",
+      "X": 1468,
+      "Y": 858,
+      "Width": 232,
+      "Height": 931
+    },
+    {
+      "Key": "m30",
+      "Atlas": "atlas_05.png",
+      "X": 1700,
+      "Y": 858,
+      "Width": 211,
+      "Height": 1103
+    },
+    {
+      "Key": "m31",
+      "Atlas": "atlas_06.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 208,
+      "Height": 955
+    },
+    {
+      "Key": "m32",
+      "Atlas": "atlas_06.png",
+      "X": 208,
+      "Y": 0,
+      "Width": 238,
+      "Height": 1120
+    },
+    {
+      "Key": "m33",
+      "Atlas": "atlas_06.png",
+      "X": 446,
+      "Y": 0,
+      "Width": 211,
+      "Height": 1103
+    },
+    {
+      "Key": "m34",
+      "Atlas": "atlas_06.png",
+      "X": 657,
+      "Y": 0,
+      "Width": 248,
+      "Height": 1127
+    },
+    {
+      "Key": "m49",
+      "Atlas": "atlas_06.png",
+      "X": 905,
+      "Y": 0,
+      "Width": 199,
+      "Height": 1042
+    },
+    {
+      "Key": "m5",
+      "Atlas": "atlas_06.png",
+      "X": 1104,
+      "Y": 0,
+      "Width": 239,
+      "Height": 1128
+    },
+    {
+      "Key": "m50",
+      "Atlas": "atlas_06.png",
+      "X": 1343,
+      "Y": 0,
+      "Width": 261,
+      "Height": 512
+    },
+    {
+      "Key": "m6",
+      "Atlas": "atlas_06.png",
+      "X": 1604,
+      "Y": 0,
+      "Width": 233,
+      "Height": 1076
+    },
+    {
+      "Key": "m81",
+      "Atlas": "atlas_06.png",
+      "X": 1837,
+      "Y": 0,
+      "Width": 132,
+      "Height": 420
+    },
+    {
+      "Key": "mana",
+      "Atlas": "atlas_06.png",
+      "X": 0,
+      "Y": 1128,
+      "Width": 87,
+      "Height": 461
+    },
+    {
+      "Key": "mapa",
+      "Atlas": "atlas_06.png",
+      "X": 87,
+      "Y": 1128,
+      "Width": 128,
+      "Height": 128
+    },
+    {
+      "Key": "mira",
+      "Atlas": "atlas_06.png",
+      "X": 215,
+      "Y": 1128,
+      "Width": 56,
+      "Height": 302
+    },
+    {
+      "Key": "moscas",
+      "Atlas": "atlas_06.png",
+      "X": 271,
+      "Y": 1128,
+      "Width": 42,
+      "Height": 129
+    },
+    {
+      "Key": "muerte",
+      "Atlas": "atlas_06.png",
+      "X": 313,
+      "Y": 1128,
+      "Width": 64,
+      "Height": 439
+    },
+    {
+      "Key": "nie",
+      "Atlas": "atlas_06.png",
+      "X": 377,
+      "Y": 1128,
+      "Width": 160,
+      "Height": 512
+    },
+    {
+      "Key": "obj-m",
+      "Atlas": "atlas_06.png",
+      "X": 537,
+      "Y": 1128,
+      "Width": 156,
+      "Height": 130
+    },
+    {
+      "Key": "ojo",
+      "Atlas": "atlas_06.png",
+      "X": 693,
+      "Y": 1128,
+      "Width": 27,
+      "Height": 155
+    },
+    {
+      "Key": "portal",
+      "Atlas": "atlas_06.png",
+      "X": 720,
+      "Y": 1128,
+      "Width": 46,
+      "Height": 575
+    },
+    {
+      "Key": "rayo",
+      "Atlas": "atlas_06.png",
+      "X": 766,
+      "Y": 1128,
+      "Width": 49,
+      "Height": 231
+    },
+    {
+      "Key": "te",
+      "Atlas": "atlas_06.png",
+      "X": 815,
+      "Y": 1128,
+      "Width": 24,
+      "Height": 128
+    },
+    {
+      "Key": "ti",
+      "Atlas": "atlas_06.png",
+      "X": 839,
+      "Y": 1128,
+      "Width": 24,
+      "Height": 128
+    },
+    {
+      "Key": "tx",
+      "Atlas": "atlas_06.png",
+      "X": 863,
+      "Y": 1128,
+      "Width": 156,
+      "Height": 130
+    },
+    {
+      "Key": "zzz",
+      "Atlas": "atlas_06.png",
+      "X": 1019,
+      "Y": 1128,
+      "Width": 14,
+      "Height": 192
+    }
+  ]
+}

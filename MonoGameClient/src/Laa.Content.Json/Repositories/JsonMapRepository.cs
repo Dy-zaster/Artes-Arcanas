@@ -33,6 +33,7 @@ public sealed class JsonMapRepository : IMapRepository
         var files = Directory.GetFiles(_mapRoot, "*.json", SearchOption.TopDirectoryOnly)
             .Select(Path.GetFileNameWithoutExtension)
             .Where(name => !string.IsNullOrWhiteSpace(name))
+            .Select(name => name!)
             .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
             .ToArray();
         return files;

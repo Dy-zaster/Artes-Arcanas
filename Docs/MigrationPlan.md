@@ -21,24 +21,24 @@
 | --- | --- | --- | --- |
 | 0. Foundations | Build system & render loop | ✅ Completed | Solution bootstrap, MonoGame packages, placeholder rendering, repo documentation. |
 | 1. Data extraction | Understand Delphi assets | ✅ Completed | `Tools/LegacyDataExtractor` exports maps, items, spells, commerce tables, monsters, attack/animation mappings, and static graphics as JSON; sample snapshots live under `Docs/Formats/Samples`. |
-| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer and overlay tooling are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is replacing placeholder colors with real sprite atlases and expanding the scene graph/input abstractions. |
+| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer, legacy BMP texture loader (oc.b-driven), and debug overlays/panels are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is packaging those textures into atlases and expanding the scene graph/input abstractions. |
 | 3. Gameplay & networking | Logic parity | ⏳ Pending | Port combat loop, inventory/trade, quests, and networking protocol (client-first, server later). |
 | 4. Polishing | UX + toolchain | ⏳ Pending | Recreate audio, localization, accessibility, add modern updater/launcher, QA automation. |
 
 Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 
-**Recommended next step:** replace the placeholder terrain colors with oc.b-driven atlases, layer static props/entities, and move on to UI overlays (inventory/shop/spellbook) so the MonoGame client exercises more of the JSON data end-to-end.
+**Recommended next step:** convert the oc.b descriptors + extracted bitmaps into shared texture atlases (instead of on-demand BMP loads), layer entities/UI (inventory, shops, spellbooks) on top of the renderer, and keep the debug overlays/panels available for validation.
 
 ## Workstreams & milestones
 
 ### 1. Asset + data pipeline
 - Reverse engineer Delphi resource loaders (graphics, animations, map definitions) and describe each format in `Docs/Formats/*.md`. **Status:** ✅ Complete extraction suite implemented under `Tools/LegacyDataExtractor`; integration plan documented in `Docs/Formats/IntegrationPlan.md`.
-- Build CLI converters (could be dotnet tools or scripts) to emit MonoGame-friendly formats (PNG, JSON, TMX, etc.). **Status:** ⏳.
+- Build CLI converters (could be dotnet tools or scripts) to emit MonoGame-friendly formats (PNG, JSON, TMX, etc.). **Status:** ⏳ runtime loads BMPs directly from `Original Pascal/Laa/grf` (or `content/graphics`); migration to packaged atlases still pending.
 - Extend `Content/Content.mgcb` with folders per asset type and integrate into CI so `dotnet build` fails on missing content. **Status:** ⏳.
 
 ### 2. Engine foundation
 - Break the new solution into projects (`Client`, `Core`, `Infrastructure`) to separate UI/gameplay logic from platform glue. **Status:** 🛠️ `Laa.Content.Core` + `Laa.Content.Json` created, referenced by `Laa.Monogame.Client`.
-- Create subsystems for input, timing, and viewport scaling to replicate the deterministic feel of the 2D MMORPG. **Status:** 🛠️ basic camera + overlay controls exist (WASD/arrow movement, mouse wheel/`+`/`-` zoom, overlay toggles via `Tab`/number keys); formal input abstractions and deterministic ticking still pending.
+- Create subsystems for input, timing, and viewport scaling to replicate the deterministic feel of the 2D MMORPG. **Status:** 🛠️ basic camera + overlay/data controls exist (WASD/arrow movement, mouse wheel/`+`/`-` zoom, overlay toggles via `Tab`/number keys, map cycling with `[`/`]`, HUD toggle via `F1`, repository panels via `I`/`S`/`M`/`C`, world panel via `F2`); formal input abstractions and deterministic ticking still pending.
 - Provide service interfaces (e.g., `IGameStateService`, `INetworkClient`) so future unit tests can mock them. **Status:** ⏳.
 
 ### 3. Gameplay systems
@@ -77,7 +77,7 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 ## Immediate next steps
 
 1. Flesh out MonoGame content structure (fonts, textures, atlases) and wire a texture manager so JSON data can drive real sprites.
-2. Leverage the new repositories/`ContentContext` in `Laa.Monogame.Client` to replace placeholder tiles with oc.b-driven textures, layer static props/entities, and hook up inventory/shop/spellbook overlays for schema validation.
+2. Leverage the new repositories/`ContentContext` in `Laa.Monogame.Client` to bake the oc.b-driven textures into atlases (so on-demand BMP loads are no longer required) and hook up inventory/shop/spellbook overlays for schema validation.
 3. Expand `Docs/Networking/Protocol.md` as more opcodes are decoded and define corresponding C# packet types/interfaces.
 4. Decide on serialization format (JSON vs. binary) for translated data tables and create adapters accordingly (plan how exporters integrate with build/patch pipeline).
 5. Add regression tests for the extraction suite (checksum validation, record counts) and wire them into CI so data drift is caught automatically.
