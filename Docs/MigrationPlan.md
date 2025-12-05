@@ -21,13 +21,13 @@
 | --- | --- | --- | --- |
 | 0. Foundations | Build system & render loop | ✅ Completed | Solution bootstrap, MonoGame packages, placeholder rendering, repo documentation. |
 | 1. Data extraction | Understand Delphi assets | ✅ Completed | `Tools/LegacyDataExtractor` exports maps, items, spells, commerce tables, monsters, attack/animation mappings, and static graphics as JSON; sample snapshots live under `Docs/Formats/Samples`. |
-| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer, legacy BMP texture loader (oc.b-driven), and debug overlays/panels are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is packaging those textures into atlases and expanding the scene graph/input abstractions. |
+| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer that now consumes the legacy `terreno.jpg` sheet (from atlases or raw files) and animates water/lava tiles, the oc.b-driven static graphic loader, and debug overlays/panels are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is tackling tile edge blending and expanding the scene graph/input abstractions. |
 | 3. Gameplay & networking | Logic parity | ⏳ Pending | Port combat loop, inventory/trade, quests, and networking protocol (client-first, server later). |
 | 4. Polishing | UX + toolchain | ⏳ Pending | Recreate audio, localization, accessibility, add modern updater/launcher, QA automation. |
 
 Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 
-**Recommended next step:** convert the oc.b descriptors + extracted bitmaps into shared texture atlases (instead of on-demand BMP loads), layer entities/UI (inventory, shops, spellbooks) on top of the renderer, and keep the debug overlays/panels available for validation.
+**Recommended next step:** finish the tile edge blending for terrain, continue migrating the oc.b descriptors + extracted bitmaps into shared texture atlases (instead of on-demand BMP loads), and keep layering entities/UI (inventory, shops, spellbooks) on top of the renderer while preserving the debug overlays/panels for validation.
 
 ## Workstreams & milestones
 

@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{3CDB7476-C7C3-4589-A9E8-6501805F7068}|src\\Laa.Content.Json\\Laa.Content.Json.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.content.json\\repositories\\jsonterraintilesetrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3CDB7476-C7C3-4589-A9E8-6501805F7068}|src\\Laa.Content.Json\\Laa.Content.Json.csproj|solutionrelative:src\\laa.content.json\\repositories\\jsonterraintilesetrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\rendering\\staticgraphicrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\rendering\\staticgraphicrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -21,11 +25,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "JsonTerrainTileSetRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
+              "RelativeDocumentMoniker": "src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
+              "RelativeToolTip": "src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T06:26:09.236Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "GraphicTextureProvider.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\GraphicTextureProvider.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\GraphicTextureProvider.cs",
@@ -37,7 +54,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "StaticGraphicRenderer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
@@ -50,7 +67,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MonoGame.Content.Builder.Task.targets",
               "DocumentMoniker": "C:\\Users\\Pablo\\.nuget\\packages\\monogame.content.builder.task\\3.8.4.1\\build\\MonoGame.Content.Builder.Task.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\.nuget\\packages\\monogame.content.builder.task\\3.8.4.1\\build\\MonoGame.Content.Builder.Task.targets",

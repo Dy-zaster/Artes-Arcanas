@@ -80,11 +80,11 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _terrainRenderer = new TerrainRenderer(GraphicsDevice, TileSize);
+        var textureRoots = ResolveGraphicRoots();
+        _terrainRenderer = new TerrainRenderer(GraphicsDevice, TileSize, textureRoots);
         _terrainRenderer.LoadContent();
         if (_graphicsCatalog is not null)
         {
-            var textureRoots = ResolveGraphicRoots();
             var textureProvider = new GraphicTextureProvider(GraphicsDevice, _graphicsCatalog, textureRoots);
             _staticGraphicRenderer = new StaticGraphicRenderer(GraphicsDevice, textureProvider, TileSize);
         }
@@ -134,7 +134,7 @@ public class Game1 : Game
             return;
         }
 
-        _terrainRenderer.Draw(_spriteBatch, _activeMap, _camera, _tilePalette);
+        _terrainRenderer.Draw(_spriteBatch, _activeMap, _camera, _tilePalette, gameTime);
         _staticGraphicRenderer?.Draw(_spriteBatch, _sortedStaticGraphics, _camera);
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
         DrawHud();

@@ -7,7 +7,8 @@
     "atlas_03.png",
     "atlas_04.png",
     "atlas_05.png",
-    "atlas_06.png"
+    "atlas_06.png",
+    "atlas_07.png"
   ],
   "Sprites": [
     {
@@ -723,9 +724,17 @@
       "Height": 56
     },
     {
-      "Key": "bolsa",
+      "Key": "bmenu",
       "Atlas": "atlas_01.png",
       "X": 392,
+      "Y": 0,
+      "Width": 216,
+      "Height": 488
+    },
+    {
+      "Key": "bolsa",
+      "Atlas": "atlas_01.png",
+      "X": 608,
       "Y": 0,
       "Width": 28,
       "Height": 144
@@ -733,7 +742,7 @@
     {
       "Key": "c0",
       "Atlas": "atlas_01.png",
-      "X": 420,
+      "X": 636,
       "Y": 0,
       "Width": 36,
       "Height": 72
@@ -741,7 +750,7 @@
     {
       "Key": "c1",
       "Atlas": "atlas_01.png",
-      "X": 456,
+      "X": 672,
       "Y": 0,
       "Width": 68,
       "Height": 133
@@ -749,7 +758,7 @@
     {
       "Key": "c10",
       "Atlas": "atlas_01.png",
-      "X": 524,
+      "X": 740,
       "Y": 0,
       "Width": 191,
       "Height": 473
@@ -757,7 +766,7 @@
     {
       "Key": "c100",
       "Atlas": "atlas_01.png",
-      "X": 715,
+      "X": 931,
       "Y": 0,
       "Width": 68,
       "Height": 95
@@ -765,7 +774,7 @@
     {
       "Key": "c101",
       "Atlas": "atlas_01.png",
-      "X": 783,
+      "X": 999,
       "Y": 0,
       "Width": 68,
       "Height": 95
@@ -773,7 +782,7 @@
     {
       "Key": "c102",
       "Atlas": "atlas_01.png",
-      "X": 851,
+      "X": 1067,
       "Y": 0,
       "Width": 45,
       "Height": 81
@@ -781,7 +790,7 @@
     {
       "Key": "c103",
       "Atlas": "atlas_01.png",
-      "X": 896,
+      "X": 1112,
       "Y": 0,
       "Width": 38,
       "Height": 59
@@ -789,7 +798,7 @@
     {
       "Key": "c104",
       "Atlas": "atlas_01.png",
-      "X": 934,
+      "X": 1150,
       "Y": 0,
       "Width": 91,
       "Height": 112
@@ -797,7 +806,7 @@
     {
       "Key": "c11",
       "Atlas": "atlas_01.png",
-      "X": 1025,
+      "X": 1241,
       "Y": 0,
       "Width": 216,
       "Height": 432
@@ -805,7 +814,7 @@
     {
       "Key": "c112",
       "Atlas": "atlas_01.png",
-      "X": 1241,
+      "X": 1457,
       "Y": 0,
       "Width": 53,
       "Height": 103
@@ -813,7 +822,7 @@
     {
       "Key": "c113",
       "Atlas": "atlas_01.png",
-      "X": 1294,
+      "X": 1510,
       "Y": 0,
       "Width": 53,
       "Height": 103
@@ -821,7 +830,7 @@
     {
       "Key": "c114",
       "Atlas": "atlas_01.png",
-      "X": 1347,
+      "X": 1563,
       "Y": 0,
       "Width": 54,
       "Height": 104
@@ -829,7 +838,7 @@
     {
       "Key": "c115",
       "Atlas": "atlas_01.png",
-      "X": 1401,
+      "X": 1617,
       "Y": 0,
       "Width": 54,
       "Height": 104
@@ -837,7 +846,7 @@
     {
       "Key": "c116",
       "Atlas": "atlas_01.png",
-      "X": 1455,
+      "X": 1671,
       "Y": 0,
       "Width": 54,
       "Height": 103
@@ -845,7 +854,7 @@
     {
       "Key": "c117",
       "Atlas": "atlas_01.png",
-      "X": 1509,
+      "X": 1725,
       "Y": 0,
       "Width": 54,
       "Height": 103
@@ -853,7 +862,7 @@
     {
       "Key": "c118",
       "Atlas": "atlas_01.png",
-      "X": 1563,
+      "X": 1779,
       "Y": 0,
       "Width": 53,
       "Height": 108
@@ -861,7 +870,7 @@
     {
       "Key": "c119",
       "Atlas": "atlas_01.png",
-      "X": 1616,
+      "X": 1832,
       "Y": 0,
       "Width": 54,
       "Height": 103
@@ -869,7 +878,7 @@
     {
       "Key": "c120",
       "Atlas": "atlas_01.png",
-      "X": 1670,
+      "X": 1886,
       "Y": 0,
       "Width": 20,
       "Height": 65
@@ -877,7 +886,7 @@
     {
       "Key": "c121",
       "Atlas": "atlas_01.png",
-      "X": 1690,
+      "X": 1906,
       "Y": 0,
       "Width": 98,
       "Height": 67
@@ -885,55 +894,55 @@
     {
       "Key": "c122",
       "Atlas": "atlas_01.png",
-      "X": 1788,
-      "Y": 0,
+      "X": 0,
+      "Y": 1000,
       "Width": 54,
       "Height": 74
     },
     {
       "Key": "c123",
       "Atlas": "atlas_01.png",
-      "X": 1842,
-      "Y": 0,
+      "X": 54,
+      "Y": 1000,
       "Width": 11,
       "Height": 75
     },
     {
       "Key": "c128",
       "Atlas": "atlas_01.png",
-      "X": 1853,
-      "Y": 0,
+      "X": 65,
+      "Y": 1000,
       "Width": 38,
       "Height": 76
     },
     {
       "Key": "c129",
       "Atlas": "atlas_01.png",
-      "X": 1891,
-      "Y": 0,
+      "X": 103,
+      "Y": 1000,
       "Width": 20,
       "Height": 63
     },
     {
       "Key": "c130",
       "Atlas": "atlas_01.png",
-      "X": 1911,
-      "Y": 0,
+      "X": 123,
+      "Y": 1000,
       "Width": 63,
       "Height": 93
     },
     {
       "Key": "c131",
       "Atlas": "atlas_01.png",
-      "X": 1974,
-      "Y": 0,
+      "X": 186,
+      "Y": 1000,
       "Width": 63,
       "Height": 92
     },
     {
       "Key": "c132",
       "Atlas": "atlas_01.png",
-      "X": 0,
+      "X": 249,
       "Y": 1000,
       "Width": 63,
       "Height": 92
@@ -941,7 +950,7 @@
     {
       "Key": "c133",
       "Atlas": "atlas_01.png",
-      "X": 63,
+      "X": 312,
       "Y": 1000,
       "Width": 18,
       "Height": 63
@@ -949,7 +958,7 @@
     {
       "Key": "c134",
       "Atlas": "atlas_01.png",
-      "X": 81,
+      "X": 330,
       "Y": 1000,
       "Width": 18,
       "Height": 64
@@ -957,7 +966,7 @@
     {
       "Key": "c135",
       "Atlas": "atlas_01.png",
-      "X": 99,
+      "X": 348,
       "Y": 1000,
       "Width": 70,
       "Height": 62
@@ -965,7 +974,7 @@
     {
       "Key": "c140",
       "Atlas": "atlas_01.png",
-      "X": 169,
+      "X": 418,
       "Y": 1000,
       "Width": 98,
       "Height": 67
@@ -973,7 +982,7 @@
     {
       "Key": "c141",
       "Atlas": "atlas_01.png",
-      "X": 267,
+      "X": 516,
       "Y": 1000,
       "Width": 58,
       "Height": 110
@@ -981,7 +990,7 @@
     {
       "Key": "c142",
       "Atlas": "atlas_01.png",
-      "X": 325,
+      "X": 574,
       "Y": 1000,
       "Width": 58,
       "Height": 105
@@ -989,7 +998,7 @@
     {
       "Key": "c143",
       "Atlas": "atlas_01.png",
-      "X": 383,
+      "X": 632,
       "Y": 1000,
       "Width": 24,
       "Height": 68
@@ -997,7 +1006,7 @@
     {
       "Key": "c144",
       "Atlas": "atlas_01.png",
-      "X": 407,
+      "X": 656,
       "Y": 1000,
       "Width": 18,
       "Height": 79
@@ -1005,7 +1014,7 @@
     {
       "Key": "c145",
       "Atlas": "atlas_01.png",
-      "X": 425,
+      "X": 674,
       "Y": 1000,
       "Width": 48,
       "Height": 58
@@ -1013,7 +1022,7 @@
     {
       "Key": "c146",
       "Atlas": "atlas_01.png",
-      "X": 473,
+      "X": 722,
       "Y": 1000,
       "Width": 58,
       "Height": 105
@@ -1021,7 +1030,7 @@
     {
       "Key": "c147",
       "Atlas": "atlas_01.png",
-      "X": 531,
+      "X": 780,
       "Y": 1000,
       "Width": 58,
       "Height": 105
@@ -1029,7 +1038,7 @@
     {
       "Key": "c148",
       "Atlas": "atlas_01.png",
-      "X": 589,
+      "X": 838,
       "Y": 1000,
       "Width": 62,
       "Height": 56
@@ -1037,7 +1046,7 @@
     {
       "Key": "c149",
       "Atlas": "atlas_01.png",
-      "X": 651,
+      "X": 900,
       "Y": 1000,
       "Width": 57,
       "Height": 104
@@ -1045,7 +1054,7 @@
     {
       "Key": "c150",
       "Atlas": "atlas_01.png",
-      "X": 708,
+      "X": 957,
       "Y": 1000,
       "Width": 56,
       "Height": 100
@@ -1053,7 +1062,7 @@
     {
       "Key": "c151",
       "Atlas": "atlas_01.png",
-      "X": 764,
+      "X": 1013,
       "Y": 1000,
       "Width": 57,
       "Height": 105
@@ -1061,7 +1070,7 @@
     {
       "Key": "c152",
       "Atlas": "atlas_01.png",
-      "X": 821,
+      "X": 1070,
       "Y": 1000,
       "Width": 58,
       "Height": 138
@@ -1069,7 +1078,7 @@
     {
       "Key": "c153",
       "Atlas": "atlas_01.png",
-      "X": 879,
+      "X": 1128,
       "Y": 1000,
       "Width": 58,
       "Height": 105
@@ -1077,7 +1086,7 @@
     {
       "Key": "c154",
       "Atlas": "atlas_01.png",
-      "X": 937,
+      "X": 1186,
       "Y": 1000,
       "Width": 96,
       "Height": 63
@@ -1085,7 +1094,7 @@
     {
       "Key": "c155",
       "Atlas": "atlas_01.png",
-      "X": 1033,
+      "X": 1282,
       "Y": 1000,
       "Width": 51,
       "Height": 68
@@ -1093,7 +1102,7 @@
     {
       "Key": "c16",
       "Atlas": "atlas_01.png",
-      "X": 1084,
+      "X": 1333,
       "Y": 1000,
       "Width": 61,
       "Height": 66
@@ -1101,7 +1110,7 @@
     {
       "Key": "c17",
       "Atlas": "atlas_01.png",
-      "X": 1145,
+      "X": 1394,
       "Y": 1000,
       "Width": 54,
       "Height": 68
@@ -1109,7 +1118,7 @@
     {
       "Key": "c192",
       "Atlas": "atlas_01.png",
-      "X": 1199,
+      "X": 1448,
       "Y": 1000,
       "Width": 96,
       "Height": 64
@@ -1117,7 +1126,7 @@
     {
       "Key": "c193",
       "Atlas": "atlas_01.png",
-      "X": 1295,
+      "X": 1544,
       "Y": 1000,
       "Width": 119,
       "Height": 158
@@ -1125,7 +1134,7 @@
     {
       "Key": "c194",
       "Atlas": "atlas_01.png",
-      "X": 1414,
+      "X": 1663,
       "Y": 1000,
       "Width": 108,
       "Height": 150
@@ -1133,7 +1142,7 @@
     {
       "Key": "c195",
       "Atlas": "atlas_01.png",
-      "X": 1522,
+      "X": 1771,
       "Y": 1000,
       "Width": 108,
       "Height": 150
@@ -1141,7 +1150,7 @@
     {
       "Key": "c196",
       "Atlas": "atlas_01.png",
-      "X": 1630,
+      "X": 1879,
       "Y": 1000,
       "Width": 116,
       "Height": 116
@@ -1149,31 +1158,31 @@
     {
       "Key": "c197",
       "Atlas": "atlas_01.png",
-      "X": 1746,
-      "Y": 1000,
+      "X": 0,
+      "Y": 1158,
       "Width": 116,
       "Height": 117
     },
     {
       "Key": "c198",
       "Atlas": "atlas_01.png",
-      "X": 1862,
-      "Y": 1000,
+      "X": 116,
+      "Y": 1158,
       "Width": 96,
       "Height": 126
     },
     {
       "Key": "c199",
       "Atlas": "atlas_01.png",
-      "X": 1958,
-      "Y": 1000,
+      "X": 212,
+      "Y": 1158,
       "Width": 4,
       "Height": 4
     },
     {
       "Key": "c20",
       "Atlas": "atlas_01.png",
-      "X": 0,
+      "X": 216,
       "Y": 1158,
       "Width": 155,
       "Height": 428
@@ -1181,7 +1190,7 @@
     {
       "Key": "c220",
       "Atlas": "atlas_01.png",
-      "X": 155,
+      "X": 371,
       "Y": 1158,
       "Width": 51,
       "Height": 84
@@ -1189,7 +1198,7 @@
     {
       "Key": "c221",
       "Atlas": "atlas_01.png",
-      "X": 206,
+      "X": 422,
       "Y": 1158,
       "Width": 109,
       "Height": 110
@@ -1197,7 +1206,7 @@
     {
       "Key": "c222",
       "Atlas": "atlas_01.png",
-      "X": 315,
+      "X": 531,
       "Y": 1158,
       "Width": 91,
       "Height": 83
@@ -1205,7 +1214,7 @@
     {
       "Key": "c223",
       "Atlas": "atlas_01.png",
-      "X": 406,
+      "X": 622,
       "Y": 1158,
       "Width": 83,
       "Height": 69
@@ -1213,7 +1222,7 @@
     {
       "Key": "c224",
       "Atlas": "atlas_01.png",
-      "X": 489,
+      "X": 705,
       "Y": 1158,
       "Width": 84,
       "Height": 72
@@ -1221,7 +1230,7 @@
     {
       "Key": "c225",
       "Atlas": "atlas_01.png",
-      "X": 573,
+      "X": 789,
       "Y": 1158,
       "Width": 144,
       "Height": 113
@@ -1229,7 +1238,7 @@
     {
       "Key": "c226",
       "Atlas": "atlas_01.png",
-      "X": 717,
+      "X": 933,
       "Y": 1158,
       "Width": 145,
       "Height": 100
@@ -1237,7 +1246,7 @@
     {
       "Key": "c227",
       "Atlas": "atlas_01.png",
-      "X": 862,
+      "X": 1078,
       "Y": 1158,
       "Width": 145,
       "Height": 83
@@ -1245,7 +1254,7 @@
     {
       "Key": "c228",
       "Atlas": "atlas_01.png",
-      "X": 1007,
+      "X": 1223,
       "Y": 1158,
       "Width": 83,
       "Height": 89
@@ -1253,7 +1262,7 @@
     {
       "Key": "c229",
       "Atlas": "atlas_01.png",
-      "X": 1090,
+      "X": 1306,
       "Y": 1158,
       "Width": 83,
       "Height": 71
@@ -1261,7 +1270,7 @@
     {
       "Key": "c230",
       "Atlas": "atlas_01.png",
-      "X": 1173,
+      "X": 1389,
       "Y": 1158,
       "Width": 91,
       "Height": 69
@@ -1269,7 +1278,7 @@
     {
       "Key": "c239",
       "Atlas": "atlas_01.png",
-      "X": 1264,
+      "X": 1480,
       "Y": 1158,
       "Width": 24,
       "Height": 16
@@ -1277,7 +1286,7 @@
     {
       "Key": "c24",
       "Atlas": "atlas_01.png",
-      "X": 1288,
+      "X": 1504,
       "Y": 1158,
       "Width": 82,
       "Height": 121
@@ -1285,7 +1294,7 @@
     {
       "Key": "c240",
       "Atlas": "atlas_01.png",
-      "X": 1370,
+      "X": 1586,
       "Y": 1158,
       "Width": 46,
       "Height": 34
@@ -1293,7 +1302,7 @@
     {
       "Key": "c241",
       "Atlas": "atlas_01.png",
-      "X": 1416,
+      "X": 1632,
       "Y": 1158,
       "Width": 156,
       "Height": 102
@@ -1301,7 +1310,7 @@
     {
       "Key": "c242",
       "Atlas": "atlas_01.png",
-      "X": 1572,
+      "X": 1788,
       "Y": 1158,
       "Width": 98,
       "Height": 67
@@ -1309,7 +1318,7 @@
     {
       "Key": "c243",
       "Atlas": "atlas_01.png",
-      "X": 1670,
+      "X": 1886,
       "Y": 1158,
       "Width": 98,
       "Height": 67
@@ -1317,23 +1326,23 @@
     {
       "Key": "c25",
       "Atlas": "atlas_01.png",
-      "X": 1768,
-      "Y": 1158,
+      "X": 0,
+      "Y": 1586,
       "Width": 83,
       "Height": 171
     },
     {
       "Key": "c26",
       "Atlas": "atlas_01.png",
-      "X": 1851,
-      "Y": 1158,
+      "X": 83,
+      "Y": 1586,
       "Width": 83,
       "Height": 165
     },
     {
       "Key": "c27",
       "Atlas": "atlas_01.png",
-      "X": 0,
+      "X": 166,
       "Y": 1586,
       "Width": 127,
       "Height": 167
@@ -1341,7 +1350,7 @@
     {
       "Key": "c28",
       "Atlas": "atlas_01.png",
-      "X": 127,
+      "X": 293,
       "Y": 1586,
       "Width": 45,
       "Height": 116
@@ -1349,7 +1358,7 @@
     {
       "Key": "c29",
       "Atlas": "atlas_01.png",
-      "X": 172,
+      "X": 338,
       "Y": 1586,
       "Width": 58,
       "Height": 105
@@ -1357,7 +1366,7 @@
     {
       "Key": "c4",
       "Atlas": "atlas_01.png",
-      "X": 230,
+      "X": 396,
       "Y": 1586,
       "Width": 154,
       "Height": 88
@@ -1365,7 +1374,7 @@
     {
       "Key": "c5",
       "Atlas": "atlas_01.png",
-      "X": 384,
+      "X": 550,
       "Y": 1586,
       "Width": 154,
       "Height": 98
@@ -1373,7 +1382,7 @@
     {
       "Key": "c64",
       "Atlas": "atlas_01.png",
-      "X": 538,
+      "X": 704,
       "Y": 1586,
       "Width": 92,
       "Height": 92
@@ -1381,7 +1390,7 @@
     {
       "Key": "c65",
       "Atlas": "atlas_01.png",
-      "X": 630,
+      "X": 796,
       "Y": 1586,
       "Width": 44,
       "Height": 68
@@ -1389,7 +1398,7 @@
     {
       "Key": "c66",
       "Atlas": "atlas_01.png",
-      "X": 674,
+      "X": 840,
       "Y": 1586,
       "Width": 36,
       "Height": 38
@@ -1397,7 +1406,7 @@
     {
       "Key": "c67",
       "Atlas": "atlas_01.png",
-      "X": 710,
+      "X": 876,
       "Y": 1586,
       "Width": 42,
       "Height": 41
@@ -1405,7 +1414,7 @@
     {
       "Key": "c68",
       "Atlas": "atlas_01.png",
-      "X": 752,
+      "X": 918,
       "Y": 1586,
       "Width": 72,
       "Height": 70
@@ -1413,7 +1422,7 @@
     {
       "Key": "c69",
       "Atlas": "atlas_01.png",
-      "X": 824,
+      "X": 990,
       "Y": 1586,
       "Width": 64,
       "Height": 71
@@ -1421,7 +1430,7 @@
     {
       "Key": "c70",
       "Atlas": "atlas_01.png",
-      "X": 888,
+      "X": 1054,
       "Y": 1586,
       "Width": 72,
       "Height": 70
@@ -1429,7 +1438,7 @@
     {
       "Key": "c71",
       "Atlas": "atlas_01.png",
-      "X": 960,
+      "X": 1126,
       "Y": 1586,
       "Width": 75,
       "Height": 75
@@ -1437,7 +1446,7 @@
     {
       "Key": "c72",
       "Atlas": "atlas_01.png",
-      "X": 1035,
+      "X": 1201,
       "Y": 1586,
       "Width": 70,
       "Height": 65
@@ -1445,7 +1454,7 @@
     {
       "Key": "c80",
       "Atlas": "atlas_01.png",
-      "X": 1105,
+      "X": 1271,
       "Y": 1586,
       "Width": 97,
       "Height": 104
@@ -1453,7 +1462,7 @@
     {
       "Key": "c81",
       "Atlas": "atlas_01.png",
-      "X": 1202,
+      "X": 1368,
       "Y": 1586,
       "Width": 91,
       "Height": 117
@@ -1461,7 +1470,7 @@
     {
       "Key": "c82",
       "Atlas": "atlas_01.png",
-      "X": 1293,
+      "X": 1459,
       "Y": 1586,
       "Width": 22,
       "Height": 49
@@ -1469,7 +1478,7 @@
     {
       "Key": "c9",
       "Atlas": "atlas_01.png",
-      "X": 1315,
+      "X": 1481,
       "Y": 1586,
       "Width": 248,
       "Height": 431
@@ -1477,7 +1486,7 @@
     {
       "Key": "c90",
       "Atlas": "atlas_01.png",
-      "X": 1563,
+      "X": 1729,
       "Y": 1586,
       "Width": 16,
       "Height": 16
@@ -1485,7 +1494,7 @@
     {
       "Key": "c91",
       "Atlas": "atlas_01.png",
-      "X": 1579,
+      "X": 1745,
       "Y": 1586,
       "Width": 16,
       "Height": 16
@@ -1493,7 +1502,7 @@
     {
       "Key": "c92",
       "Atlas": "atlas_01.png",
-      "X": 1595,
+      "X": 1761,
       "Y": 1586,
       "Width": 16,
       "Height": 16
@@ -1501,7 +1510,7 @@
     {
       "Key": "c93",
       "Atlas": "atlas_01.png",
-      "X": 1611,
+      "X": 1777,
       "Y": 1586,
       "Width": 16,
       "Height": 16
@@ -1509,7 +1518,7 @@
     {
       "Key": "c94",
       "Atlas": "atlas_01.png",
-      "X": 1627,
+      "X": 1793,
       "Y": 1586,
       "Width": 12,
       "Height": 22
@@ -1517,7 +1526,7 @@
     {
       "Key": "c95",
       "Atlas": "atlas_01.png",
-      "X": 1639,
+      "X": 1805,
       "Y": 1586,
       "Width": 12,
       "Height": 21
@@ -1525,7 +1534,7 @@
     {
       "Key": "c96",
       "Atlas": "atlas_01.png",
-      "X": 1651,
+      "X": 1817,
       "Y": 1586,
       "Width": 22,
       "Height": 26
@@ -1533,7 +1542,7 @@
     {
       "Key": "c97",
       "Atlas": "atlas_01.png",
-      "X": 1673,
+      "X": 1839,
       "Y": 1586,
       "Width": 22,
       "Height": 21
@@ -1541,7 +1550,7 @@
     {
       "Key": "c98",
       "Atlas": "atlas_01.png",
-      "X": 1695,
+      "X": 1861,
       "Y": 1586,
       "Width": 15,
       "Height": 31
@@ -1549,7 +1558,7 @@
     {
       "Key": "cadaver",
       "Atlas": "atlas_01.png",
-      "X": 1710,
+      "X": 1876,
       "Y": 1586,
       "Width": 44,
       "Height": 176
@@ -1563,9 +1572,17 @@
       "Height": 724
     },
     {
-      "Key": "esfera",
+      "Key": "cjr",
       "Atlas": "atlas_02.png",
       "X": 75,
+      "Y": 0,
+      "Width": 320,
+      "Height": 160
+    },
+    {
+      "Key": "esfera",
+      "Atlas": "atlas_02.png",
+      "X": 395,
       "Y": 0,
       "Width": 42,
       "Height": 308
@@ -1573,7 +1590,7 @@
     {
       "Key": "fogata",
       "Atlas": "atlas_02.png",
-      "X": 117,
+      "X": 437,
       "Y": 0,
       "Width": 32,
       "Height": 329
@@ -1581,7 +1598,7 @@
     {
       "Key": "fondo",
       "Atlas": "atlas_02.png",
-      "X": 149,
+      "X": 469,
       "Y": 0,
       "Width": 1280,
       "Height": 144
@@ -1589,7 +1606,7 @@
     {
       "Key": "ingreso",
       "Atlas": "atlas_02.png",
-      "X": 1429,
+      "X": 1749,
       "Y": 0,
       "Width": 83,
       "Height": 731
@@ -1597,23 +1614,23 @@
     {
       "Key": "letras",
       "Atlas": "atlas_02.png",
-      "X": 1512,
-      "Y": 0,
+      "X": 0,
+      "Y": 731,
       "Width": 288,
       "Height": 105
     },
     {
       "Key": "liq",
       "Atlas": "atlas_02.png",
-      "X": 1800,
-      "Y": 0,
+      "X": 288,
+      "Y": 731,
       "Width": 144,
       "Height": 144
     },
     {
       "Key": "llu",
       "Atlas": "atlas_02.png",
-      "X": 0,
+      "X": 432,
       "Y": 731,
       "Width": 160,
       "Height": 1024
@@ -1621,7 +1638,7 @@
     {
       "Key": "logo",
       "Atlas": "atlas_02.png",
-      "X": 160,
+      "X": 592,
       "Y": 731,
       "Width": 640,
       "Height": 280
@@ -1629,7 +1646,7 @@
     {
       "Key": "m0",
       "Atlas": "atlas_02.png",
-      "X": 800,
+      "X": 1232,
       "Y": 731,
       "Width": 198,
       "Height": 1039
@@ -1637,7 +1654,7 @@
     {
       "Key": "m1",
       "Atlas": "atlas_02.png",
-      "X": 998,
+      "X": 1430,
       "Y": 731,
       "Width": 233,
       "Height": 1076
@@ -1645,7 +1662,7 @@
     {
       "Key": "m101",
       "Atlas": "atlas_02.png",
-      "X": 1231,
+      "X": 1663,
       "Y": 731,
       "Width": 149,
       "Height": 245
@@ -1653,31 +1670,31 @@
     {
       "Key": "m102",
       "Atlas": "atlas_02.png",
-      "X": 1380,
+      "X": 1812,
       "Y": 731,
       "Width": 144,
       "Height": 243
     },
     {
       "Key": "m103",
-      "Atlas": "atlas_02.png",
-      "X": 1524,
-      "Y": 731,
+      "Atlas": "atlas_03.png",
+      "X": 0,
+      "Y": 0,
       "Width": 255,
       "Height": 430
     },
     {
       "Key": "m104",
-      "Atlas": "atlas_02.png",
-      "X": 1779,
-      "Y": 731,
+      "Atlas": "atlas_03.png",
+      "X": 255,
+      "Y": 0,
       "Width": 213,
       "Height": 352
     },
     {
       "Key": "m105",
       "Atlas": "atlas_03.png",
-      "X": 0,
+      "X": 468,
       "Y": 0,
       "Width": 204,
       "Height": 422
@@ -1685,7 +1702,7 @@
     {
       "Key": "m106",
       "Atlas": "atlas_03.png",
-      "X": 204,
+      "X": 672,
       "Y": 0,
       "Width": 204,
       "Height": 422
@@ -1693,7 +1710,7 @@
     {
       "Key": "m107",
       "Atlas": "atlas_03.png",
-      "X": 408,
+      "X": 876,
       "Y": 0,
       "Width": 268,
       "Height": 447
@@ -1701,7 +1718,7 @@
     {
       "Key": "m110",
       "Atlas": "atlas_03.png",
-      "X": 676,
+      "X": 1144,
       "Y": 0,
       "Width": 222,
       "Height": 335
@@ -1709,7 +1726,7 @@
     {
       "Key": "m111",
       "Atlas": "atlas_03.png",
-      "X": 898,
+      "X": 1366,
       "Y": 0,
       "Width": 333,
       "Height": 482
@@ -1717,7 +1734,7 @@
     {
       "Key": "m112",
       "Atlas": "atlas_03.png",
-      "X": 1231,
+      "X": 1699,
       "Y": 0,
       "Width": 191,
       "Height": 446
@@ -1725,127 +1742,127 @@
     {
       "Key": "m113",
       "Atlas": "atlas_03.png",
-      "X": 1422,
-      "Y": 0,
+      "X": 0,
+      "Y": 482,
       "Width": 280,
       "Height": 537
     },
     {
       "Key": "m114",
       "Atlas": "atlas_03.png",
-      "X": 1702,
-      "Y": 0,
+      "X": 280,
+      "Y": 482,
       "Width": 274,
       "Height": 496
     },
     {
       "Key": "m115",
       "Atlas": "atlas_03.png",
-      "X": 0,
-      "Y": 537,
+      "X": 554,
+      "Y": 482,
       "Width": 275,
       "Height": 536
     },
     {
       "Key": "m116",
       "Atlas": "atlas_03.png",
-      "X": 275,
-      "Y": 537,
+      "X": 829,
+      "Y": 482,
       "Width": 287,
       "Height": 585
     },
     {
       "Key": "m120",
       "Atlas": "atlas_03.png",
-      "X": 562,
-      "Y": 537,
+      "X": 1116,
+      "Y": 482,
       "Width": 324,
       "Height": 524
     },
     {
       "Key": "m121",
       "Atlas": "atlas_03.png",
-      "X": 886,
-      "Y": 537,
+      "X": 1440,
+      "Y": 482,
       "Width": 317,
       "Height": 516
     },
     {
       "Key": "m122",
       "Atlas": "atlas_03.png",
-      "X": 1203,
-      "Y": 537,
+      "X": 1757,
+      "Y": 482,
       "Width": 282,
       "Height": 492
     },
     {
       "Key": "m123",
       "Atlas": "atlas_03.png",
-      "X": 1485,
-      "Y": 537,
+      "X": 0,
+      "Y": 1067,
       "Width": 282,
       "Height": 479
     },
     {
       "Key": "m124",
       "Atlas": "atlas_03.png",
-      "X": 0,
-      "Y": 1122,
+      "X": 282,
+      "Y": 1067,
       "Width": 285,
       "Height": 483
     },
     {
       "Key": "m125",
       "Atlas": "atlas_03.png",
-      "X": 285,
-      "Y": 1122,
+      "X": 567,
+      "Y": 1067,
       "Width": 264,
       "Height": 507
     },
     {
       "Key": "m126",
       "Atlas": "atlas_03.png",
-      "X": 549,
-      "Y": 1122,
+      "X": 831,
+      "Y": 1067,
       "Width": 324,
       "Height": 861
     },
     {
       "Key": "m128",
       "Atlas": "atlas_03.png",
-      "X": 873,
-      "Y": 1122,
+      "X": 1155,
+      "Y": 1067,
       "Width": 277,
       "Height": 579
     },
     {
       "Key": "m129",
       "Atlas": "atlas_03.png",
-      "X": 1150,
-      "Y": 1122,
+      "X": 1432,
+      "Y": 1067,
       "Width": 242,
       "Height": 556
     },
     {
       "Key": "m130",
       "Atlas": "atlas_03.png",
-      "X": 1392,
-      "Y": 1122,
+      "X": 1674,
+      "Y": 1067,
       "Width": 228,
       "Height": 369
     },
     {
       "Key": "m131",
-      "Atlas": "atlas_03.png",
-      "X": 1620,
-      "Y": 1122,
+      "Atlas": "atlas_04.png",
+      "X": 0,
+      "Y": 0,
       "Width": 229,
       "Height": 355
     },
     {
       "Key": "m132",
       "Atlas": "atlas_04.png",
-      "X": 0,
+      "X": 229,
       "Y": 0,
       "Width": 374,
       "Height": 526
@@ -1853,7 +1870,7 @@
     {
       "Key": "m136",
       "Atlas": "atlas_04.png",
-      "X": 374,
+      "X": 603,
       "Y": 0,
       "Width": 176,
       "Height": 446
@@ -1861,7 +1878,7 @@
     {
       "Key": "m137",
       "Atlas": "atlas_04.png",
-      "X": 550,
+      "X": 779,
       "Y": 0,
       "Width": 176,
       "Height": 446
@@ -1869,7 +1886,7 @@
     {
       "Key": "m140",
       "Atlas": "atlas_04.png",
-      "X": 726,
+      "X": 955,
       "Y": 0,
       "Width": 184,
       "Height": 512
@@ -1877,7 +1894,7 @@
     {
       "Key": "m141",
       "Atlas": "atlas_04.png",
-      "X": 910,
+      "X": 1139,
       "Y": 0,
       "Width": 277,
       "Height": 498
@@ -1885,7 +1902,7 @@
     {
       "Key": "m142",
       "Atlas": "atlas_04.png",
-      "X": 1187,
+      "X": 1416,
       "Y": 0,
       "Width": 282,
       "Height": 672
@@ -1893,7 +1910,7 @@
     {
       "Key": "m144",
       "Atlas": "atlas_04.png",
-      "X": 1469,
+      "X": 1698,
       "Y": 0,
       "Width": 308,
       "Height": 575
@@ -2227,9 +2244,17 @@
       "Height": 128
     },
     {
-      "Key": "mira",
+      "Key": "menu",
       "Atlas": "atlas_06.png",
       "X": 215,
+      "Y": 1128,
+      "Width": 640,
+      "Height": 480
+    },
+    {
+      "Key": "mira",
+      "Atlas": "atlas_06.png",
+      "X": 855,
       "Y": 1128,
       "Width": 56,
       "Height": 302
@@ -2237,7 +2262,7 @@
     {
       "Key": "moscas",
       "Atlas": "atlas_06.png",
-      "X": 271,
+      "X": 911,
       "Y": 1128,
       "Width": 42,
       "Height": 129
@@ -2245,7 +2270,7 @@
     {
       "Key": "muerte",
       "Atlas": "atlas_06.png",
-      "X": 313,
+      "X": 953,
       "Y": 1128,
       "Width": 64,
       "Height": 439
@@ -2253,7 +2278,7 @@
     {
       "Key": "nie",
       "Atlas": "atlas_06.png",
-      "X": 377,
+      "X": 1017,
       "Y": 1128,
       "Width": 160,
       "Height": 512
@@ -2261,64 +2286,104 @@
     {
       "Key": "obj-m",
       "Atlas": "atlas_06.png",
-      "X": 537,
+      "X": 1177,
       "Y": 1128,
       "Width": 156,
       "Height": 130
     },
     {
+      "Key": "obj",
+      "Atlas": "atlas_07.png",
+      "X": 0,
+      "Y": 0,
+      "Width": 320,
+      "Height": 1280
+    },
+    {
       "Key": "ojo",
-      "Atlas": "atlas_06.png",
-      "X": 693,
-      "Y": 1128,
+      "Atlas": "atlas_07.png",
+      "X": 320,
+      "Y": 0,
       "Width": 27,
       "Height": 155
     },
     {
       "Key": "portal",
-      "Atlas": "atlas_06.png",
-      "X": 720,
-      "Y": 1128,
+      "Atlas": "atlas_07.png",
+      "X": 347,
+      "Y": 0,
       "Width": 46,
       "Height": 575
     },
     {
       "Key": "rayo",
-      "Atlas": "atlas_06.png",
-      "X": 766,
-      "Y": 1128,
+      "Atlas": "atlas_07.png",
+      "X": 393,
+      "Y": 0,
       "Width": 49,
       "Height": 231
     },
     {
+      "Key": "ros",
+      "Atlas": "atlas_07.png",
+      "X": 442,
+      "Y": 0,
+      "Width": 320,
+      "Height": 320
+    },
+    {
+      "Key": "tcca",
+      "Atlas": "atlas_07.png",
+      "X": 762,
+      "Y": 0,
+      "Width": 160,
+      "Height": 680
+    },
+    {
+      "Key": "tccb",
+      "Atlas": "atlas_07.png",
+      "X": 922,
+      "Y": 0,
+      "Width": 160,
+      "Height": 664
+    },
+    {
       "Key": "te",
-      "Atlas": "atlas_06.png",
-      "X": 815,
-      "Y": 1128,
+      "Atlas": "atlas_07.png",
+      "X": 1082,
+      "Y": 0,
       "Width": 24,
       "Height": 128
     },
     {
+      "Key": "terreno",
+      "Atlas": "atlas_07.png",
+      "X": 1106,
+      "Y": 0,
+      "Width": 576,
+      "Height": 480
+    },
+    {
       "Key": "ti",
-      "Atlas": "atlas_06.png",
-      "X": 839,
-      "Y": 1128,
+      "Atlas": "atlas_07.png",
+      "X": 1682,
+      "Y": 0,
       "Width": 24,
       "Height": 128
     },
     {
       "Key": "tx",
-      "Atlas": "atlas_06.png",
-      "X": 863,
-      "Y": 1128,
+      "Atlas": "atlas_07.png",
+      "X": 1706,
+      "Y": 0,
       "Width": 156,
       "Height": 130
     },
     {
       "Key": "zzz",
-      "Atlas": "atlas_06.png",
-      "X": 1019,
-      "Y": 1128,
+      "Atlas": "atlas_07.png",
+      "X": 1862,
+      "Y": 0,
       "Width": 14,
       "Height": 192
     }

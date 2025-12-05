@@ -57,13 +57,23 @@ At runtime `TcoleccionGraficosTablero` loads each bitmap whose descriptor has `d
 - Deserialize `oc.b` and store descriptors in a modern format (e.g., `graphics.json`).
 - Batch-export referenced bitmaps into texture atlases grouped by usage (floors, walls, roofs) and keep the original occupancy masks to rebuild collision layers.
 
+## Terrain sheet (`grf/terreno.jpg`)
+
+The Delphi renderer does not load ground tiles from `oc.b`. Instead it uses a dedicated sheet named `terreno.jpg` (`576×480`, progressive JPEG) that lives next to the rest of the `.bmp` assets. Its layout mirrors the legacy `TMapaCompreso` terrain codes:
+
+- Codes `0..31` are arranged in eight rows (four codes per row). Each code occupies a `144×48` block made out of 18 mini tiles (`6` columns × `3` rows).
+- Every mini tile measures `24×16` pixels. During runtime the client picks one of the 18 variants based on tile coordinates to add subtle variation to large areas.
+- Codes `28..31` represent liquids/fire and were rendered with special routines (`BltLiquido`). The MonoGame port now samples those frames from the same sheet (or atlas entry) and cycles through the 18 mini tiles to mimic movement.
+
+The new `TerrainRenderer` first looks for the `terreno` entry inside any generated atlas manifest and only falls back to loading the standalone JPEG/PNG from `MonoGameClient/content/graphics` (or `Original Pascal/Laa/grf`). If both sources are missing it reuses the deterministic color palette introduced earlier.
+
 ## UI atlases
 
 UI boards (`fondo.bmp`, `menu.jpg`, `barra.bmp`, `obj.jpg`, `ros.jpg`, `cjr.jpg`) are loaded through `Graficador` helpers. They already use conventional bitmap/JPEG formats, so data extraction mainly involves lossless conversion to PNG and mapping sprite rectangles by reading existing constants in `Juego.pas`/`UCliente.pas`.
 
 ## Atlas builder
 
-The repository now includes a small CLI (`Tools/AtlasBuilder`) that repacks the legacy `grf/*.bmp` files into Texture2D-friendly atlases alongside a JSON manifest. The MonoGame client automatically loads the manifest/atlases (if present) and falls back to the raw BMPs when they are missing.
+The repository now includes a small CLI (`Tools/AtlasBuilder`) that repacks the legacy `grf/*` textures (BMP, PNG, JPG/JPEG) into Texture2D-friendly atlases alongside a JSON manifest. The MonoGame client automatically loads the manifest/atlases (if present) and falls back to the raw files when they are missing.
 
 ```bash
 cd Tools/AtlasBuilder
@@ -76,6 +86,7 @@ DOTNET_CLI_HOME="$PWD" dotnet run -- \
 - `--source` defaults to the legacy `Original Pascal/Laa/grf` folder.
 - `--output` defaults to `MonoGameClient/content/graphics/atlases`.
 - `--atlas-size` controls the square dimensions of each atlas (pixels). Increase it if you want fewer atlas files, decrease it to avoid GPU limits.
+- All `.bmp`, `.png`, `.jpg`, and `.jpeg` files inside the source folder are packed. This keeps resources like `terreno.jpg`, `ros.jpg`, and UI boards consistent with the rest of the pipeline.
 
 The command produces:
 

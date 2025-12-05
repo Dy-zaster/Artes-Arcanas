@@ -63,6 +63,14 @@ internal sealed class AtlasBuilder
         _outputRoot = Path.GetFullPath(outputRoot);
     }
 
+    private static bool IsSupportedTexture(string path)
+    {
+        return path.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+            || path.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase);
+    }
+
     public async Task BuildAsync()
     {
         if (!Directory.Exists(_sourceRoot))
@@ -72,10 +80,10 @@ internal sealed class AtlasBuilder
 
         Directory.CreateDirectory(_outputRoot);
 
-        var files = Directory.EnumerateFiles(_sourceRoot, "*.*", SearchOption.TopDirectoryOnly)
-            .Where(f => f.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) || f.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-            .OrderBy(f => f, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+var files = Directory.EnumerateFiles(_sourceRoot, "*.*", SearchOption.TopDirectoryOnly)
+    .Where(IsSupportedTexture)
+    .OrderBy(f => f, StringComparer.OrdinalIgnoreCase)
+    .ToList();
 
         if (files.Count == 0)
         {

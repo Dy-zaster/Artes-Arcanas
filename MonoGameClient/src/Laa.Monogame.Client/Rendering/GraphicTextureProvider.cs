@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using Laa.Content.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,7 +14,7 @@ public sealed class GraphicTextureProvider : IDisposable
     private readonly GraphicDocument _document;
     private readonly List<string> _searchRoots;
     private readonly Dictionary<int, GraphicTextureEntry> _cache = new();
-    private readonly Dictionary<string, AtlasSpriteEntry> _atlasEntries = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, AtlasSpriteEntry> _atlasEntries;
     private readonly Dictionary<string, Texture2D> _atlasTextures = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<Texture2D> _ownedTextures = new();
 
@@ -27,7 +26,7 @@ public sealed class GraphicTextureProvider : IDisposable
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .Where(Directory.Exists)
             .ToList() ?? new List<string>();
-        LoadAtlasManifests();
+        _atlasEntries = AtlasContentLoader.Load(_searchRoots);
     }
 
     public bool TryGetTexture(int descriptorIndex, out GraphicTextureEntry entry)
@@ -88,60 +87,6 @@ public sealed class GraphicTextureProvider : IDisposable
         _cache[descriptorIndex] = created;
         entry = created;
         return true;
-    }
-
-    private void LoadAtlasManifests()
-    {
-        foreach (var root in _searchRoots)
-        {
-            var manifestPath = Path.Combine(root, "atlas_manifest.json");
-            if (!File.Exists(manifestPath))
-            {
-                manifestPath = Path.Combine(root, "atlases", "atlas_manifest.json");
-            }
-
-            if (!File.Exists(manifestPath))
-            {
-                continue;
-            }
-
-            try
-            {
-                using var stream = File.OpenRead(manifestPath);
-                var manifest = JsonSerializer.Deserialize<AtlasManifest>(stream, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-
-                if (manifest is null)
-                {
-                    continue;
-                }
-
-                var manifestRoot = Path.GetDirectoryName(manifestPath) ?? root;
-                foreach (var sprite in manifest.Sprites)
-                {
-                    var key = sprite.Key;
-                    if (string.IsNullOrWhiteSpace(key))
-                    {
-                        continue;
-                    }
-
-                    _atlasEntries[key] = new AtlasSpriteEntry(
-                        key,
-                        sprite.Atlas,
-                        manifestRoot,
-                        sprite.X,
-                        sprite.Y,
-                        sprite.Width,
-                        sprite.Height);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Failed to load atlas manifest '{manifestPath}': {ex.Message}");
-            }
-        }
     }
 
     private Texture2D GetAtlasTexture(AtlasSpriteEntry sprite)
@@ -242,9 +187,3 @@ public sealed class GraphicTextureProvider : IDisposable
 }
 
 public sealed record GraphicTextureEntry(Texture2D Texture, Rectangle? SourceRectangle, int OffsetX, int OffsetY, int ReflectedOffsetX, byte AlignY);
-
-internal sealed record AtlasManifest(int AtlasSize, IReadOnlyList<string> Atlases, IReadOnlyList<AtlasSprite> Sprites);
-
-internal sealed record AtlasSprite(string Key, string Atlas, int X, int Y, int Width, int Height);
-
-internal sealed record AtlasSpriteEntry(string Key, string Atlas, string Root, int X, int Y, int Width, int Height);
