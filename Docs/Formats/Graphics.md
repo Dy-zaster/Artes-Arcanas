@@ -55,7 +55,7 @@ The associated bitmap usually contains every direction concatenated horizontally
 At runtime `TcoleccionGraficosTablero` loads each bitmap whose descriptor has `dg_recuperarArchivo`, producing an `TElementoGrafico` that knows how to render with the right flags. To port this:
 
 - Deserialize `oc.b` and store descriptors in a modern format (e.g., `graphics.json`).
-- Batch-export referenced bitmaps into texture atlases grouped by usage (floors, walls, roofs) and keep the original occupancy masks to rebuild collision layers.
+- Batch-export referenced bitmaps into texture atlases grouped by usage (floors, walls, roofs) and keep the original occupancy masks to rebuild collision layers. When the runtime loads legacy BMPs (either directly or as part of the generated atlases) it applies the same color-key treatment as Delphi (`etNegro`), turning pure black pixels into transparent ones so old assets without alpha behave as expected until new atlases are supplied.
 
 ## Terrain sheet (`grf/terreno.jpg`)
 
@@ -80,12 +80,14 @@ cd Tools/AtlasBuilder
 DOTNET_CLI_HOME="$PWD" dotnet run -- \
     --source "../../Original Pascal/Laa/grf" \
     --output "../../MonoGameClient/content/graphics/atlases" \
-    --atlas-size 2048
+    --atlas-size 2048 \
+    --chroma-key #000000
 ```
 
 - `--source` defaults to the legacy `Original Pascal/Laa/grf` folder.
 - `--output` defaults to `MonoGameClient/content/graphics/atlases`.
 - `--atlas-size` controls the square dimensions of each atlas (pixels). Increase it if you want fewer atlas files, decrease it to avoid GPU limits.
+- `--chroma-key` defaults to black (`#000000`). Pass `none` to disable replacement or specify another hex color if you want to experiment with different legacy keys.
 - All `.bmp`, `.png`, `.jpg`, and `.jpeg` files inside the source folder are packed. This keeps resources like `terreno.jpg`, `ros.jpg`, and UI boards consistent with the rest of the pipeline.
 
 The command produces:
@@ -100,3 +102,13 @@ Drop the generated folder under `MonoGameClient/content/graphics/atlases` (alrea
 - [ ] Write a converter that walks `grf/`, finds each `.cr9`, and emits JSON descriptors plus PNG atlases.
 - [x] Recreate the `oc.b` metadata in a cross-platform format and generate a lookup table to drive MonoGame's tile renderer.
 - [ ] Document per-asset transparency expectations (magenta key vs. alpha) so SpriteBatch settings match the Delphi behavior.
+
+## Pseudo-mosaic masks (`ti.bmp`)
+
+The Delphi client never relied on texture filtering to smooth terrain boundaries. Instead it upscales the 64×64 `TMapaCompreso` grid into a 256×256 board and then blends corner/edge tiles with a set of 4×4 alpha stencils stored in `grf/ti.bmp`:
+
+- `ti.bmp` is an 8-bit, 24×128 bitmap where each 16-pixel row block encodes one of the `MZ_*` patterns (`MZ_h`, `MZ_v`, `MZ_h2`, `MZ_v2`, `MZ_si`, `MZ_sd`, `MZ_ii`, `MZ_id`) plus a fully transparent strip.
+- Every pixel value 0–8 maps to a deterministic mix (`0` = use overlay color, `4` = 50/50, `8` = keep destination). `BltAlphaTile` and `BltAlphaLiquido` loop over the mask and apply the weight by averaging source/destination colors multiple times in 16-bit space.
+- Liquids use the same masks but sample palette-indexed data from `liq.bmp`/`Paleta_Liquidos` instead of the terrain sheet.
+
+The MonoGame renderer loads `ti.bmp`, converts each stencil into a normalized float array, and builds a cached `Texture2D` per `(tile code, atlas variant, pattern)` so the GPU reproduces the exact blending. Matching the original look requires both this mask and the 4×4 terrain upscaling rules described in [`Map.md`](Map.md).

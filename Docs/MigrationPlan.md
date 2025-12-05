@@ -22,7 +22,7 @@
 | --- | --- | --- | --- |
 | 0. Foundations | Build system & render loop | ✅ Completed | Solution bootstrap, MonoGame packages, placeholder rendering, repo documentation. |
 | 1. Data extraction | Understand Delphi assets | ✅ Completed | `Tools/LegacyDataExtractor` exports maps, items, spells, commerce tables, monsters, attack/animation mappings, and static graphics as JSON; sample snapshots live under `Docs/Formats/Samples`. |
-| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer that now consumes the legacy `terreno.jpg` sheet (from atlases or raw files), animates water/lava tiles, and adds interim gradient edge blending; the oc.b-driven static graphic loader and debug overlays/panels are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is tackling the true pseudo-mosaic edge logic and expanding the scene graph/input abstractions. |
+| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer that consumes the legacy `terreno.jpg` sheet (from atlases or raw files), animates water/lava tiles, **and now ports the true pseudo-mosaic system using `ti.bmp` masks + Delphi’s 4× upscaling rules**; the oc.b-driven static graphic loader and debug overlays/panels are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is expanding the scene graph/input abstractions. |
 | 3. Gameplay & networking | Logic parity | ⏳ Pending | Port combat loop, inventory/trade, quests, and networking protocol (client-first, server later). |
 | 4. Polishing | UX + toolchain | ⏳ Pending | Recreate audio, localization, accessibility, add modern updater/launcher, QA automation. |
 
@@ -78,7 +78,7 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 ## Immediate next steps
 
 1. Flesh out MonoGame content structure (fonts, textures, atlases) and wire a texture manager so JSON data can drive real sprites.
-2. Replace the temporary gradient blending with a faithful port of the Delphi pseudo-mosaic system (`MZ_h`, `MZ_v`, `MZ_si`, etc.) so tile transitions match the original renderer.
+2. Finish integrating the pseudo-mosaic renderer with future atlas builds (pre-baked overlays, mip-aware blending) now that `ti.bmp` masks and the 4× upscaler mirror Delphi behavior.
 3. Leverage the new repositories/`ContentContext` in `Laa.Monogame.Client` to bake the oc.b-driven textures into atlases (so on-demand BMP loads are no longer required) and hook up inventory/shop/spellbook overlays for schema validation.
 4. Expand `Docs/Networking/Protocol.md` as more opcodes are decoded and define corresponding C# packet types/interfaces.
 5. Decide on serialization format (JSON vs. binary) for translated data tables and create adapters accordingly (plan how exporters integrate with build/patch pipeline).

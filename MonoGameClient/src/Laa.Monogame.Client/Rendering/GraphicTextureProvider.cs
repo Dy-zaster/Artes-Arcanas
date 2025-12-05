@@ -74,6 +74,11 @@ public sealed class GraphicTextureProvider : IDisposable
 
         using var stream = File.OpenRead(filePath);
         var texture = Texture2D.FromStream(_graphicsDevice, stream);
+        var extension = Path.GetExtension(filePath);
+        if (extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase))
+        {
+            ApplyLegacyChromaKey(texture);
+        }
         _ownedTextures.Add(texture);
 
             var created = new GraphicTextureEntry(
@@ -104,6 +109,7 @@ public sealed class GraphicTextureProvider : IDisposable
 
         using var stream = File.OpenRead(fullPath);
         var loaded = Texture2D.FromStream(_graphicsDevice, stream);
+        ApplyLegacyChromaKey(loaded);
         _atlasTextures[sprite.Atlas] = loaded;
         return loaded;
     }
@@ -166,6 +172,43 @@ public sealed class GraphicTextureProvider : IDisposable
         }
 
         return $"x{descriptorIndex - 512}";
+    }
+
+    private static void ApplyLegacyChromaKey(Texture2D texture)
+    {
+        if (texture is null)
+        {
+            return;
+        }
+
+        var totalPixels = texture.Width * texture.Height;
+        if (totalPixels == 0)
+        {
+            return;
+        }
+
+        var data = new Color[totalPixels];
+        texture.GetData(data);
+        var modified = false;
+        for (var i = 0; i < data.Length; i++)
+        {
+            var color = data[i];
+            if (color.A == 0)
+            {
+                continue;
+            }
+
+            if (color.R == 0 && color.G == 0 && color.B == 0)
+            {
+                data[i] = new Color(0, 0, 0, 0);
+                modified = true;
+            }
+        }
+
+        if (modified)
+        {
+            texture.SetData(data);
+        }
     }
 
     public void Dispose()

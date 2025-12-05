@@ -61,3 +61,7 @@ When converting to MonoGame, load sprites from the `Grf/` directory and reuse th
 3. Emit a friendly format (e.g., Tiled JSON) with layers for terrain, props, sensors, nests, and merchants. Keep the original binary blob around for validation by storing the SHA-1 and source offset in the JSON metadata.
 4. Name the exported files `map_<id>.json` (or place them inside `content/data/maps/`) so the MonoGame client can auto-discover them.
 5. Validate by loading a handful of `.mpv` files in Delphi and taking screenshots; ensure the MonoGame renderer produces matching layouts before fully migrating.
+
+### Terrain expansion details
+
+`ActualizarTableroTiles` is more than a 4×4 repetition: for each 64×64 cell it looks at the four cardinal neighbors (`n`, `e`, `s`) and picks alternate terrain codes for the sub-quadrants so beaches, floors, and rivers gain rounded edges before the pseudo-mosaic masks are applied. The MonoGame `MapTransformer` now mirrors this routine when it expands the JSON terrain, guaranteeing that the 256×256 grid feeding the renderer matches the precise patterns the Delphi client produced.
