@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0D755933-C0A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laa.Monogame.Client", "src\Laa.Monogame.Client\Laa.Monogame.Client.csproj", "{94893333-90B1-4556-8C93-44E60E531102}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laa.Content.Core", "src\Laa.Content.Core\Laa.Content.Core.csproj", "{265FEC9D-B1FB-41E7-BEF3-0B11D571D0F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laa.Content.Json", "src\Laa.Content.Json\Laa.Content.Json.csproj", "{3CDB7476-C7C3-4589-A9E8-6501805F7068}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +24,18 @@ Global
 		{94893333-90B1-4556-8C93-44E60E531102}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94893333-90B1-4556-8C93-44E60E531102}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94893333-90B1-4556-8C93-44E60E531102}.Release|Any CPU.Build.0 = Release|Any CPU
+		{265FEC9D-B1FB-41E7-BEF3-0B11D571D0F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{265FEC9D-B1FB-41E7-BEF3-0B11D571D0F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{265FEC9D-B1FB-41E7-BEF3-0B11D571D0F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{265FEC9D-B1FB-41E7-BEF3-0B11D571D0F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CDB7476-C7C3-4589-A9E8-6501805F7068}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CDB7476-C7C3-4589-A9E8-6501805F7068}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CDB7476-C7C3-4589-A9E8-6501805F7068}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CDB7476-C7C3-4589-A9E8-6501805F7068}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{94893333-90B1-4556-8C93-44E60E531102} = {0D755933-C0A6-40D9-9871-163905BC480E}
+		{265FEC9D-B1FB-41E7-BEF3-0B11D571D0F2} = {0D755933-C0A6-40D9-9871-163905BC480E}
+		{3CDB7476-C7C3-4589-A9E8-6501805F7068} = {0D755933-C0A6-40D9-9871-163905BC480E}
 	EndGlobalSection
 EndGlobal

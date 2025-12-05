@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using Laa.Content.Core.Maps;
+using Laa.Monogame.Client.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,6 +14,9 @@ public class Game1 : Game
     private SpriteBatch? _spriteBatch;
     private Texture2D? _placeholderTexture;
     private double _elapsedSeconds;
+    private ContentContext? _content;
+    private MapDocument? _activeMap;
+    private bool _loggedContent;
 
     public Game1()
     {
@@ -24,6 +30,9 @@ public class Game1 : Game
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
+
+        _content = ContentContext.Create();
+        LoadInitialMap();
 
         base.Initialize();
     }
@@ -46,12 +55,18 @@ public class Game1 : Game
 
         _elapsedSeconds += gameTime.ElapsedGameTime.TotalSeconds;
 
+        if (!_loggedContent)
+        {
+            _loggedContent = true;
+            LogContentSummary();
+        }
+
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.Black);
+        GraphicsDevice.Clear(GetBackgroundColor());
 
         if (_spriteBatch is null || _placeholderTexture is null)
         {
@@ -78,5 +93,53 @@ public class Game1 : Game
         }
 
         base.Dispose(disposing);
+    }
+
+    private void LoadInitialMap()
+    {
+        if (_content is null)
+        {
+            return;
+        }
+
+        var firstMapId = _content.Maps.ListMaps().FirstOrDefault() ?? "map_0";
+        try
+        {
+            _activeMap = _content.Maps.GetMap(firstMapId);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to load map '{firstMapId}': {ex.Message}");
+            _activeMap = null;
+        }
+    }
+
+    private void LogContentSummary()
+    {
+        if (_content is null)
+        {
+            Console.WriteLine("ContentContext not initialized.");
+            return;
+        }
+
+        var mapName = _activeMap?.Header.Name ?? "N/A";
+        var itemCount = _content.Items.GetItems().Items.Count;
+        var spellCount = _content.Spells.GetSpells().Spells.Count;
+        var monsterCount = _content.Monsters.GetMonsters().Monsters.Count;
+        Console.WriteLine($"Loaded Map: {mapName} | Items: {itemCount} | Spells: {spellCount} | Monsters: {monsterCount}");
+    }
+
+    private Color GetBackgroundColor()
+    {
+        if (_activeMap?.Header is null)
+        {
+            return Color.Black;
+        }
+
+        var seed = _activeMap.Header.Flags;
+        var r = (byte)(seed & 0xFF);
+        var g = (byte)((seed >> 8) & 0xFF);
+        var b = (byte)((seed >> 4) & 0xFF);
+        return new Color(r, g, b);
     }
 }

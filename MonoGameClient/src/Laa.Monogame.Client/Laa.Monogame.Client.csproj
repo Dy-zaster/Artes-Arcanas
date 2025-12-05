@@ -17,4 +17,9 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content/Content.mgcb" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Laa.Content.Core/Laa.Content.Core.csproj" />
+    <ProjectReference Include="../Laa.Content.Json/Laa.Content.Json.csproj" />
+  </ItemGroup>
 </Project>

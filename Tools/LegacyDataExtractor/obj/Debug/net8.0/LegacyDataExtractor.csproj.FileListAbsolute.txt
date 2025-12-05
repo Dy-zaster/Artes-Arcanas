@@ -1,0 +1,15 @@
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.AssemblyInfoInputs.cache
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.AssemblyInfo.cs
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.csproj.CoreCompileInputs.cache
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.sourcelink.json
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/bin/Debug/net8.0/LegacyDataExtractor
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/bin/Debug/net8.0/LegacyDataExtractor.deps.json
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/bin/Debug/net8.0/LegacyDataExtractor.runtimeconfig.json
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/bin/Debug/net8.0/LegacyDataExtractor.dll
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/bin/Debug/net8.0/LegacyDataExtractor.pdb
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.dll
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/refint/LegacyDataExtractor.dll
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.pdb
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/LegacyDataExtractor.genruntimeconfig.cache
+/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/Debug/net8.0/ref/LegacyDataExtractor.dll

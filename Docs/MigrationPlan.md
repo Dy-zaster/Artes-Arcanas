@@ -20,24 +20,26 @@
 | Phase | Focus | Status | Key Tasks |
 | --- | --- | --- | --- |
 | 0. Foundations | Build system & render loop | ✅ Completed | Solution bootstrap, MonoGame packages, placeholder rendering, repo documentation. |
-| 1. Data extraction | Understand Delphi assets | ⏳ Pending | Catalog sprites, animations, maps, NPC/object tables from `Original Pascal/Laa`, document formats, and design conversion scripts. |
-| 2. Core systems | Rendering & content | ⏳ Pending | Implement resource manager, sprite/animation players, tile map renderer, input abstraction, and UI primitives. |
+| 1. Data extraction | Understand Delphi assets | ✅ Completed | `Tools/LegacyDataExtractor` exports maps, items, spells, commerce tables, monsters, attack/animation mappings, and static graphics as JSON; sample snapshots live under `Docs/Formats/Samples`. |
+| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext`) and `Game1` now boots with real data; next up is tile rendering, sprite systems, and input abstractions. |
 | 3. Gameplay & networking | Logic parity | ⏳ Pending | Port combat loop, inventory/trade, quests, and networking protocol (client-first, server later). |
 | 4. Polishing | UX + toolchain | ⏳ Pending | Recreate audio, localization, accessibility, add modern updater/launcher, QA automation. |
 
 Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 
+**Recommended next step:** use the new content repositories to render a real map scene (terrain tiles + placeholder sprites) so the MonoGame client starts exercising the JSON data end-to-end. Once the tile layer is on screen, hook up inventory/shop and spellbook overlays to validate the remaining data feeds.
+
 ## Workstreams & milestones
 
 ### 1. Asset + data pipeline
-- Reverse engineer Delphi resource loaders (graphics, animations, map definitions) and describe each format in `Docs/Formats/*.md`. **Status:** ⏳ not started.
-- Build CLI converters (could be dotnet tools or scripts) to emit MonoGame-friendly formats (PNG, JSON, TMX, etc.).
-- Extend `Content/Content.mgcb` with folders per asset type and integrate into CI so `dotnet build` fails on missing content.
+- Reverse engineer Delphi resource loaders (graphics, animations, map definitions) and describe each format in `Docs/Formats/*.md`. **Status:** ✅ Complete extraction suite implemented under `Tools/LegacyDataExtractor`; integration plan documented in `Docs/Formats/IntegrationPlan.md`.
+- Build CLI converters (could be dotnet tools or scripts) to emit MonoGame-friendly formats (PNG, JSON, TMX, etc.). **Status:** ⏳.
+- Extend `Content/Content.mgcb` with folders per asset type and integrate into CI so `dotnet build` fails on missing content. **Status:** ⏳.
 
 ### 2. Engine foundation
-- Break the new solution into projects (`Client`, `Core`, `Infrastructure`) to separate UI/gameplay logic from platform glue. **Status:** ⏳.
-- Create subsystems for input, timing, and viewport scaling to replicate the deterministic feel of the 2D MMORPG.
-- Provide service interfaces (e.g., `IGameStateService`, `INetworkClient`) so future unit tests can mock them.
+- Break the new solution into projects (`Client`, `Core`, `Infrastructure`) to separate UI/gameplay logic from platform glue. **Status:** 🛠️ `Laa.Content.Core` + `Laa.Content.Json` created, referenced by `Laa.Monogame.Client`.
+- Create subsystems for input, timing, and viewport scaling to replicate the deterministic feel of the 2D MMORPG. **Status:** ⏳.
+- Provide service interfaces (e.g., `IGameStateService`, `INetworkClient`) so future unit tests can mock them. **Status:** ⏳.
 
 ### 3. Gameplay systems
 - Port the following modules iteratively, verifying behavior against the original client:
@@ -74,7 +76,8 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 
 ## Immediate next steps
 
-1. Flesh out MonoGame content structure (fonts, textures, atlases) and wire a texture manager.
-2. Audit `Original Pascal/Laa` for data formats; start documenting them under `Docs/Formats/`.
+1. Flesh out MonoGame content structure (fonts, textures, atlases) and wire a texture manager so JSON data can drive real sprites.
+2. Leverage the new repositories/`ContentContext` in `Laa.Monogame.Client` to render an actual tile map, hook up inventory/shop viewers, and surface spell/monster data onscreen for schema validation.
 3. Expand `Docs/Networking/Protocol.md` as more opcodes are decoded and define corresponding C# packet types/interfaces.
-4. Decide on serialization format (JSON vs. binary) for translated data tables and create adapters accordingly.
+4. Decide on serialization format (JSON vs. binary) for translated data tables and create adapters accordingly (plan how exporters integrate with build/patch pipeline).
+5. Add regression tests for the extraction suite (checksum validation, record counts) and wire them into CI so data drift is caught automatically.
