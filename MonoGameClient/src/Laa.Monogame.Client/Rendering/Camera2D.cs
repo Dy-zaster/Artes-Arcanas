@@ -8,7 +8,7 @@ namespace Laa.Monogame.Client.Rendering;
 /// </summary>
 public sealed class Camera2D
 {
-    private const float MinZoom = 0.5f;
+    private const float MinZoom = 0.1f;
     private const float MaxZoom = 4f;
 
     private Vector2 _position;
