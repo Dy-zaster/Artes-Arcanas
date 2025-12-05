@@ -55,7 +55,7 @@ public sealed class JsonMapRepository : IMapRepository
 
         var document = JsonFileLoader.Load<MapDocument>(candidate, _options);
         JsonValidation.Ensure(document.Terrain.Count > 0, $"Map '{mapId}' is missing terrain data.");
-        return MapTransformer.Normalize(document);
+        return document;
     }
 
     private string ResolvePath(string mapId)
