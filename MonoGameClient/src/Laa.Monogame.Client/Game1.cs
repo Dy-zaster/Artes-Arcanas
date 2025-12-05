@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Laa.Content.Core.Maps;
 using Laa.Monogame.Client.Content;
+using Laa.Monogame.Client.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,13 +11,20 @@ namespace Laa.Monogame.Client;
 
 public class Game1 : Game
 {
+    private const int TileSize = 32;
+
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch? _spriteBatch;
-    private Texture2D? _placeholderTexture;
-    private double _elapsedSeconds;
     private ContentContext? _content;
     private MapDocument? _activeMap;
     private bool _loggedContent;
+    private TerrainRenderer? _terrainRenderer;
+    private MapOverlayRenderer? _overlayRenderer;
+    private TilePalette? _tilePalette;
+    private Camera2D? _camera;
+    private CameraController? _cameraController;
+    private OverlayLayers _overlayLayers = OverlayLayers.None;
+    private KeyboardState _previousKeyboard;
 
     public Game1()
     {
@@ -35,13 +43,21 @@ public class Game1 : Game
         LoadInitialMap();
 
         base.Initialize();
+
+        _camera = new Camera2D(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        _cameraController = new CameraController(_camera);
+        ConfigureCameraBounds();
+        Window.ClientSizeChanged += OnClientSizeChanged;
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        _placeholderTexture = new Texture2D(GraphicsDevice, 1, 1);
-        _placeholderTexture.SetData(new[] { Color.White });
+        _terrainRenderer = new TerrainRenderer(GraphicsDevice, TileSize);
+        _terrainRenderer.LoadContent();
+        _overlayRenderer = new MapOverlayRenderer(GraphicsDevice, TileSize);
+        _overlayRenderer.LoadContent();
+        _tilePalette = new TilePalette();
     }
 
     protected override void Update(GameTime gameTime)
@@ -53,7 +69,9 @@ public class Game1 : Game
             return;
         }
 
-        _elapsedSeconds += gameTime.ElapsedGameTime.TotalSeconds;
+        var mouse = Mouse.GetState();
+        HandleOverlayInput(keyboard);
+        _cameraController?.Update(gameTime, keyboard, mouse);
 
         if (!_loggedContent)
         {
@@ -62,24 +80,22 @@ public class Game1 : Game
         }
 
         base.Update(gameTime);
+
+        _previousKeyboard = keyboard;
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(GetBackgroundColor());
 
-        if (_spriteBatch is null || _placeholderTexture is null)
+        if (_spriteBatch is null || _terrainRenderer is null || _camera is null || _tilePalette is null)
         {
             base.Draw(gameTime);
             return;
         }
 
-        var pulse = (float)((Math.Sin(_elapsedSeconds) + 1.0) * 0.5);
-        var color = new Color(pulse, pulse, 1f);
-
-        _spriteBatch.Begin();
-        _spriteBatch.Draw(_placeholderTexture, new Rectangle(100, 100, 320, 80), color);
-        _spriteBatch.End();
+        _terrainRenderer.Draw(_spriteBatch, _activeMap, _camera, _tilePalette);
+        _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
 
         base.Draw(gameTime);
     }
@@ -88,8 +104,10 @@ public class Game1 : Game
     {
         if (disposing)
         {
+            Window.ClientSizeChanged -= OnClientSizeChanged;
             _spriteBatch?.Dispose();
-            _placeholderTexture?.Dispose();
+            _terrainRenderer?.Dispose();
+            _overlayRenderer?.Dispose();
         }
 
         base.Dispose(disposing);
@@ -106,6 +124,7 @@ public class Game1 : Game
         try
         {
             _activeMap = _content.Maps.GetMap(firstMapId);
+            ConfigureCameraBounds();
         }
         catch (Exception ex)
         {
@@ -141,5 +160,95 @@ public class Game1 : Game
         var g = (byte)((seed >> 8) & 0xFF);
         var b = (byte)((seed >> 4) & 0xFF);
         return new Color(r, g, b);
+    }
+
+    private void ConfigureCameraBounds()
+    {
+        if (_activeMap is null || _camera is null)
+        {
+            return;
+        }
+
+        var width = _activeMap.Terrain.FirstOrDefault()?.Count ?? 0;
+        var height = _activeMap.Terrain.Count;
+        if (width == 0 || height == 0)
+        {
+            return;
+        }
+
+        var pixelWidth = width * TileSize;
+        var pixelHeight = height * TileSize;
+        _camera.SetWorldSize(pixelWidth, pixelHeight);
+        _camera.CenterOn(new Vector2(pixelWidth / 2f, pixelHeight / 2f));
+    }
+
+    private void OnClientSizeChanged(object? sender, EventArgs e)
+    {
+        if (_camera is null)
+        {
+            return;
+        }
+
+        _camera.ResizeViewport(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        ConfigureCameraBounds();
+    }
+
+    private void HandleOverlayInput(KeyboardState keyboardState)
+    {
+        if (IsKeyPressed(keyboardState, Keys.Tab))
+        {
+            CycleOverlayMode();
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.D0))
+        {
+            SetOverlay(OverlayLayers.None);
+        }
+        else if (IsKeyPressed(keyboardState, Keys.D1))
+        {
+            SetOverlay(OverlayLayers.Sensors);
+        }
+        else if (IsKeyPressed(keyboardState, Keys.D2))
+        {
+            SetOverlay(OverlayLayers.Nests);
+        }
+        else if (IsKeyPressed(keyboardState, Keys.D3))
+        {
+            SetOverlay(OverlayLayers.Merchants);
+        }
+        else if (IsKeyPressed(keyboardState, Keys.D4))
+        {
+            SetOverlay(OverlayLayers.All);
+        }
+    }
+
+    private void CycleOverlayMode()
+    {
+        var next = _overlayLayers switch
+        {
+            OverlayLayers.None => OverlayLayers.Sensors,
+            OverlayLayers.Sensors => OverlayLayers.Nests,
+            OverlayLayers.Nests => OverlayLayers.Merchants,
+            OverlayLayers.Merchants => OverlayLayers.All,
+            _ => OverlayLayers.None
+        };
+
+        SetOverlay(next);
+    }
+
+    private void SetOverlay(OverlayLayers layers)
+    {
+        if (_overlayLayers == layers)
+        {
+            return;
+        }
+
+        _overlayLayers = layers;
+        Console.WriteLine($"Overlay mode: {_overlayLayers}");
+    }
+
+    private bool IsKeyPressed(KeyboardState current, Keys key)
+    {
+        return current.IsKeyDown(key) && !_previousKeyboard.IsKeyDown(key);
     }
 }

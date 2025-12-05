@@ -37,7 +37,7 @@ All runtime names, classes, and variables inside the new client are written in E
    cd src/Laa.Monogame.Client
    DOTNET_CLI_HOME="$PWD" dotnet run
    ```
-   The placeholder scene opens a 1280×720 window with a pulsing sprite to confirm the render loop works.
+   The prototype opens a 1280×720 window, loads the exported JSON data, and renders the selected legacy map with camera/overlay controls.
 
 ## NuGet packages currently referenced
 
@@ -52,5 +52,14 @@ Additional packages (serialization, networking, UI widgets, etc.) will be introd
 - Favor C#-style naming (PascalCase for types/methods, camelCase for locals/fields with `_` prefix for private fields).
 - Mirror the original client's feature set incrementally: first render loop and scene graph, then asset loading, UI, networking, and gameplay systems.
 - Document new architectural decisions inside `Docs/` (see `MigrationPlan.md`).
+
+## Current MonoGame client snapshot
+
+The new client already boots with the extracted JSON data and renders the sample maps via a camera-driven tile renderer.
+
+- Use `dotnet run` under `MonoGameClient/src/Laa.Monogame.Client` to launch the prototype scene.
+- Pan with `WASD`/arrow keys, zoom with the mouse wheel or `+`/`-`.
+- Toggle metadata overlays: `Tab` cycles through sensors → nests → merchants → all → off, number keys `0-4` jump directly to None/Sensors/Nests/Merchants/All.
+- Console logs report which map and content payloads were loaded; this helps validate repository wiring before gameplay systems exist.
 
 Refer to `Docs/MigrationPlan.md` for the step-by-step porting strategy.
