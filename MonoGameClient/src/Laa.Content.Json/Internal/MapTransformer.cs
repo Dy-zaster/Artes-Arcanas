@@ -103,28 +103,110 @@ internal static class MapTransformer
             return source;
         }
 
-        var expanded = new List<IReadOnlyList<byte>>(ExpandedSize);
-        for (var y = 0; y < CompressedSize; y++)
+        static int GetTerrain(IReadOnlyList<IReadOnlyList<byte>> src, int x, int y)
         {
-            // Each compressed row fans out into four rows.
-            for (var repeatY = 0; repeatY < ExpansionFactor; repeatY++)
+            if (x < 0) x = 0;
+            else if (x >= CompressedSize) x = CompressedSize - 1;
+
+            if (y < 0) y = 0;
+            else if (y >= CompressedSize) y = CompressedSize - 1;
+
+            return src[y][x];
+        }
+
+        var expandedGrid = new byte[ExpandedSize, ExpandedSize];
+
+        for (var j = 0; j < CompressedSize; j++)
+        {
+            for (var i = 0; i < CompressedSize; i++)
             {
-                var row = new byte[ExpandedSize];
-                for (var x = 0; x < CompressedSize; x++)
+                var terrain = GetTerrain(source, i, j);
+
+                var n = terrain;
+                if ((GetTerrain(source, i - 1, j) == GetTerrain(source, i - 1, j - 1) &&
+                     GetTerrain(source, i, j - 1) != GetTerrain(source, i, j)) ||
+                    (GetTerrain(source, i, j - 1) == GetTerrain(source, i - 1, j - 1) &&
+                     GetTerrain(source, i - 1, j) != GetTerrain(source, i, j)))
                 {
-                    var value = source[y][x];
-                    var startX = x * ExpansionFactor;
-                    for (var repeatX = 0; repeatX < ExpansionFactor; repeatX++)
-                    {
-                        row[startX + repeatX] = value;
-                    }
+                    // NoEsPiso returns true in the final client, so we always adopt the corner when conditions match.
+                    n = GetTerrain(source, i - 1, j - 1);
+                }
+                else if (GetTerrain(source, i - 1, j) == GetTerrain(source, i, j - 1) &&
+                         (GetTerrain(source, i, j) < GetTerrain(source, i - 1, j) ||
+                          GetTerrain(source, i, j) != GetTerrain(source, i - 1, j - 1)))
+                {
+                    n = GetTerrain(source, i - 1, j);
                 }
 
-                expanded.Add(Array.AsReadOnly(row));
+                var e = terrain;
+                if ((GetTerrain(source, i + 1, j) == GetTerrain(source, i + 1, j - 1) &&
+                     GetTerrain(source, i, j - 1) != GetTerrain(source, i, j)) ||
+                    (GetTerrain(source, i, j - 1) == GetTerrain(source, i + 1, j - 1) &&
+                     GetTerrain(source, i + 1, j) != GetTerrain(source, i, j)))
+                {
+                    e = GetTerrain(source, i + 1, j - 1);
+                }
+                else if (GetTerrain(source, i + 1, j) == GetTerrain(source, i, j - 1) &&
+                         (GetTerrain(source, i, j) < GetTerrain(source, i + 1, j) ||
+                          GetTerrain(source, i, j) != GetTerrain(source, i + 1, j - 1)))
+                {
+                    e = GetTerrain(source, i + 1, j);
+                }
+
+                var s = terrain;
+                if ((GetTerrain(source, i - 1, j) == GetTerrain(source, i - 1, j + 1) &&
+                     GetTerrain(source, i, j + 1) != GetTerrain(source, i, j)) ||
+                    (GetTerrain(source, i, j + 1) == GetTerrain(source, i - 1, j + 1) &&
+                     GetTerrain(source, i - 1, j) != GetTerrain(source, i, j)))
+                {
+                    s = GetTerrain(source, i - 1, j + 1);
+                }
+                else if (GetTerrain(source, i - 1, j) == GetTerrain(source, i, j + 1) &&
+                         (GetTerrain(source, i, j) < GetTerrain(source, i - 1, j) ||
+                          GetTerrain(source, i, j) != GetTerrain(source, i - 1, j + 1)))
+                {
+                    s = GetTerrain(source, i - 1, j);
+                }
+
+                for (var a = 0; a < ExpansionFactor; a++)
+                {
+                    for (var b = 0; b < ExpansionFactor; b++)
+                    {
+                        var code = terrain;
+                        if (a + b <= 1)
+                        {
+                            code = n;
+                        }
+                        else if (a - b >= 3)
+                        {
+                            code = e;
+                        }
+                        else if (b - a >= 3)
+                        {
+                            code = s;
+                        }
+
+                        var ex = i * ExpansionFactor + a;
+                        var ey = j * ExpansionFactor + b;
+                        expandedGrid[ey, ex] = (byte)code;
+                    }
+                }
             }
         }
 
-        return expanded;
+        var expandedRows = new List<IReadOnlyList<byte>>(ExpandedSize);
+        for (var y = 0; y < ExpandedSize; y++)
+        {
+            var row = new byte[ExpandedSize];
+            for (var x = 0; x < ExpandedSize; x++)
+            {
+                row[x] = expandedGrid[y, x];
+            }
+
+            expandedRows.Add(Array.AsReadOnly(row));
+        }
+
+        return expandedRows;
     }
 
     private static IReadOnlyList<IReadOnlyList<byte>> RotateTerrain180(IReadOnlyList<IReadOnlyList<byte>> terrain)
