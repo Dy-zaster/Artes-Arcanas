@@ -19,7 +19,8 @@ namespace Laa.Monogame.Client;
 
 public class Game1 : Game
 {
-    private const int TileSize = 32;
+    private const int TileWidth = 24;
+    private const int TileHeight = 16;
 
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch? _spriteBatch;
@@ -81,15 +82,15 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         var textureRoots = ResolveGraphicRoots();
-        _terrainRenderer = new TerrainRenderer(GraphicsDevice, TileSize, textureRoots);
+        _terrainRenderer = new TerrainRenderer(GraphicsDevice, TileWidth, TileHeight, textureRoots);
         _terrainRenderer.LoadContent();
         if (_graphicsCatalog is not null)
         {
             var textureProvider = new GraphicTextureProvider(GraphicsDevice, _graphicsCatalog, textureRoots);
-            _staticGraphicRenderer = new StaticGraphicRenderer(GraphicsDevice, textureProvider, TileSize);
+            _staticGraphicRenderer = new StaticGraphicRenderer(GraphicsDevice, textureProvider, TileWidth, TileHeight);
         }
 
-        _overlayRenderer = new MapOverlayRenderer(GraphicsDevice, TileSize);
+        _overlayRenderer = new MapOverlayRenderer(GraphicsDevice, TileWidth, TileHeight);
         _overlayRenderer.LoadContent();
         _tilePalette = new TilePalette();
         _debugTextRenderer = new DebugTextRenderer(GraphicsDevice);
@@ -245,8 +246,8 @@ public class Game1 : Game
             return;
         }
 
-        var pixelWidth = width * TileSize;
-        var pixelHeight = height * TileSize;
+        var pixelWidth = width * TileWidth;
+        var pixelHeight = height * TileHeight;
         _camera.SetWorldSize(pixelWidth, pixelHeight);
         _camera.CenterOn(new Vector2(pixelWidth / 2f, pixelHeight / 2f));
     }

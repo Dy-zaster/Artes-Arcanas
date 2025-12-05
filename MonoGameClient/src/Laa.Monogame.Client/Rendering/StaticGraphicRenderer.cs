@@ -13,13 +13,15 @@ public sealed class StaticGraphicRenderer : IDisposable
 
     private readonly GraphicTextureProvider _textureProvider;
     private readonly Texture2D _fallbackTexture;
-    private readonly int _tileSize;
+    private readonly int _tileWidth;
+    private readonly int _tileHeight;
 
-    public StaticGraphicRenderer(GraphicsDevice graphicsDevice, GraphicTextureProvider textureProvider, int tileSize)
+    public StaticGraphicRenderer(GraphicsDevice graphicsDevice, GraphicTextureProvider textureProvider, int tileWidth, int tileHeight)
     {
         if (graphicsDevice is null) throw new ArgumentNullException(nameof(graphicsDevice));
         _textureProvider = textureProvider ?? throw new ArgumentNullException(nameof(textureProvider));
-        _tileSize = tileSize > 0 ? tileSize : throw new ArgumentOutOfRangeException(nameof(tileSize));
+        _tileWidth = tileWidth > 0 ? tileWidth : throw new ArgumentOutOfRangeException(nameof(tileWidth));
+        _tileHeight = tileHeight > 0 ? tileHeight : throw new ArgumentOutOfRangeException(nameof(tileHeight));
         _fallbackTexture = new Texture2D(graphicsDevice, 1, 1);
         _fallbackTexture.SetData(new[] { Color.White });
     }
@@ -51,8 +53,8 @@ public sealed class StaticGraphicRenderer : IDisposable
                 ? SpriteEffects.FlipHorizontally
                 : SpriteEffects.None;
 
-            var baseX = graphic.X * _tileSize;
-            var baseY = graphic.Y * _tileSize - entry.AlignY * _tileSize;
+            var baseX = graphic.X * _tileWidth;
+            var baseY = graphic.Y * _tileHeight - entry.AlignY * _tileHeight;
             var offsetX = effects == SpriteEffects.FlipHorizontally ? entry.ReflectedOffsetX : entry.OffsetX;
             var drawPosition = new Vector2(baseX + offsetX, baseY + entry.OffsetY);
             var layerDepth = MathHelper.Clamp(graphic.SubLayer / 32f, 0f, 1f);
@@ -81,10 +83,10 @@ public sealed class StaticGraphicRenderer : IDisposable
     private void DrawPlaceholder(SpriteBatch spriteBatch, StaticGraphic graphic)
     {
         var destination = new Rectangle(
-            graphic.X * _tileSize,
-            graphic.Y * _tileSize,
-            _tileSize,
-            _tileSize);
+            graphic.X * _tileWidth,
+            graphic.Y * _tileHeight,
+            _tileWidth,
+            _tileHeight);
         spriteBatch.Draw(_fallbackTexture, destination, Color.DimGray * 0.75f);
     }
 }

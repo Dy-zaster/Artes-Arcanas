@@ -11,13 +11,15 @@ namespace Laa.Monogame.Client.Rendering;
 public sealed class MapOverlayRenderer : IDisposable
 {
     private readonly GraphicsDevice _graphicsDevice;
-    private readonly int _tileSize;
+    private readonly int _tileWidth;
+    private readonly int _tileHeight;
     private Texture2D? _markerTexture;
 
-    public MapOverlayRenderer(GraphicsDevice graphicsDevice, int tileSize)
+    public MapOverlayRenderer(GraphicsDevice graphicsDevice, int tileWidth, int tileHeight)
     {
         _graphicsDevice = graphicsDevice ?? throw new ArgumentNullException(nameof(graphicsDevice));
-        _tileSize = tileSize > 0 ? tileSize : throw new ArgumentOutOfRangeException(nameof(tileSize));
+        _tileWidth = tileWidth > 0 ? tileWidth : throw new ArgumentOutOfRangeException(nameof(tileWidth));
+        _tileHeight = tileHeight > 0 ? tileHeight : throw new ArgumentOutOfRangeException(nameof(tileHeight));
     }
 
     public void LoadContent()
@@ -75,13 +77,15 @@ public sealed class MapOverlayRenderer : IDisposable
             return;
         }
 
-        var size = Math.Max(4, _tileSize / 2);
-        var offset = (_tileSize - size) / 2;
+        var markerWidth = Math.Max(4, _tileWidth / 2);
+        var markerHeight = Math.Max(4, _tileHeight / 2);
+        var offsetX = (_tileWidth - markerWidth) / 2;
+        var offsetY = (_tileHeight - markerHeight) / 2;
         var destination = new Rectangle(
-            tileX * _tileSize + offset,
-            tileY * _tileSize + offset,
-            size,
-            size);
+            tileX * _tileWidth + offsetX,
+            tileY * _tileHeight + offsetY,
+            markerWidth,
+            markerHeight);
 
         spriteBatch.Draw(_markerTexture, destination, color);
     }
