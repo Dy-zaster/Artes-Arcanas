@@ -7,7 +7,6 @@
 - Game bootstrap (`Program.cs`) instantiates `Game1`, which sets up a 1280×720 swap chain, a placeholder sprite batch, and a Content Pipeline definition (`Content/Content.mgcb`).
 - NuGet dependencies declared but not yet restored locally (MonoGame feeds blocked inside this environment). Restoration succeeds when NuGet is reachable.
 - Networking research started: see `Docs/Networking/Protocol.md` for opcode-level documentation extracted from the Delphi sources.
-- Map loading now expands the legacy 64×64 compressed terrain to 256×256 and applies a transpose so screen quadrants match the Delphi client; static graphics/sensors/nests/merchants are transformed accordingly and camera zoom allows viewing the full map. Temporary edge gradients are suppressed when a real terrain sheet is present to avoid neon artifacts.
 
 ## Goals
 
