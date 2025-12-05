@@ -65,7 +65,7 @@ The Delphi renderer does not load ground tiles from `oc.b`. Instead it uses a de
 - Every mini tile measures `24×16` pixels. During runtime the client picks one of the 18 variants based on tile coordinates to add subtle variation to large areas.
 - Codes `28..31` represent liquids/fire and were rendered with special routines (`BltLiquido`). The MonoGame port now samples those frames from the same sheet (or atlas entry) and cycles through the 18 mini tiles to mimic movement.
 
-The new `TerrainRenderer` first looks for the `terreno` entry inside any generated atlas manifest and only falls back to loading the standalone JPEG/PNG from `MonoGameClient/content/graphics` (or `Original Pascal/Laa/grf`). If both sources are missing it reuses the deterministic color palette introduced earlier.
+The new `TerrainRenderer` first looks for the `terreno` entry inside any generated atlas manifest and only falls back to loading the standalone JPEG/PNG from `MonoGameClient/content/graphics` (or `Original Pascal/Laa/grf`). If both sources are missing it reuses the deterministic color palette introduced earlier. While the original pseudo-mosaic logic gets ported, the MonoGame renderer overlays simple gradient blends along tile borders whenever two terrain types meet so transitions are less abrupt.
 
 ## UI atlases
 

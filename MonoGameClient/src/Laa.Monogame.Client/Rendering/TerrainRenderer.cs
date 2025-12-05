@@ -17,9 +17,12 @@ public sealed class TerrainRenderer : IDisposable
     private const int VariationColumns = 6;
     private const int VariationRows = 3;
     private const int VariationCells = VariationColumns * VariationRows;
+    private const int VariationCells = VariationColumns * VariationRows;
     private const int VariationStrideX = SheetTileWidth * VariationColumns;
     private const int VariationStrideY = SheetTileHeight * VariationRows;
     private const int LiquidTerrainStart = 28;
+    private const float EdgeThicknessRatio = 0.35f;
+    private const float LiquidAnimationSpeed = 4f;
     private const float LiquidAnimationSpeed = 4f;
 
     private static readonly string[] TerrainSheetCandidates =
@@ -43,6 +46,9 @@ public sealed class TerrainRenderer : IDisposable
     private Rectangle _tileSheetRegion;
     private Texture2D? _tileTexture;
     private bool _hasTileSheet;
+    private Texture2D? _verticalGradientTexture;
+    private Texture2D? _horizontalGradientTexture;
+    private int _liquidAnimationFrame;
     private int _liquidAnimationFrame;
 
     public TerrainRenderer(GraphicsDevice graphicsDevice, int tileSize, IEnumerable<string> searchRoots)
@@ -74,6 +80,8 @@ public sealed class TerrainRenderer : IDisposable
             _tileSheetRegion = sheet.Value.Region;
             _hasTileSheet = true;
         }
+        _verticalGradientTexture = CreateGradientTexture(1, _tileSize, vertical: true);
+        _horizontalGradientTexture = CreateGradientTexture(_tileSize, 1, vertical: false);
     }
 
     public void Draw(SpriteBatch spriteBatch, MapDocument? map, Camera2D camera, TilePalette palette, GameTime gameTime)
@@ -112,6 +120,7 @@ public sealed class TerrainRenderer : IDisposable
                         destination,
                         source,
                         Color.White);
+                    DrawEdgeOverlays(spriteBatch, map, palette, code, x, y, destination);
                 }
                 else
                 {
@@ -133,6 +142,8 @@ public sealed class TerrainRenderer : IDisposable
     {
         _tileTexture?.Dispose();
         _tileSheetTexture?.Dispose();
+        _verticalGradientTexture?.Dispose();
+        _horizontalGradientTexture?.Dispose();
     }
 
     private TileSheetResource? LoadTerrainSheet()
@@ -201,6 +212,33 @@ public sealed class TerrainRenderer : IDisposable
         return Texture2D.FromStream(_graphicsDevice, stream);
     }
 
+    private Texture2D CreateGradientTexture(int width, int height, bool vertical)
+    {
+        var texture = new Texture2D(_graphicsDevice, width, height);
+        var data = new Color[width * height];
+        for (var y = 0; y < height; y++)
+        {
+            for (var x = 0; x < width; x++)
+            {
+                float t;
+                if (vertical)
+                {
+                    t = 1f - y / Math.Max(1f, height - 1f);
+                }
+                else
+                {
+                    t = 1f - x / Math.Max(1f, width - 1f);
+                }
+
+                var alpha = (byte)(MathHelper.Clamp(t, 0f, 1f) * 255f);
+                data[y * width + x] = new Color(255, 255, 255, alpha);
+            }
+        }
+
+        texture.SetData(data);
+        return texture;
+    }
+
     private static int Hash(int x, int y, byte code)
     {
         var value = (x * 73856093) ^ (y * 19349663) ^ (code * 83492791);
@@ -243,6 +281,105 @@ public sealed class TerrainRenderer : IDisposable
         }
 
         rectangle = new Rectangle(left, top, SheetTileWidth, SheetTileHeight);
+        return true;
+    }
+
+    private void DrawEdgeOverlays(
+        SpriteBatch spriteBatch,
+        MapDocument map,
+        TilePalette palette,
+        byte centerCode,
+        int tileX,
+        int tileY,
+        Rectangle tileRect)
+    {
+        if (_verticalGradientTexture is null || _horizontalGradientTexture is null)
+        {
+            return;
+        }
+
+        var thickness = Math.Max(1, (int)(_tileSize * EdgeThicknessRatio));
+
+        if (TryGetTerrainCode(map, tileX, tileY - 1, out var topCode) && topCode != centerCode)
+        {
+            DrawVerticalEdge(spriteBatch, tileRect, palette[topCode], thickness, SpriteEffects.None);
+        }
+
+        if (TryGetTerrainCode(map, tileX, tileY + 1, out var bottomCode) && bottomCode != centerCode)
+        {
+            DrawVerticalEdge(spriteBatch, tileRect, palette[bottomCode], thickness, SpriteEffects.FlipVertically);
+        }
+
+        if (TryGetTerrainCode(map, tileX - 1, tileY, out var leftCode) && leftCode != centerCode)
+        {
+            DrawHorizontalEdge(spriteBatch, tileRect, palette[leftCode], thickness, SpriteEffects.None);
+        }
+
+        if (TryGetTerrainCode(map, tileX + 1, tileY, out var rightCode) && rightCode != centerCode)
+        {
+            DrawHorizontalEdge(spriteBatch, tileRect, palette[rightCode], thickness, SpriteEffects.FlipHorizontally);
+        }
+    }
+
+    private void DrawVerticalEdge(SpriteBatch spriteBatch, Rectangle tileRect, Color color, int thickness, SpriteEffects effects)
+    {
+        if (color.A == 0)
+        {
+            return;
+        }
+
+        var dest = effects == SpriteEffects.None
+            ? new Rectangle(tileRect.X, tileRect.Y, tileRect.Width, thickness)
+            : new Rectangle(tileRect.X, tileRect.Bottom - thickness, tileRect.Width, thickness);
+
+        spriteBatch.Draw(
+            _verticalGradientTexture!,
+            dest,
+            null,
+            color,
+            0f,
+            Vector2.Zero,
+            effects,
+            layerDepth: 0f);
+    }
+
+    private void DrawHorizontalEdge(SpriteBatch spriteBatch, Rectangle tileRect, Color color, int thickness, SpriteEffects effects)
+    {
+        if (color.A == 0)
+        {
+            return;
+        }
+
+        var dest = effects == SpriteEffects.None
+            ? new Rectangle(tileRect.X, tileRect.Y, thickness, tileRect.Height)
+            : new Rectangle(tileRect.Right - thickness, tileRect.Y, thickness, tileRect.Height);
+
+        spriteBatch.Draw(
+            _horizontalGradientTexture!,
+            dest,
+            null,
+            color,
+            0f,
+            Vector2.Zero,
+            effects,
+            layerDepth: 0f);
+    }
+
+    private static bool TryGetTerrainCode(MapDocument map, int x, int y, out byte code)
+    {
+        code = 0;
+        if (map.Terrain.Count == 0 || y < 0 || y >= map.Terrain.Count)
+        {
+            return false;
+        }
+
+        var row = map.Terrain[y];
+        if (x < 0 || x >= row.Count)
+        {
+            return false;
+        }
+
+        code = row[x];
         return true;
     }
 
