@@ -4,12 +4,12 @@
     <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
     <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
     <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
-    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/.nuget/packages/</NuGetPackageRoot>
-    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/.nuget/packages/</NuGetPackageFolders>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/.nuget/packages/</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/.nuget/packages/</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
     <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.8.1</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <SourceRoot Include="/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/.nuget/packages/" />
+    <SourceRoot Include="/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/.nuget/packages/" />
   </ItemGroup>
 </Project>

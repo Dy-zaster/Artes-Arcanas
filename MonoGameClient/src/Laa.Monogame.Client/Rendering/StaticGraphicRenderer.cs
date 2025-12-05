@@ -9,7 +9,6 @@ namespace Laa.Monogame.Client.Rendering;
 public sealed class StaticGraphicRenderer : IDisposable
 {
     private const int DescriptorCodeMask = 0x03FF;
-    private const int MirrorFlagMask = 0x0400;
 
     private readonly GraphicTextureProvider _textureProvider;
     private readonly Texture2D _fallbackTexture;
@@ -49,7 +48,7 @@ public sealed class StaticGraphicRenderer : IDisposable
                 continue;
             }
 
-            var effects = (graphic.CodeFlags & MirrorFlagMask) != 0
+            var effects = (graphic.Flags & StaticGraphicFlags.Mirror) != 0
                 ? SpriteEffects.FlipHorizontally
                 : SpriteEffects.None;
 

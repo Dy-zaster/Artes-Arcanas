@@ -48,6 +48,20 @@ Static props (trees, roofs, walls) use descriptor metadata stored inside the map
 
 When converting to MonoGame, load sprites from the `Grf/` directory and reuse the metadata to reproduce draw order, mirroring, and collision masks.
 
+`flagsGrafico` stores the `fgfx_*` bits defined in `Tablero.pas:160`. They now map 1:1 to the `StaticGraphicFlags` enum so runtime code can query them directly:
+
+| Bit | Flag | Meaning |
+| --- | --- | --- |
+| `0x01` | `fgfx_Espejo` | Draw mirrored (the original editor labeled this as “rotación”). |
+| `0x02` | `fgfx_TransparenteNatural` | Natural chroma transparency (obeys atlas alpha). |
+| `0x04` | `fgfx_TransparenteForzado` | Forced transparency (used for special overlays). |
+| `0x08` | `fgfx_Ilusion` | Illusion/invisibility helper (affects draw order). |
+| `0x20` | `fgfx_SensibleAFlags` | Depends on dungeon flag state. |
+| `0x40` | `fgfx_Antialisado` | Eligible for the old antialiasing routine. |
+| `0x80` | `fgfx_Levitacion` | Hovering objects bob vertically. |
+
+The MonoGame `StaticGraphicRenderer` already respects the mirroring flag (reproducing the Delphi rotation trick), and the remaining bits are available for future behavior parity work.
+
 ## Sensors, nests, and merchants
 
 - `TSensor` defines interactive triggers (resurrection shrines, portals, clan banners). Fields: `Tipo`, `posx/posy`, two key requirements, `dato1..dato4`, and `flagsSensor` bits (clan-only, apprentice-only, etc.). If `ListaTextoSensor` exists the same index stores the localized prompt.

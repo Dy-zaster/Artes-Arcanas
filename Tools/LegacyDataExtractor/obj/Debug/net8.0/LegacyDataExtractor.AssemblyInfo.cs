@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LegacyDataExtractor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e30f465e5d471710266a5b058bd314ab8dfdaad")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ddbc9af4ef41d58148f2cc6f31253c9993e5bc16")]
 [assembly: System.Reflection.AssemblyProductAttribute("LegacyDataExtractor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LegacyDataExtractor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

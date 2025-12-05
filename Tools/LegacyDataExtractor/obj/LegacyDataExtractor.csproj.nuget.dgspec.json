@@ -10,12 +10,12 @@
         "projectUniqueName": "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/LegacyDataExtractor.csproj",
         "projectName": "LegacyDataExtractor",
         "projectPath": "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/LegacyDataExtractor.csproj",
-        "packagesPath": "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/.nuget/packages/",
+        "packagesPath": "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/.nuget/packages/",
         "outputPath": "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/nuget.config",
-          "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/Tools/LegacyDataExtractor/.nuget/NuGet/NuGet.Config"
+          "/mnt/c/Users/Pablo/Desktop/GitHub/Artes-Arcanas/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

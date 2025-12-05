@@ -4,6 +4,6 @@ public sealed record StaticGraphic(
     ushort CodeFlags,
     byte X,
     byte Y,
-    byte Flags,
+    StaticGraphicFlags Flags,
     byte SubLayer
 );
