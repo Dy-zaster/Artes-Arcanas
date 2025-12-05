@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0D755933-C0A6-40D9-9871-163905BC480E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laa.Monogame.Client", "src\Laa.Monogame.Client\Laa.Monogame.Client.csproj", "{94893333-90B1-4556-8C93-44E60E531102}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94893333-90B1-4556-8C93-44E60E531102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94893333-90B1-4556-8C93-44E60E531102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94893333-90B1-4556-8C93-44E60E531102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94893333-90B1-4556-8C93-44E60E531102}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{94893333-90B1-4556-8C93-44E60E531102} = {0D755933-C0A6-40D9-9871-163905BC480E}
+	EndGlobalSection
+EndGlobal

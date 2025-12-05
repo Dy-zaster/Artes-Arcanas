@@ -1,0 +1,80 @@
+# Migration Plan – LAa Client to MonoGame
+
+## Current snapshot
+
+- Legacy client (`Original Pascal/Laa`) built with Delphi 6, heavily tied to Windows-specific APIs and Spanish identifiers.
+- New solution `MonoGameClient/Laa.Monogame.Client` created with .NET 8 and MonoGame DesktopGL.
+- Game bootstrap (`Program.cs`) instantiates `Game1`, which sets up a 1280×720 swap chain, a placeholder sprite batch, and a Content Pipeline definition (`Content/Content.mgcb`).
+- NuGet dependencies declared but not yet restored locally (MonoGame feeds blocked inside this environment). Restoration succeeds when NuGet is reachable.
+- Networking research started: see `Docs/Networking/Protocol.md` for opcode-level documentation extracted from the Delphi sources.
+
+## Goals
+
+1. Feature-parity client that preserves core gameplay, UI, and networking behavior from the Delphi version.
+2. Clean separations for rendering, assets, simulation, and networking to simplify future tooling and testing.
+3. English-only identifiers and comments for maintainability and alignment with .NET ecosystem conventions.
+4. Documentation-first mindset: every architectural decision or format conversion lives under `Docs/`.
+
+## Port strategy and status
+
+| Phase | Focus | Status | Key Tasks |
+| --- | --- | --- | --- |
+| 0. Foundations | Build system & render loop | ✅ Completed | Solution bootstrap, MonoGame packages, placeholder rendering, repo documentation. |
+| 1. Data extraction | Understand Delphi assets | ⏳ Pending | Catalog sprites, animations, maps, NPC/object tables from `Original Pascal/Laa`, document formats, and design conversion scripts. |
+| 2. Core systems | Rendering & content | ⏳ Pending | Implement resource manager, sprite/animation players, tile map renderer, input abstraction, and UI primitives. |
+| 3. Gameplay & networking | Logic parity | ⏳ Pending | Port combat loop, inventory/trade, quests, and networking protocol (client-first, server later). |
+| 4. Polishing | UX + toolchain | ⏳ Pending | Recreate audio, localization, accessibility, add modern updater/launcher, QA automation. |
+
+Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
+
+## Workstreams & milestones
+
+### 1. Asset + data pipeline
+- Reverse engineer Delphi resource loaders (graphics, animations, map definitions) and describe each format in `Docs/Formats/*.md`. **Status:** ⏳ not started.
+- Build CLI converters (could be dotnet tools or scripts) to emit MonoGame-friendly formats (PNG, JSON, TMX, etc.).
+- Extend `Content/Content.mgcb` with folders per asset type and integrate into CI so `dotnet build` fails on missing content.
+
+### 2. Engine foundation
+- Break the new solution into projects (`Client`, `Core`, `Infrastructure`) to separate UI/gameplay logic from platform glue. **Status:** ⏳.
+- Create subsystems for input, timing, and viewport scaling to replicate the deterministic feel of the 2D MMORPG.
+- Provide service interfaces (e.g., `IGameStateService`, `INetworkClient`) so future unit tests can mock them.
+
+### 3. Gameplay systems
+- Port the following modules iteratively, verifying behavior against the original client:
+  1. Character creation/login UI.
+  2. Map streaming + entity interpolation.
+  3. Combat/skills casting loop.
+  4. Inventory, crafting, and merchant dialogs.
+  5. Chat, party, and guild UX.
+- Each module gets a design note (problem statement, Pascal references, and chosen C# structure).
+
+### 4. Networking
+- Document packet formats from the Pascal client (`Docs/Networking/Protocol.md`). **Status:** ✅ initial opcodes captured; keep expanding as we port features.
+- Implement a .NET socket client with pluggable encryption/compression so it can talk to the existing server before any server rewrite.
+- Abstract serialization/deserialization to isolate endianness and versioning concerns.
+
+### 5. Tooling + QA
+- Recreate essential editors (maps, sprites) either as MonoGame tools or web apps once the core client stabilizes.
+- Add automated regression tests around data conversions and deterministic gameplay pieces (e.g., combat formulas).
+- Establish GitHub Actions workflow that restores NuGet, builds, and runs tests on push.
+
+## Technical considerations
+
+- **Coordinate system**: adopt top-left origin with integer pixel units to match the original assets; document conversions anywhere floating-point math is introduced.
+- **Localization**: even though code switches to English identifiers, keep Rune/Spanish text assets externalized and UTF-8 encoded.
+- **Input**: unify keyboard + mouse events via MonoGame's `KeyboardState`/`MouseState`, but expose them through engine interfaces for future controller/mobile support.
+- **Performance**: batch draw calls aggressively, leverage `SpriteSortMode.Deferred`, and consider render targets for lighting/post effects once parity is achieved.
+- **Testing**: create headless tests for content parsers and combat rules; use MonoGame's ability to run off-screen when collecting reference screenshots.
+
+## Risks & mitigations
+
+- **NuGet/network access** – Document commands and keep `NuGet.config` customizable so contributors behind firewalls can restore packages via an internal feed.
+- **Legacy unknowns** – Some Delphi behaviors may rely on undefined order or Windows messages; capture findings early in Docs to avoid rewrites.
+- **Server protocol drift** – Until the server gets modernized, the client must mimic the exact packet structure; prioritize protocol documentation before touching networking.
+
+## Immediate next steps
+
+1. Flesh out MonoGame content structure (fonts, textures, atlases) and wire a texture manager.
+2. Audit `Original Pascal/Laa` for data formats; start documenting them under `Docs/Formats/`.
+3. Expand `Docs/Networking/Protocol.md` as more opcodes are decoded and define corresponding C# packet types/interfaces.
+4. Decide on serialization format (JSON vs. binary) for translated data tables and create adapters accordingly.
