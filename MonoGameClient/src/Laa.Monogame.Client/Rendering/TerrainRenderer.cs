@@ -17,12 +17,10 @@ public sealed class TerrainRenderer : IDisposable
     private const int VariationColumns = 6;
     private const int VariationRows = 3;
     private const int VariationCells = VariationColumns * VariationRows;
-    private const int VariationCells = VariationColumns * VariationRows;
     private const int VariationStrideX = SheetTileWidth * VariationColumns;
     private const int VariationStrideY = SheetTileHeight * VariationRows;
     private const int LiquidTerrainStart = 28;
     private const float EdgeThicknessRatio = 0.35f;
-    private const float LiquidAnimationSpeed = 4f;
     private const float LiquidAnimationSpeed = 4f;
 
     private static readonly string[] TerrainSheetCandidates =
@@ -48,7 +46,6 @@ public sealed class TerrainRenderer : IDisposable
     private bool _hasTileSheet;
     private Texture2D? _verticalGradientTexture;
     private Texture2D? _horizontalGradientTexture;
-    private int _liquidAnimationFrame;
     private int _liquidAnimationFrame;
 
     public TerrainRenderer(GraphicsDevice graphicsDevice, int tileSize, IEnumerable<string> searchRoots)
@@ -131,6 +128,7 @@ public sealed class TerrainRenderer : IDisposable
                     }
 
                     spriteBatch.Draw(_tileTexture, destination, fallbackColor);
+                    DrawEdgeOverlays(spriteBatch, map, palette, code, x, y, destination);
                 }
             }
         }
@@ -231,7 +229,7 @@ public sealed class TerrainRenderer : IDisposable
                 }
 
                 var alpha = (byte)(MathHelper.Clamp(t, 0f, 1f) * 255f);
-                data[y * width + x] = new Color(255, 255, 255, alpha);
+                data[y * width + x] = new Color((byte)255, (byte)255, (byte)255, alpha);
             }
         }
 
@@ -293,6 +291,12 @@ public sealed class TerrainRenderer : IDisposable
         int tileY,
         Rectangle tileRect)
     {
+        if (_hasTileSheet)
+        {
+            // When the real terrain sheet is present, skip the temporary gradients.
+            return;
+        }
+
         if (_verticalGradientTexture is null || _horizontalGradientTexture is null)
         {
             return;
