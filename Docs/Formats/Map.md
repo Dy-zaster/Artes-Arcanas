@@ -62,6 +62,10 @@ When converting to MonoGame, load sprites from the `Grf/` directory and reuse th
 
 The MonoGame `StaticGraphicRenderer` already respects the mirroring flag (reproducing the Delphi rotation trick), and the remaining bits are available for future behavior parity work.
 
+**Placement origin:** `posx` in the map file points to the center column of the 8×8 occupancy mask. The Delphi client subtracts four tiles before applying the mask (and before sampling pseudo-collision data), so the MonoGame renderer now mirrors that behavior by subtracting `4 * tileWidth` from the horizontal base position before applying the descriptor offsets. Without this shift, wide assets such as statues, arches, and bridges appear a few cells to the right of their intended terrain.
+
+**Draw order:** the editor sorts objects by `((posy << 9) | sub_z)` (`OrdenadoRapido`), so `posy` dominates and `sub_z` only breaks ties. The MonoGame client now mimics that sort so interior props (yunques, mesas) stay beneath the corresponding roofs even if their `SubLayer` values differ.
+
 ## Sensors, nests, and merchants
 
 - `TSensor` defines interactive triggers (resurrection shrines, portals, clan banners). Fields: `Tipo`, `posx/posy`, two key requirements, `dato1..dato4`, and `flagsSensor` bits (clan-only, apprentice-only, etc.). If `ListaTextoSensor` exists the same index stores the localized prompt.

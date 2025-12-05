@@ -297,8 +297,7 @@ public class Game1 : Game
         }
 
         _sortedStaticGraphics = _activeMap.Graphics
-            .OrderBy(g => g.SubLayer)
-            .ThenBy(g => g.Y)
+            .OrderBy(g => ((g.Y << 9) | g.SubLayer))
             .ThenBy(g => g.X)
             .ToArray();
     }

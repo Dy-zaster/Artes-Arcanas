@@ -9,6 +9,7 @@ namespace Laa.Monogame.Client.Rendering;
 public sealed class StaticGraphicRenderer : IDisposable
 {
     private const int DescriptorCodeMask = 0x03FF;
+    private const int OccupiedMaskHalfWidth = 4;
 
     private readonly GraphicTextureProvider _textureProvider;
     private readonly Texture2D _fallbackTexture;
@@ -52,7 +53,7 @@ public sealed class StaticGraphicRenderer : IDisposable
                 ? SpriteEffects.FlipHorizontally
                 : SpriteEffects.None;
 
-            var baseX = graphic.X * _tileWidth;
+            var baseX = (graphic.X - OccupiedMaskHalfWidth) * _tileWidth;
             var baseY = graphic.Y * _tileHeight - entry.AlignY * _tileHeight;
             var offsetX = effects == SpriteEffects.FlipHorizontally ? entry.ReflectedOffsetX : entry.OffsetX;
             var drawPosition = new Vector2(baseX + offsetX, baseY + entry.OffsetY);
@@ -82,7 +83,7 @@ public sealed class StaticGraphicRenderer : IDisposable
     private void DrawPlaceholder(SpriteBatch spriteBatch, StaticGraphic graphic)
     {
         var destination = new Rectangle(
-            graphic.X * _tileWidth,
+            (graphic.X - OccupiedMaskHalfWidth) * _tileWidth,
             graphic.Y * _tileHeight,
             _tileWidth,
             _tileHeight);
