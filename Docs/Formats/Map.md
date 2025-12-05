@@ -59,4 +59,5 @@ When converting to MonoGame, load sprites from the `Grf/` directory and reuse th
 1. Write a C# reader that sequentially deserializes each block according to the layouts above (remember double-byte alignment rules). The Pascal code uses packed records, so no extra padding is present.
 2. Expand the 64×64 `TMapaCompreso` grid into the 256×256 logical map by applying the same logic as `ActualizarTableroTiles` (copy `Mapapos[i,j].terBol` into `MapaTiles`). Documented behavior: terrain bits (`mskTerreno`) control collision, and the low 10 bits store bag/corpse ids.
 3. Emit a friendly format (e.g., Tiled JSON) with layers for terrain, props, sensors, nests, and merchants. Keep the original binary blob around for validation by storing the SHA-1 and source offset in the JSON metadata.
-4. Validate by loading a handful of `.mpv` files in Delphi and taking screenshots; ensure the MonoGame renderer produces matching layouts before fully migrating.
+4. Name the exported files `map_<id>.json` (or place them inside `content/data/maps/`) so the MonoGame client can auto-discover them.
+5. Validate by loading a handful of `.mpv` files in Delphi and taking screenshots; ensure the MonoGame renderer produces matching layouts before fully migrating.

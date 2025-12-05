@@ -30,7 +30,7 @@ public sealed class JsonMapRepository : IMapRepository
             return Array.Empty<string>();
         }
 
-        var files = Directory.GetFiles(_mapRoot, "*.json", SearchOption.TopDirectoryOnly)
+        var files = Directory.GetFiles(_mapRoot, "map_*.json", SearchOption.TopDirectoryOnly)
             .Select(Path.GetFileNameWithoutExtension)
             .Where(name => !string.IsNullOrWhiteSpace(name))
             .Select(name => name!)

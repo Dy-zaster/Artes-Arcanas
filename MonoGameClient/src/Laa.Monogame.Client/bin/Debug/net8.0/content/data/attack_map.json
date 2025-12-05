@@ -1,0 +1,504 @@
+{
+  "Entries": [
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 2,
+      "Flags": 2,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 2,
+      "Flags": 2,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 3,
+      "Flags": 1,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 4,
+      "Flags": 1,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 2,
+      "Flags": 2,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 4,
+      "Flags": 1,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 2,
+      "Flags": 2,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 6,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    },
+    {
+      "AnimationId": 0,
+      "Flags": 0,
+      "Reserved": 0
+    }
+  ]
+}

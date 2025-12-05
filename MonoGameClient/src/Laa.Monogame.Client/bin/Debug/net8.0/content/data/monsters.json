@@ -1,0 +1,2013 @@
+{
+  "Monsters": [
+    {
+      "Name": "Humano",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 0
+    },
+    {
+      "Name": "Elfo",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 1
+    },
+    {
+      "Name": "Enano",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 1,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 2
+    },
+    {
+      "Name": "Gnomo",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 1,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 3
+    },
+    {
+      "Name": "Semielfo",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 4
+    },
+    {
+      "Name": "Orco",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 1,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 5
+    },
+    {
+      "Name": "Drow",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 1,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 6
+    },
+    {
+      "Name": "Humano Mago",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 20
+    },
+    {
+      "Name": "Humano Clerigo",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 21
+    },
+    {
+      "Name": "Elfo Guerrero Mago",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 22
+    },
+    {
+      "Name": "Enano Clerigo",
+      "TerrainFlags": 12288,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 23
+    },
+    {
+      "Name": "Humano guerrero-placas",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 30
+    },
+    {
+      "Name": "Enano guerrero",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 1,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 31
+    },
+    {
+      "Name": "Orco guerrero",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 32
+    },
+    {
+      "Name": "Humano guerrero-cuero",
+      "TerrainFlags": 12288,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 33
+    },
+    {
+      "Name": "Drow, guerrero mago",
+      "TerrainFlags": 12288,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 34
+    },
+    {
+      "Name": "Herrero",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 0,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 49
+    },
+    {
+      "Name": "Ariete",
+      "TerrainFlags": 12288,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 18045787,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 0,
+      "Experience": 100,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 10,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 50
+    },
+    {
+      "Name": "Ara\u00F1a esmeralda",
+      "TerrainFlags": 14336,
+      "Level": 3,
+      "Alignment": 0,
+      "Resistances": 125286263,
+      "Defense": 40,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 20,
+      "Behavior": 1,
+      "Regeneration": 0,
+      "TreasureModifier": 1,
+      "Experience": 75,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 1,
+          "NameCode": 22
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 22
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 3,
+          "NameCode": 22
+        }
+      ],
+      "PrimaryTreasure": 219,
+      "Visibility": 2,
+      "MovementIndex": 2,
+      "DeathStyle": 2,
+      "Size": 0,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 12,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 101
+    },
+    {
+      "Name": "Ara\u00F1a de agua",
+      "TerrainFlags": 47104,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 192378743,
+      "Defense": 15,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 10,
+      "Behavior": 4,
+      "Regeneration": 0,
+      "TreasureModifier": 1,
+      "Experience": 40,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 22
+        },
+        {
+          "Base": 1,
+          "Bonus": 3,
+          "DamageType": 1,
+          "NameCode": 22
+        },
+        {
+          "Base": 1,
+          "Bonus": 3,
+          "DamageType": 1,
+          "NameCode": 22
+        }
+      ],
+      "PrimaryTreasure": 173,
+      "Visibility": 2,
+      "MovementIndex": 3,
+      "DeathStyle": 2,
+      "Size": 0,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 5,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 102
+    },
+    {
+      "Name": "Ara\u00F1a gris",
+      "TerrainFlags": 14336,
+      "Level": 5,
+      "Alignment": 2,
+      "Resistances": 125269879,
+      "Defense": 60,
+      "SecondaryTreasure": 52,
+      "AttackLevel": 20,
+      "Behavior": 2,
+      "Regeneration": 0,
+      "TreasureModifier": 30,
+      "Experience": 150,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 8,
+          "DamageType": 4,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 2,
+          "NameCode": 23
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 1,
+          "NameCode": 22
+        }
+      ],
+      "PrimaryTreasure": 214,
+      "Visibility": 1,
+      "MovementIndex": 2,
+      "DeathStyle": 2,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 10,
+      "AverageHp": 20,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 103
+    },
+    {
+      "Name": "Ara\u00F1a infernal",
+      "TerrainFlags": 30720,
+      "Level": 8,
+      "Alignment": 3,
+      "Resistances": 962508663,
+      "Defense": 70,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 30,
+      "Behavior": 2,
+      "Regeneration": 1,
+      "TreasureModifier": 8,
+      "Experience": 300,
+      "Damages": [
+        {
+          "Base": 6,
+          "Bonus": 7,
+          "DamageType": 4,
+          "NameCode": 12
+        },
+        {
+          "Base": 4,
+          "Bonus": 9,
+          "DamageType": 1,
+          "NameCode": 22
+        },
+        {
+          "Base": 6,
+          "Bonus": 3,
+          "DamageType": 3,
+          "NameCode": 22
+        }
+      ],
+      "PrimaryTreasure": 172,
+      "Visibility": 1,
+      "MovementIndex": 2,
+      "DeathStyle": 2,
+      "Size": 1,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 8,
+      "TreasureModifier2": 0,
+      "AverageHp": 30,
+      "SkillMask": 272,
+      "Reserved": 0,
+      "TypeId": 104
+    },
+    {
+      "Name": "Gran escorpi\u00F3n",
+      "TerrainFlags": 14336,
+      "Level": 16,
+      "Alignment": 2,
+      "Resistances": 695978683,
+      "Defense": 90,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 70,
+      "Behavior": 7,
+      "Regeneration": 1,
+      "TreasureModifier": 1,
+      "Experience": 1500,
+      "Damages": [
+        {
+          "Base": 4,
+          "Bonus": 7,
+          "DamageType": 3,
+          "NameCode": 1
+        },
+        {
+          "Base": 2,
+          "Bonus": 11,
+          "DamageType": 0,
+          "NameCode": 26
+        },
+        {
+          "Base": 4,
+          "Bonus": 7,
+          "DamageType": 3,
+          "NameCode": 21
+        }
+      ],
+      "PrimaryTreasure": 227,
+      "Visibility": 0,
+      "MovementIndex": 2,
+      "DeathStyle": 2,
+      "Size": 2,
+      "RandomTreasure": 2,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 60,
+      "SkillMask": 260,
+      "Reserved": 0,
+      "TypeId": 110
+    },
+    {
+      "Name": "Ruga",
+      "TerrainFlags": 14336,
+      "Level": 45,
+      "Alignment": 3,
+      "Resistances": 1015859079,
+      "Defense": 80,
+      "SecondaryTreasure": 219,
+      "AttackLevel": 80,
+      "Behavior": 2,
+      "Regeneration": 2,
+      "TreasureModifier": 1,
+      "Experience": 4500,
+      "Damages": [
+        {
+          "Base": 40,
+          "Bonus": 6,
+          "DamageType": 0,
+          "NameCode": 26
+        },
+        {
+          "Base": 40,
+          "Bonus": 6,
+          "DamageType": 2,
+          "NameCode": 14
+        },
+        {
+          "Base": 30,
+          "Bonus": 6,
+          "DamageType": 3,
+          "NameCode": 22
+        }
+      ],
+      "PrimaryTreasure": 224,
+      "Visibility": 2,
+      "MovementIndex": 2,
+      "DeathStyle": 2,
+      "Size": 4,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 2,
+      "TreasureModifier2": 3,
+      "AverageHp": 150,
+      "SkillMask": 308,
+      "Reserved": 0,
+      "TypeId": 111
+    },
+    {
+      "Name": "Guerrero esqueleto",
+      "TerrainFlags": 14336,
+      "Level": 12,
+      "Alignment": 3,
+      "Resistances": 162785211,
+      "Defense": 75,
+      "SecondaryTreasure": 80,
+      "AttackLevel": 80,
+      "Behavior": 2,
+      "Regeneration": 0,
+      "TreasureModifier": 25,
+      "Experience": 650,
+      "Damages": [
+        {
+          "Base": 3,
+          "Bonus": 6,
+          "DamageType": 0,
+          "NameCode": 11
+        },
+        {
+          "Base": 3,
+          "Bonus": 6,
+          "DamageType": 1,
+          "NameCode": 11
+        },
+        {
+          "Base": 1,
+          "Bonus": 6,
+          "DamageType": 3,
+          "NameCode": 22
+        }
+      ],
+      "PrimaryTreasure": 27,
+      "Visibility": 1,
+      "MovementIndex": 2,
+      "DeathStyle": 1,
+      "Size": 2,
+      "RandomTreasure": 2,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 25,
+      "AverageHp": 75,
+      "SkillMask": 256,
+      "Reserved": 0,
+      "TypeId": 112
+    },
+    {
+      "Name": "Leviat\u00E1n",
+      "TerrainFlags": 32768,
+      "Level": 25,
+      "Alignment": 2,
+      "Resistances": 1791465592,
+      "Defense": 90,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 75,
+      "Behavior": 7,
+      "Regeneration": 4,
+      "TreasureModifier": 8,
+      "Experience": 2500,
+      "Damages": [
+        {
+          "Base": 20,
+          "Bonus": 6,
+          "DamageType": 0,
+          "NameCode": 22
+        },
+        {
+          "Base": 12,
+          "Bonus": 7,
+          "DamageType": 3,
+          "NameCode": 22
+        },
+        {
+          "Base": 30,
+          "Bonus": 11,
+          "DamageType": 5,
+          "NameCode": 28
+        }
+      ],
+      "PrimaryTreasure": 175,
+      "Visibility": 2,
+      "MovementIndex": 2,
+      "DeathStyle": 2,
+      "Size": 4,
+      "RandomTreasure": 2,
+      "AnimationStyle": 4,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 8,
+      "TreasureModifier2": 0,
+      "AverageHp": 250,
+      "SkillMask": 256,
+      "Reserved": 0,
+      "TypeId": 120
+    },
+    {
+      "Name": "Guardi\u00E1n Infernal",
+      "TerrainFlags": 14336,
+      "Level": 20,
+      "Alignment": 3,
+      "Resistances": 1215993752,
+      "Defense": 90,
+      "SecondaryTreasure": 30,
+      "AttackLevel": 90,
+      "Behavior": 2,
+      "Regeneration": 5,
+      "TreasureModifier": 5,
+      "Experience": 1500,
+      "Damages": [
+        {
+          "Base": 14,
+          "Bonus": 13,
+          "DamageType": 0,
+          "NameCode": 15
+        },
+        {
+          "Base": 12,
+          "Bonus": 13,
+          "DamageType": 2,
+          "NameCode": 14
+        },
+        {
+          "Base": 10,
+          "Bonus": 7,
+          "DamageType": 4,
+          "NameCode": 3
+        }
+      ],
+      "PrimaryTreasure": 174,
+      "Visibility": 1,
+      "MovementIndex": 2,
+      "DeathStyle": 1,
+      "Size": 3,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 64,
+      "AverageHp": 120,
+      "SkillMask": 272,
+      "Reserved": 0,
+      "TypeId": 128
+    },
+    {
+      "Name": "Diablo Rojo",
+      "TerrainFlags": 14336,
+      "Level": 25,
+      "Alignment": 3,
+      "Resistances": 1769781417,
+      "Defense": 100,
+      "SecondaryTreasure": 30,
+      "AttackLevel": 120,
+      "Behavior": 2,
+      "Regeneration": 5,
+      "TreasureModifier": 1,
+      "Experience": 2500,
+      "Damages": [
+        {
+          "Base": 8,
+          "Bonus": 11,
+          "DamageType": 0,
+          "NameCode": 15
+        },
+        {
+          "Base": 8,
+          "Bonus": 11,
+          "DamageType": 0,
+          "NameCode": 15
+        },
+        {
+          "Base": 12,
+          "Bonus": 13,
+          "DamageType": 4,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 163,
+      "Visibility": 1,
+      "MovementIndex": 2,
+      "DeathStyle": 1,
+      "Size": 3,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 2,
+      "TreasureModifier2": 136,
+      "AverageHp": 125,
+      "SkillMask": 40,
+      "Reserved": 0,
+      "TypeId": 129
+    },
+    {
+      "Name": "Ninfa del bosque",
+      "TerrainFlags": 47104,
+      "Level": 40,
+      "Alignment": 0,
+      "Resistances": 1844307831,
+      "Defense": 120,
+      "SecondaryTreasure": 157,
+      "AttackLevel": 100,
+      "Behavior": 6,
+      "Regeneration": 5,
+      "TreasureModifier": 3,
+      "Experience": 4000,
+      "Damages": [
+        {
+          "Base": 20,
+          "Bonus": 11,
+          "DamageType": 3,
+          "NameCode": 21
+        },
+        {
+          "Base": 40,
+          "Bonus": 6,
+          "DamageType": 5,
+          "NameCode": 17
+        },
+        {
+          "Base": 45,
+          "Bonus": 6,
+          "DamageType": 6,
+          "NameCode": 25
+        }
+      ],
+      "PrimaryTreasure": 11,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 3,
+      "Size": 1,
+      "RandomTreasure": 0,
+      "AnimationStyle": 4,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 20,
+      "AverageHp": 50,
+      "SkillMask": 828,
+      "Reserved": 0,
+      "TypeId": 136
+    },
+    {
+      "Name": "Centauro",
+      "TerrainFlags": 14336,
+      "Level": 12,
+      "Alignment": 0,
+      "Resistances": 125269879,
+      "Defense": 70,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 75,
+      "Behavior": 3,
+      "Regeneration": 0,
+      "TreasureModifier": 64,
+      "Experience": 600,
+      "Damages": [
+        {
+          "Base": 3,
+          "Bonus": 10,
+          "DamageType": 1,
+          "NameCode": 5
+        },
+        {
+          "Base": 2,
+          "Bonus": 9,
+          "DamageType": 3,
+          "NameCode": 27
+        },
+        {
+          "Base": 4,
+          "Bonus": 13,
+          "DamageType": 1,
+          "NameCode": 5
+        }
+      ],
+      "PrimaryTreasure": 46,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 1,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 60,
+      "SkillMask": 256,
+      "Reserved": 0,
+      "TypeId": 140
+    },
+    {
+      "Name": "Ogro",
+      "TerrainFlags": 14336,
+      "Level": 20,
+      "Alignment": 2,
+      "Resistances": 126392183,
+      "Defense": 90,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 80,
+      "Behavior": 2,
+      "Regeneration": 1,
+      "TreasureModifier": 10,
+      "Experience": 2000,
+      "Damages": [
+        {
+          "Base": 25,
+          "Bonus": 16,
+          "DamageType": 2,
+          "NameCode": 20
+        },
+        {
+          "Base": 15,
+          "Bonus": 6,
+          "DamageType": 2,
+          "NameCode": 14
+        },
+        {
+          "Base": 10,
+          "Bonus": 3,
+          "DamageType": 3,
+          "NameCode": 3
+        }
+      ],
+      "PrimaryTreasure": 139,
+      "Visibility": 1,
+      "MovementIndex": 2,
+      "DeathStyle": 0,
+      "Size": 3,
+      "RandomTreasure": 6,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 8,
+      "TreasureModifier2": 0,
+      "AverageHp": 160,
+      "SkillMask": 256,
+      "Reserved": 0,
+      "TypeId": 142
+    },
+    {
+      "Name": "Oso blanco",
+      "TerrainFlags": 14336,
+      "Level": 8,
+      "Alignment": 2,
+      "Resistances": 126257015,
+      "Defense": 60,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 55,
+      "Behavior": 1,
+      "Regeneration": 0,
+      "TreasureModifier": 25,
+      "Experience": 500,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 8,
+          "DamageType": 0,
+          "NameCode": 22
+        },
+        {
+          "Base": 1,
+          "Bonus": 8,
+          "DamageType": 2,
+          "NameCode": 14
+        },
+        {
+          "Base": 1,
+          "Bonus": 6,
+          "DamageType": 1,
+          "NameCode": 13
+        }
+      ],
+      "PrimaryTreasure": 221,
+      "Visibility": 1,
+      "MovementIndex": 1,
+      "DeathStyle": 0,
+      "Size": 3,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 80,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 150
+    },
+    {
+      "Name": "Oso Pardo",
+      "TerrainFlags": 14336,
+      "Level": 6,
+      "Alignment": 2,
+      "Resistances": 125269879,
+      "Defense": 60,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 50,
+      "Behavior": 1,
+      "Regeneration": 0,
+      "TreasureModifier": 12,
+      "Experience": 350,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 6,
+          "DamageType": 0,
+          "NameCode": 22
+        },
+        {
+          "Base": 1,
+          "Bonus": 6,
+          "DamageType": 2,
+          "NameCode": 14
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 1,
+          "NameCode": 13
+        }
+      ],
+      "PrimaryTreasure": 221,
+      "Visibility": 1,
+      "MovementIndex": 1,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 2,
+      "TreasureModifier2": 0,
+      "AverageHp": 60,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 151
+    },
+    {
+      "Name": "\u00D1and\u00FA",
+      "TerrainFlags": 12288,
+      "Level": 4,
+      "Alignment": 1,
+      "Resistances": 125269879,
+      "Defense": 65,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 40,
+      "Behavior": 0,
+      "Regeneration": 0,
+      "TreasureModifier": 15,
+      "Experience": 200,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 2,
+          "NameCode": 23
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 2,
+          "NameCode": 23
+        },
+        {
+          "Base": 1,
+          "Bonus": 3,
+          "DamageType": 1,
+          "NameCode": 24
+        }
+      ],
+      "PrimaryTreasure": 148,
+      "Visibility": 2,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 2,
+      "TreasureModifier2": 0,
+      "AverageHp": 25,
+      "SkillMask": 256,
+      "Reserved": 0,
+      "TypeId": 160
+    },
+    {
+      "Name": "Gacela",
+      "TerrainFlags": 14336,
+      "Level": 2,
+      "Alignment": 1,
+      "Resistances": 125269879,
+      "Defense": 50,
+      "SecondaryTreasure": 221,
+      "AttackLevel": 0,
+      "Behavior": 4,
+      "Regeneration": 0,
+      "TreasureModifier": 6,
+      "Experience": 60,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 1,
+          "NameCode": 22
+        },
+        {
+          "Base": 1,
+          "Bonus": 6,
+          "DamageType": 2,
+          "NameCode": 23
+        },
+        {
+          "Base": 2,
+          "Bonus": 7,
+          "DamageType": 2,
+          "NameCode": 10
+        }
+      ],
+      "PrimaryTreasure": 149,
+      "Visibility": 2,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 1,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 1,
+      "AverageHp": 6,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 161
+    },
+    {
+      "Name": "Cl\u00E9rigo de Thanatos",
+      "TerrainFlags": 14336,
+      "Level": 35,
+      "Alignment": 3,
+      "Resistances": 1535871112,
+      "Defense": 75,
+      "SecondaryTreasure": 14,
+      "AttackLevel": 100,
+      "Behavior": 6,
+      "Regeneration": 2,
+      "TreasureModifier": 20,
+      "Experience": 3500,
+      "Damages": [
+        {
+          "Base": 35,
+          "Bonus": 6,
+          "DamageType": 7,
+          "NameCode": 17
+        },
+        {
+          "Base": 35,
+          "Bonus": 6,
+          "DamageType": 3,
+          "NameCode": 21
+        },
+        {
+          "Base": 100,
+          "Bonus": 151,
+          "DamageType": 7,
+          "NameCode": 29
+        }
+      ],
+      "PrimaryTreasure": 236,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 3,
+      "Size": 2,
+      "RandomTreasure": 5,
+      "AnimationStyle": 4,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 8,
+      "TreasureModifier2": 1,
+      "AverageHp": 80,
+      "SkillMask": 300,
+      "Reserved": 0,
+      "TypeId": 170
+    },
+    {
+      "Name": "Mu\u00F1eco para entrenamiento",
+      "TerrainFlags": 14336,
+      "Level": 1,
+      "Alignment": 0,
+      "Resistances": 2147483647,
+      "Defense": 0,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 0,
+      "Behavior": 8,
+      "Regeneration": 15,
+      "TreasureModifier": 0,
+      "Experience": 25,
+      "Damages": [
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        },
+        {
+          "Base": 1,
+          "Bonus": 4,
+          "DamageType": 0,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 0,
+      "Visibility": 1,
+      "MovementIndex": 3,
+      "DeathStyle": 1,
+      "Size": 2,
+      "RandomTreasure": 0,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 25,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 179
+    },
+    {
+      "Name": "Guardi\u00E1n de Castillo",
+      "TerrainFlags": 14336,
+      "Level": 40,
+      "Alignment": 0,
+      "Resistances": 1735907191,
+      "Defense": 125,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 100,
+      "Behavior": 9,
+      "Regeneration": 10,
+      "TreasureModifier": 10,
+      "Experience": 4000,
+      "Damages": [
+        {
+          "Base": 35,
+          "Bonus": 6,
+          "DamageType": 0,
+          "NameCode": 22
+        },
+        {
+          "Base": 35,
+          "Bonus": 6,
+          "DamageType": 5,
+          "NameCode": 28
+        },
+        {
+          "Base": 50,
+          "Bonus": 11,
+          "DamageType": 4,
+          "NameCode": 12
+        }
+      ],
+      "PrimaryTreasure": 174,
+      "Visibility": 2,
+      "MovementIndex": 0,
+      "DeathStyle": 3,
+      "Size": 4,
+      "RandomTreasure": 0,
+      "AnimationStyle": 3,
+      "DeathOutcome": 1,
+      "CastableSpells": 0,
+      "AttackInterval": 4,
+      "TreasureModifier2": 0,
+      "AverageHp": 1000,
+      "SkillMask": 256,
+      "Reserved": 0,
+      "TypeId": 180
+    },
+    {
+      "Name": "Golem de bronce",
+      "TerrainFlags": 14336,
+      "Level": 14,
+      "Alignment": 3,
+      "Resistances": 57067673,
+      "Defense": 80,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 60,
+      "Behavior": 5,
+      "Regeneration": 1,
+      "TreasureModifier": 0,
+      "Experience": 1400,
+      "Damages": [
+        {
+          "Base": 2,
+          "Bonus": 15,
+          "DamageType": 0,
+          "NameCode": 11
+        },
+        {
+          "Base": 2,
+          "Bonus": 15,
+          "DamageType": 1,
+          "NameCode": 11
+        },
+        {
+          "Base": 2,
+          "Bonus": 11,
+          "DamageType": 2,
+          "NameCode": 14
+        }
+      ],
+      "PrimaryTreasure": 178,
+      "Visibility": 1,
+      "MovementIndex": 1,
+      "DeathStyle": 1,
+      "Size": 3,
+      "RandomTreasure": 2,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 8,
+      "TreasureModifier2": 0,
+      "AverageHp": 160,
+      "SkillMask": 0,
+      "Reserved": 0,
+      "TypeId": 181
+    },
+    {
+      "Name": "Contemplador",
+      "TerrainFlags": 47104,
+      "Level": 18,
+      "Alignment": 3,
+      "Resistances": 1551329847,
+      "Defense": 75,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 20,
+      "Behavior": 6,
+      "Regeneration": 1,
+      "TreasureModifier": 3,
+      "Experience": 1800,
+      "Damages": [
+        {
+          "Base": 15,
+          "Bonus": 6,
+          "DamageType": 7,
+          "NameCode": 16
+        },
+        {
+          "Base": 20,
+          "Bonus": 6,
+          "DamageType": 5,
+          "NameCode": 17
+        },
+        {
+          "Base": 25,
+          "Bonus": 6,
+          "DamageType": 4,
+          "NameCode": 12
+        }
+      ],
+      "PrimaryTreasure": 162,
+      "Visibility": 2,
+      "MovementIndex": 3,
+      "DeathStyle": 0,
+      "Size": 2,
+      "RandomTreasure": 3,
+      "AnimationStyle": 2,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 8,
+      "TreasureModifier2": 0,
+      "AverageHp": 100,
+      "SkillMask": 300,
+      "Reserved": 0,
+      "TypeId": 182
+    },
+    {
+      "Name": "Gusano Gigante",
+      "TerrainFlags": 8192,
+      "Level": 15,
+      "Alignment": 2,
+      "Resistances": 1501226901,
+      "Defense": 50,
+      "SecondaryTreasure": 0,
+      "AttackLevel": 40,
+      "Behavior": 7,
+      "Regeneration": 1,
+      "TreasureModifier": 1,
+      "Experience": 1500,
+      "Damages": [
+        {
+          "Base": 40,
+          "Bonus": 11,
+          "DamageType": 0,
+          "NameCode": 22
+        },
+        {
+          "Base": 30,
+          "Bonus": 11,
+          "DamageType": 1,
+          "NameCode": 22
+        },
+        {
+          "Base": 20,
+          "Bonus": 11,
+          "DamageType": 4,
+          "NameCode": 0
+        }
+      ],
+      "PrimaryTreasure": 199,
+      "Visibility": 2,
+      "MovementIndex": 0,
+      "DeathStyle": 3,
+      "Size": 4,
+      "RandomTreasure": 2,
+      "AnimationStyle": 0,
+      "DeathOutcome": 0,
+      "CastableSpells": 0,
+      "AttackInterval": 16,
+      "TreasureModifier2": 0,
+      "AverageHp": 250,
+      "SkillMask": 256,
+      "Reserved": 0,
+      "TypeId": 183
+    }
+  ]
+}

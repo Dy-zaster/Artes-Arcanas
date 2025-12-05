@@ -32,7 +32,10 @@ All runtime names, classes, and variables inside the new client are written in E
    DOTNET_CLI_HOME="$PWD" dotnet restore
    DOTNET_CLI_HOME="$PWD" dotnet build
    ```
-4. Run the client:
+4. Copy or generate the content data:
+   - During development you can point the client to `Docs/Formats/Samples` (default fallback).
+   - For actual builds place the JSON exports under `MonoGameClient/content/data` (maps should be named `map_*.json` or live inside a `maps/` subfolder so the runtime can find them).
+5. Run the client:
    ```bash
    cd src/Laa.Monogame.Client
    DOTNET_CLI_HOME="$PWD" dotnet run
