@@ -31,18 +31,9 @@ The associated bitmap usually contains every direction concatenated horizontally
 
 ### Conversion approach
 
-1. Parse the `.cr9` layout according to the descriptor counts above. Max sizes are defined in `Demonios.pas` (`MaxDirAni=4`, `MaxCuadrosJ=19`, `MaxCuadrosM=15`).
-2. Slice the companion `.bmp` file into per-direction strips using `anchoMax` and `acumy`. Store per-frame rectangles and pivot offsets (`cenx/ceny` minus `modi*`).
-3. Emit an intermediate JSON format like:
-   ```json
-   {
-     "texture": "Characters/m0.png",
-     "directions": [ ... ],
-     "frames": [{"rect": [x,y,w,h], "pivot": [px,py]}]
-   }
-   ```
-   This allows MonoGame to load a single PNG atlas and animate via SpriteBatch.
-4. Plan to convert key bitmaps (with palette) into PNG while preserving transparency. The Delphi client sometimes relies on magenta (0xFF00FF) chroma key or grayscale overlays; document those per-asset as we convert.
+1. Parse the `.cr9` layout according to the descriptor counts above. Max sizes are defined in `Demonios.pas` (`MaxDirAni=4`, `MaxCuadrosJ=19`, `MaxCuadrosM=15`). The `LegacyDataExtractor` command `animations` now walks `grf/*.cr9` and emits `content/data/animations.json` with every direction/frame entry (kind, offsets, `acumy/ancho/cenx/ceny`, and optional style flags).
+2. Slice the companion `.bmp` file into per-direction strips using `anchoMax` and `acumy`. Store per-frame rectangles and pivot offsets (`cenx/ceny` minus `modi*`). This step will feed future atlas builds that pack animated sprites.
+3. Convert key bitmaps (with palette) into PNG while preserving transparency. The Delphi client sometimes relies on magenta (0xFF00FF) chroma key or grayscale overlays; document those per-asset as we convert so SpriteBatch can reproduce the same blending.
 
 ## Static world graphics (`oc.b` + `grf/*.bmp`)
 
@@ -97,10 +88,17 @@ The command produces:
 
 Drop the generated folder under `MonoGameClient/content/graphics/atlases` (already part of the fallback search roots). When absent, the client continues to stream the original BMPs directly from `Original Pascal/Laa/grf`.
 
+## Animation preview inside the MonoGame client
+
+- `animations.json` is loaded next to the rest of the JSON catalogues and `AnimationTextureProvider` now resolves every key straight from the atlas manifest (no BMP fallback paths). The provider rebuilds per-direction strips by applying the legacy `modix/modiy/cenx/ceny` offsets so pivots match Delphi’s `TanimacionMonstruo.draw` routines.
+- `Game1` exposes an opt-in debug viewer so we can validate each animation without networking. Press `F5` to toggle it, `F6/F7` to cycle the loaded `.cr9` entries, `F8` to iterate directions, and `F9` to flip the sprite. The preview is anchored at the map center and renders through the same camera used by the terrain renderer, which keeps scale/alignment consistent with the pseudo-mosaic world.
+- The HUD now displays the active animation key/direction/mirror state so we can cross-reference it with the legacy table IDs when something looks off.
+
 ## Action items
 
-- [ ] Write a converter that walks `grf/`, finds each `.cr9`, and emits JSON descriptors plus PNG atlases.
+- [x] Write a converter that walks `grf/`, finds each `.cr9`, and emits JSON descriptors plus PNG-ready metadata (see `LegacyDataExtractor animations` output in `content/data/animations.json`). Atlas packing remains pending.
 - [x] Recreate the `oc.b` metadata in a cross-platform format and generate a lookup table to drive MonoGame's tile renderer.
+- [x] Hook the MonoGame runtime to the exported animations (`F5` viewer) using the atlas manifest instead of direct BMP reads.
 - [ ] Document per-asset transparency expectations (magenta key vs. alpha) so SpriteBatch settings match the Delphi behavior.
 
 ## Pseudo-mosaic masks (`ti.bmp`)

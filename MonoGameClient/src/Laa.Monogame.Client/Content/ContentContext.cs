@@ -25,6 +25,7 @@ public sealed class ContentContext
     public IAttackMappingRepository AttackMappings { get; }
     public IAnimationMappingRepository AnimationMappings { get; }
     public IGraphicRepository Graphics { get; }
+    public IAnimationRepository Animations { get; }
 
     private ContentContext(
         IMapRepository maps,
@@ -34,7 +35,8 @@ public sealed class ContentContext
         IMonsterRepository monsters,
         IAttackMappingRepository attackMappings,
         IAnimationMappingRepository animationMappings,
-        IGraphicRepository graphics)
+        IGraphicRepository graphics,
+        IAnimationRepository animations)
     {
         Maps = maps;
         Items = items;
@@ -44,6 +46,7 @@ public sealed class ContentContext
         AttackMappings = attackMappings;
         AnimationMappings = animationMappings;
         Graphics = graphics;
+        Animations = animations;
     }
 
     public static ContentContext Create(string? rootPath = null)
@@ -74,7 +77,8 @@ public sealed class ContentContext
             new JsonMonsterRepository(ResolveFile("monsters.json"), options),
             new JsonAttackMappingRepository(ResolveFile("attack_map.json"), options),
             new JsonAnimationMappingRepository(ResolveFile("anim_map.json"), options),
-            new JsonGraphicRepository(ResolveFile("graphics.json"), options));
+            new JsonGraphicRepository(ResolveFile("graphics.json"), options),
+            new JsonAnimationRepository(ResolveFile("animations.json"), options));
     }
 
     private static string ResolveContentRoot(string? overridePath)

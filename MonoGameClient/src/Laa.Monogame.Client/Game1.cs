@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Laa.Content.Core.Animations;
 using Laa.Content.Core.Commerce;
 using Laa.Content.Core.Graphics;
 using Laa.Content.Core.Items;
@@ -27,9 +28,12 @@ public class Game1 : Game
     private ContentContext? _content;
     private MapDocument? _activeMap;
     private GraphicDocument? _graphicsCatalog;
+    private AnimationDocument? _animationCatalog;
     private bool _loggedContent;
     private TerrainRenderer? _terrainRenderer;
     private StaticGraphicRenderer? _staticGraphicRenderer;
+    private AnimationTextureProvider? _animationTextureProvider;
+    private AnimationPreviewPlayer? _animationPreview;
     private MapOverlayRenderer? _overlayRenderer;
     private DebugTextRenderer? _debugTextRenderer;
     private TilePalette? _tilePalette;
@@ -40,6 +44,7 @@ public class Game1 : Game
     private IReadOnlyList<StaticGraphic> _sortedStaticGraphics = Array.Empty<StaticGraphic>();
     private Texture2D? _hudBackgroundTexture;
     private bool _showHud = true;
+    private bool _showAnimationPreview;
     private string[] _mapIds = Array.Empty<string>();
     private int _currentMapIndex;
     private ItemDocument? _itemDocument;
@@ -47,6 +52,7 @@ public class Game1 : Game
     private MonsterDocument? _monsterDocument;
     private CommerceDocument? _commerceDocument;
     private InfoPanel _infoPanel = InfoPanel.None;
+    private Vector2 _animationPreviewAnchor = Vector2.Zero;
 
     public Game1()
     {
@@ -63,6 +69,7 @@ public class Game1 : Game
 
         _content = ContentContext.Create();
         _graphicsCatalog = _content.Graphics.GetGraphics();
+        _animationCatalog = _content.Animations.GetAnimations();
         _itemDocument = _content.Items.GetItems();
         _spellDocument = _content.Spells.GetSpells();
         _monsterDocument = _content.Monsters.GetMonsters();
@@ -84,6 +91,13 @@ public class Game1 : Game
         var textureRoots = ResolveGraphicRoots();
         _terrainRenderer = new TerrainRenderer(GraphicsDevice, TileWidth, TileHeight, textureRoots);
         _terrainRenderer.LoadContent();
+        if (_animationCatalog is not null)
+        {
+            _animationTextureProvider = new AnimationTextureProvider(GraphicsDevice, _animationCatalog, textureRoots);
+            _animationPreview = new AnimationPreviewPlayer(
+                _animationTextureProvider,
+                _animationCatalog.Animations.Select(a => a.Key));
+        }
         if (_graphicsCatalog is not null)
         {
             var textureProvider = new GraphicTextureProvider(GraphicsDevice, _graphicsCatalog, textureRoots);
@@ -112,7 +126,9 @@ public class Game1 : Game
         HandleMapInput(keyboard);
         HandleHudInput(keyboard);
         HandleInfoPanelInput(keyboard);
+        HandleAnimationPreviewInput(keyboard);
         _cameraController?.Update(gameTime, keyboard, mouse);
+        _animationPreview?.Update(gameTime);
 
         if (!_loggedContent)
         {
@@ -137,6 +153,7 @@ public class Game1 : Game
 
         _terrainRenderer.Draw(_spriteBatch, _activeMap, _camera, _tilePalette, gameTime);
         _staticGraphicRenderer?.Draw(_spriteBatch, _sortedStaticGraphics, _camera);
+        DrawAnimationPreview();
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
         DrawHud();
         DrawInfoPanel();
@@ -152,6 +169,7 @@ public class Game1 : Game
             _spriteBatch?.Dispose();
             _terrainRenderer?.Dispose();
             _staticGraphicRenderer?.Dispose();
+            _animationTextureProvider?.Dispose();
             _overlayRenderer?.Dispose();
             _debugTextRenderer?.Dispose();
             _hudBackgroundTexture?.Dispose();
@@ -193,6 +211,7 @@ public class Game1 : Game
             _activeMap = _content.Maps.GetMap(mapId);
             PrepareStaticGraphics();
             ConfigureCameraBounds();
+            UpdateAnimationPreviewAnchor();
             Console.WriteLine($"Loaded map: {mapId} (index {_currentMapIndex + 1}/{count})");
         }
         catch (Exception ex)
@@ -215,7 +234,8 @@ public class Game1 : Game
         var itemCount = _content.Items.GetItems().Items.Count;
         var spellCount = _content.Spells.GetSpells().Spells.Count;
         var monsterCount = _content.Monsters.GetMonsters().Monsters.Count;
-        Console.WriteLine($"Loaded Map: {mapName} | Items: {itemCount} | Spells: {spellCount} | Monsters: {monsterCount}");
+        var animationCount = _content.Animations.GetAnimations().Animations.Count;
+        Console.WriteLine($"Loaded Map: {mapName} | Items: {itemCount} | Spells: {spellCount} | Monsters: {monsterCount} | Animations: {animationCount}");
     }
 
     private Color GetBackgroundColor()
@@ -250,6 +270,25 @@ public class Game1 : Game
         var pixelHeight = height * TileHeight;
         _camera.SetWorldSize(pixelWidth, pixelHeight);
         _camera.CenterOn(new Vector2(pixelWidth / 2f, pixelHeight / 2f));
+    }
+
+    private void UpdateAnimationPreviewAnchor()
+    {
+        if (_activeMap is null)
+        {
+            _animationPreviewAnchor = Vector2.Zero;
+            return;
+        }
+
+        var width = _activeMap.Terrain.FirstOrDefault()?.Count ?? 0;
+        var height = _activeMap.Terrain.Count;
+        if (width == 0 || height == 0)
+        {
+            _animationPreviewAnchor = Vector2.Zero;
+            return;
+        }
+
+        _animationPreviewAnchor = new Vector2(width * TileWidth / 2f, height * TileHeight / 2f);
     }
 
     private void OnClientSizeChanged(object? sender, EventArgs e)
@@ -375,6 +414,43 @@ public class Game1 : Game
         }
     }
 
+    private void HandleAnimationPreviewInput(KeyboardState keyboardState)
+    {
+        if (_animationPreview is null)
+        {
+            return;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.F5))
+        {
+            _showAnimationPreview = !_showAnimationPreview;
+        }
+
+        if (!_showAnimationPreview)
+        {
+            return;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.F6))
+        {
+            _animationPreview.StepAnimation(1);
+        }
+        else if (IsKeyPressed(keyboardState, Keys.F7))
+        {
+            _animationPreview.StepAnimation(-1);
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.F8))
+        {
+            _animationPreview.StepDirection(1);
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.F9))
+        {
+            _animationPreview.ToggleMirror();
+        }
+    }
+
     private void CycleOverlayMode()
     {
         var next = _overlayLayers switch
@@ -456,12 +532,18 @@ public class Game1 : Game
             ? $"{_currentMapIndex + 1}/{_mapIds.Length}"
             : "0/0";
 
+        var animationLine = BuildAnimationPreviewLine();
+
         var builder = new StringBuilder();
         builder.AppendLine($"MAP {mapName} ({currentMapLabel})");
         builder.AppendLine($"SIZE {width}X{height}  STATIC {staticCount}");
         builder.AppendLine($"SENSORS {sensorCount}  NESTS {nestCount}  MERCHANTS {merchantCount}");
         builder.AppendLine($"OVERLAY {overlay}");
-        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD");
+        if (!string.IsNullOrEmpty(animationLine))
+        {
+            builder.AppendLine(animationLine);
+        }
+        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD  F5 PREVIEW  F6/F7 ANIM  F8 DIR  F9 MIR");
         return builder.ToString().ToUpperInvariant();
     }
 
@@ -499,6 +581,16 @@ public class Game1 : Game
             Color.LightGreen,
             scale);
         _spriteBatch.End();
+    }
+
+    private void DrawAnimationPreview()
+    {
+        if (!_showAnimationPreview || _animationPreview is null || _spriteBatch is null || _camera is null)
+        {
+            return;
+        }
+
+        _animationPreview.Draw(_spriteBatch, _camera, _animationPreviewAnchor);
     }
 
     private string BuildInfoPanelText()
@@ -660,6 +752,25 @@ public class Game1 : Game
         }
 
         return builder.ToString().ToUpperInvariant();
+    }
+
+    private string BuildAnimationPreviewLine()
+    {
+        if (_animationPreview is null)
+        {
+            return string.Empty;
+        }
+
+        if (!_showAnimationPreview || !_animationPreview.HasAnimation)
+        {
+            return "ANIM PREVIEW OFF (F5 TOGGLE)";
+        }
+
+        var key = _animationPreview.CurrentKey ?? "N/A";
+        var direction = _animationPreview.DirectionIndex;
+        var mirror = _animationPreview.Mirror ? "MIR" : "FWD";
+        var kind = _animationPreview.CurrentKind?.ToString() ?? "UNK";
+        return $"ANIM {key} DIR {direction} {mirror} {kind}";
     }
 
     private string ResolveItemName(int itemId)

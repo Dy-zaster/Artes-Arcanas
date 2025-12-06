@@ -16,6 +16,7 @@ internal sealed class ExtractionApp
     private readonly MonsterFileParser _monsterParser = new();
     private readonly AttackMappingParser _attackMappingParser = new();
     private readonly AnimationMappingParser _animationMappingParser = new();
+    private readonly AnimationFileParser _animationFileParser = new();
     private readonly GraphicFileParser _graphicParser = new();
 
     public int Run(string[] args)
@@ -38,6 +39,7 @@ internal sealed class ExtractionApp
             "monsters" => RunMonsters(commandArgs),
             "attackmap" => RunAttackMap(commandArgs),
             "animmap" => RunAnimationMap(commandArgs),
+            "animations" => RunAnimations(commandArgs),
             "graphics" => RunGraphics(commandArgs),
             "-h" => PrintHelpAndReturnSuccess(),
             "--help" => PrintHelpAndReturnSuccess(),
@@ -305,6 +307,43 @@ internal sealed class ExtractionApp
         }
     }
 
+    private int RunAnimations(string[] args)
+    {
+        var (sourceDirectory, outputPath) = ParseAnimationArgs(args);
+        try
+        {
+            var document = _animationFileParser.ParseDirectory(sourceDirectory);
+            var json = JsonSerializer.Serialize(document, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
+            if (!string.IsNullOrWhiteSpace(outputPath))
+            {
+                var fullOutput = Path.GetFullPath(outputPath);
+                var directory = Path.GetDirectoryName(fullOutput);
+                if (!string.IsNullOrEmpty(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                File.WriteAllText(fullOutput, json);
+                Console.WriteLine($"Animations exported to {fullOutput}");
+            }
+            else
+            {
+                Console.WriteLine(json);
+            }
+
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to parse animations under '{sourceDirectory}': {ex.Message}");
+            return 1;
+        }
+    }
+
     private int RunGraphics(string[] args)
     {
         var (inputPath, outputPath) = ParseGraphicArgs(args);
@@ -566,6 +605,43 @@ internal sealed class ExtractionApp
         return (inputPath, outputPath);
     }
 
+    private static (string sourceDirectory, string? outputPath) ParseAnimationArgs(string[] args)
+    {
+        string? sourceDirectory = null;
+        string? outputPath = null;
+
+        for (var i = 0; i < args.Length; i++)
+        {
+            var current = args[i];
+            switch (current)
+            {
+                case "--source" when i + 1 < args.Length:
+                    sourceDirectory = args[++i];
+                    break;
+                case "-o":
+                case "--out":
+                    if (i + 1 >= args.Length)
+                    {
+                        throw new ArgumentException("Missing value for --out option.");
+                    }
+
+                    outputPath = args[++i];
+                    break;
+                default:
+                    if (current.StartsWith("-"))
+                    {
+                        throw new ArgumentException($"Unknown option '{current}'.");
+                    }
+
+                    sourceDirectory = current;
+                    break;
+            }
+        }
+
+        sourceDirectory ??= Path.Combine("Original Pascal", "Laa", "grf");
+        return (sourceDirectory, outputPath);
+    }
+
     private static (string inputPath, string? outputPath) ParseGraphicArgs(string[] args)
     {
         string? inputPath = null;
@@ -610,6 +686,7 @@ internal sealed class ExtractionApp
         Console.WriteLine("  dotnet run -- attackmap [path/to/mp_ataq.b] [--out attack_map.json]");
         Console.WriteLine("  dotnet run -- animmap [path/to/mp_anim.b] [--out anim_map.json]");
         Console.WriteLine("  dotnet run -- graphics [path/to/oc.b] [--out graphics.json]");
+        Console.WriteLine("  dotnet run -- animations [--source grf/dir] [--out animations.json]");
         Console.WriteLine();
         Console.WriteLine("Commands:");
         Console.WriteLine("  map        Parses a legacy .mpv map file and prints or exports JSON.");
@@ -620,6 +697,7 @@ internal sealed class ExtractionApp
         Console.WriteLine("  attackmap  Reads mp_ataq.b (attack mappings) and prints or exports JSON.");
         Console.WriteLine("  animmap    Reads mp_anim.b (animation mappings) and prints or exports JSON.");
         Console.WriteLine("  graphics   Reads oc.b (static graphic descriptors) and prints or exports JSON.");
+        Console.WriteLine("  animations Parses every .cr9 animation under the given directory and exports JSON metadata.");
         Console.WriteLine();
         Console.WriteLine("If no path is provided, defaults are used inside 'Original Pascal/Laa/bin/'.");
     }
