@@ -13,6 +13,7 @@ using Laa.Content.Core.Monsters;
 using Laa.Content.Core.Spells;
 using Laa.Monogame.Client.Content;
 using Laa.Monogame.Client.Rendering;
+using Laa.Monogame.Client.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -39,6 +40,7 @@ public class Game1 : Game
     private StaticGraphicRenderer? _staticGraphicRenderer;
     private AnimationTextureProvider? _animationTextureProvider;
     private AnimationPreviewPlayer? _animationPreview;
+    private MonsterRenderer? _monsterRenderer;
     private MapOverlayRenderer? _overlayRenderer;
     private DebugTextRenderer? _debugTextRenderer;
     private TilePalette? _tilePalette;
@@ -47,7 +49,7 @@ public class Game1 : Game
     private OverlayLayers _overlayLayers = OverlayLayers.None;
     private KeyboardState _previousKeyboard;
     private IReadOnlyList<StaticGraphic> _sortedStaticGraphics = Array.Empty<StaticGraphic>();
-    private readonly List<MonsterPreviewInstance> _monsterPreviews = new();
+    private readonly List<MonsterEntity> _monsterEntities = new();
     private Texture2D? _hudBackgroundTexture;
     private bool _showHud = true;
     private bool _showAnimationPreview;
@@ -134,7 +136,8 @@ public class Game1 : Game
             _animationPreview = new AnimationPreviewPlayer(
                 _animationTextureProvider,
                 _animationCatalog.Animations.Select(a => a.Key));
-            PrepareMonsterPreviews();
+            _monsterRenderer = new MonsterRenderer(_animationTextureProvider);
+            RebuildMonsterEntities();
         }
         if (_graphicsCatalog is not null)
         {
@@ -165,9 +168,10 @@ public class Game1 : Game
         HandleHudInput(keyboard);
         HandleInfoPanelInput(keyboard);
         HandleAnimationPreviewInput(keyboard);
+        HandleMonsterDebugInput(keyboard);
         _cameraController?.Update(gameTime, keyboard, mouse);
         _animationPreview?.Update(gameTime);
-        UpdateMonsterPreviews(gameTime);
+        UpdateMonsterRenderer(gameTime);
 
         if (!_loggedContent)
         {
@@ -191,8 +195,8 @@ public class Game1 : Game
         }
 
         _terrainRenderer.Draw(_spriteBatch, _activeMap, _camera, _tilePalette, gameTime);
+        DrawMonsters();
         _staticGraphicRenderer?.Draw(_spriteBatch, _sortedStaticGraphics, _camera);
-        DrawMonsterPreviews();
         DrawAnimationPreview();
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
         DrawHud();
@@ -252,7 +256,7 @@ public class Game1 : Game
             PrepareStaticGraphics();
             ConfigureCameraBounds();
             UpdateAnimationPreviewAnchor();
-            PrepareMonsterPreviews();
+            RebuildMonsterEntities();
             Console.WriteLine($"Loaded map: {mapId} (index {_currentMapIndex + 1}/{count})");
         }
         catch (Exception ex)
@@ -426,11 +430,12 @@ public class Game1 : Game
             .ToArray();
     }
 
-    private void PrepareMonsterPreviews()
+    private void RebuildMonsterEntities()
     {
-        _monsterPreviews.Clear();
-        if (_activeMap is null || _monsterDocument is null || _animationTextureProvider is null)
+        _monsterEntities.Clear();
+        if (_activeMap is null || _monsterDocument is null)
         {
+            _monsterRenderer?.SetMonsters(Array.Empty<MonsterEntity>());
             return;
         }
 
@@ -438,6 +443,7 @@ public class Game1 : Game
             .GroupBy(m => (int)m.TypeId)
             .ToDictionary(g => g.Key, g => g.First(), comparer: EqualityComparer<int>.Default);
 
+        var identifier = 0;
         foreach (var nest in _activeMap.Nests)
         {
             if (!monsterLookup.TryGetValue(nest.Type, out var descriptor))
@@ -446,69 +452,42 @@ public class Game1 : Game
             }
 
             var key = $"m{descriptor.TypeId}";
-            if (!_animationTextureProvider.TryGetAnimation(key, out var animation))
-            {
-                continue;
-            }
-
-            if (animation.Directions.Count == 0)
-            {
-                continue;
-            }
-
-            var directionIndex = GetDirectionIndex(animation, nest.X, nest.Y);
-            var direction = animation.Directions[directionIndex];
-            var firstFrameIndex = AnimationRenderHelper.FindPlayableFrameIndex(direction);
-            if (firstFrameIndex < 0)
-            {
-                continue;
-            }
-
             var anchor = new Vector2(
                 (nest.X + 0.5f) * TileWidth,
                 (nest.Y + 1f) * TileHeight);
-            var instance = new MonsterPreviewInstance(animation, anchor, directionIndex, firstFrameIndex, descriptor.Name ?? $"#{descriptor.TypeId}");
-            _monsterPreviews.Add(instance);
+            var entity = new MonsterEntity(identifier++, descriptor, anchor, key);
+            _monsterEntities.Add(entity);
         }
 
-        _monsterPreviews.Sort((a, b) => a.Anchor.Y.CompareTo(b.Anchor.Y));
+        _monsterRenderer?.SetMonsters(_monsterEntities);
     }
 
-    private static int GetDirectionIndex(AnimationTexture animation, int x, int y)
+    private void UpdateMonsterRenderer(GameTime gameTime)
     {
-        if (animation.Directions.Count == 0)
-        {
-            return 0;
-        }
+        _monsterRenderer?.Update(gameTime);
+    }
 
-        var preferred = (x + y) % animation.Directions.Count;
-        if (animation.Directions[preferred].Frames.Count > 0)
+    private void CycleMonsterActions()
+    {
+        foreach (var monster in _monsterEntities)
         {
-            return preferred;
-        }
-
-        for (var i = 0; i < animation.Directions.Count; i++)
-        {
-            if (animation.Directions[i].Frames.Count > 0)
+            var next = monster.Action switch
             {
-                return i;
-            }
+                MonsterAction.Idle => MonsterAction.Moving,
+                MonsterAction.Moving => MonsterAction.Attack,
+                MonsterAction.Attack => MonsterAction.Dead,
+                _ => MonsterAction.Idle
+            };
+            monster.SetAction(next);
         }
-
-        return 0;
     }
 
-    private void UpdateMonsterPreviews(GameTime gameTime)
+    private void ToggleMonsterAttackMode()
     {
-        if (_monsterPreviews.Count == 0)
+        foreach (var monster in _monsterEntities)
         {
-            return;
-        }
-
-        var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        foreach (var preview in _monsterPreviews)
-        {
-            preview.Update(elapsed);
+            var next = monster.Action == MonsterAction.Attack ? MonsterAction.Idle : MonsterAction.Attack;
+            monster.SetAction(next);
         }
     }
 
@@ -685,6 +664,23 @@ public class Game1 : Game
         }
     }
 
+    private void HandleMonsterDebugInput(KeyboardState keyboardState)
+    {
+        if (_monsterEntities.Count == 0)
+        {
+            return;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.F11))
+        {
+            CycleMonsterActions();
+        }
+        else if (IsKeyPressed(keyboardState, Keys.F12))
+        {
+            ToggleMonsterAttackMode();
+        }
+    }
+
     private void CycleOverlayMode()
     {
         var next = _overlayLayers switch
@@ -777,7 +773,7 @@ public class Game1 : Game
         {
             builder.AppendLine(animationLine);
         }
-        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD  F5 PREVIEW  F6/F7 ANIM  F8 DIR  F9 MIR  F10 AV MODE  J/U ARM  K/I CLASS  L/O RACE  P GEND");
+        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD  F5 PREVIEW  F6/F7 ANIM  F8 DIR  F9 MIR  F10 AV MODE  J/U ARM  K/I CLASS  L/O RACE  P GEND  F11 MON CYCLE  F12 MON ATT");
         return builder.ToString().ToUpperInvariant();
     }
 
@@ -827,39 +823,14 @@ public class Game1 : Game
         _animationPreview.Draw(_spriteBatch, _camera, _animationPreviewAnchor);
     }
 
-    private void DrawMonsterPreviews()
+    private void DrawMonsters()
     {
-        if (_monsterPreviews.Count == 0 || _spriteBatch is null || _camera is null)
+        if (_monsterRenderer is null || _spriteBatch is null || _camera is null)
         {
             return;
         }
 
-        _spriteBatch.Begin(
-            samplerState: SamplerState.PointClamp,
-            blendState: BlendState.NonPremultiplied,
-            transformMatrix: _camera.GetViewMatrix());
-
-        foreach (var preview in _monsterPreviews)
-        {
-            if (!preview.TryGetFrame(out var direction, out var frame))
-            {
-                continue;
-            }
-
-            var position = AnimationRenderHelper.CalculateDrawPosition(preview.Anchor, direction, frame, false);
-            _spriteBatch.Draw(
-                preview.Animation.Texture,
-                position,
-                frame.Source,
-                Color.White,
-                0f,
-                Vector2.Zero,
-                Vector2.One,
-                SpriteEffects.None,
-                0.7f);
-        }
-
-        _spriteBatch.End();
+        _monsterRenderer.Draw(_spriteBatch, _camera);
     }
 
     private string BuildInfoPanelText()
@@ -1069,87 +1040,5 @@ public class Game1 : Game
         }
 
         return $"ITEM #{itemId:D3}";
-    }
-
-    private sealed class MonsterPreviewInstance
-    {
-        private const float DefaultFrameDuration = 0.12f;
-
-        public MonsterPreviewInstance(AnimationTexture animation, Vector2 anchor, int directionIndex, int initialFrame, string name)
-        {
-            Animation = animation;
-            Anchor = anchor;
-            DirectionIndex = directionIndex;
-            Name = name;
-            _frameIndices = BuildFrameIndices(animation.Directions[directionIndex]);
-            var startIndex = _frameIndices.IndexOf(initialFrame);
-            _currentIndex = startIndex >= 0 ? startIndex : 0;
-            _frameDuration = _frameIndices.Count > 4 ? DefaultFrameDuration : DefaultFrameDuration * 1.5f;
-        }
-
-        public AnimationTexture Animation { get; }
-
-        public Vector2 Anchor { get; }
-
-        public int DirectionIndex { get; }
-
-        public string Name { get; }
-
-        private readonly List<int> _frameIndices;
-        private readonly float _frameDuration;
-        private float _timer;
-        private int _currentIndex;
-
-        public void Update(float elapsedSeconds)
-        {
-            if (_frameIndices.Count <= 1)
-            {
-                return;
-            }
-
-            _timer += elapsedSeconds;
-            while (_timer >= _frameDuration)
-            {
-                _timer -= _frameDuration;
-                _currentIndex++;
-                if (_currentIndex >= _frameIndices.Count)
-                {
-                    _currentIndex = 0;
-                }
-            }
-        }
-
-        public bool TryGetFrame(out AnimationDirectionSlice direction, out AnimationFrameSlice frame)
-        {
-            direction = Animation.Directions[DirectionIndex];
-            if (_frameIndices.Count == 0)
-            {
-                frame = default;
-                return false;
-            }
-
-            var index = _frameIndices[_currentIndex];
-            frame = direction.Frames[index];
-            return frame.Source != Rectangle.Empty;
-        }
-
-        private static List<int> BuildFrameIndices(AnimationDirectionSlice direction)
-        {
-            var list = new List<int>(direction.Frames.Count);
-            for (var i = 0; i < direction.Frames.Count; i++)
-            {
-                if (direction.Frames[i].Source != Rectangle.Empty)
-                {
-                    list.Add(i);
-                }
-            }
-
-            if (list.Count == 0)
-            {
-                list.Add(0);
-            }
-
-            return list;
-        }
     }
 }
