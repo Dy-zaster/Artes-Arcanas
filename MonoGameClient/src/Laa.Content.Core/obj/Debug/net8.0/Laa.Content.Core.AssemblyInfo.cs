@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Laa.Content.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c57e41dc13ff68d7b28ee255a9cae9e8f73e9da1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12a60012b4f3f4ea57e2e66473493b51082b83db")]
 [assembly: System.Reflection.AssemblyProductAttribute("Laa.Content.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Laa.Content.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

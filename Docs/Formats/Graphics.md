@@ -62,6 +62,87 @@ The new `TerrainRenderer` first looks for the `terreno` entry inside any generat
 
 UI boards (`fondo.bmp`, `menu.jpg`, `barra.bmp`, `obj.jpg`, `ros.jpg`, `cjr.jpg`) are loaded through `Graficador` helpers. They already use conventional bitmap/JPEG formats, so data extraction mainly involves lossless conversion to PNG and mapping sprite rectangles by reading existing constants in `Juego.pas`/`UCliente.pas`.
 
+### Legacy HUD layout (bottom bar)
+
+The Delphi client does not treat UI windows as floating, independent panels. Instead it builds a single HUD strip anchored to the bottom edge of the screen that is always visible while the world scrolls underneath. That strip is assembled from several bitmaps in `grf/` and divided into fixed regions:
+
+- **Minimap block (far left)** – uses a dedicated background and renders the minimap plus the current map name (e.g., `Isla de los Ogros`). This sits in the lower‑left corner and never moves.
+- **Character stats panel** – immediately to the right of the minimap. This block shows class/level and primary stats (`Fuerza`, `Constitución`, `Inteligencia`, `Sabiduría`, `Destreza`) plus percentages for hit chance, evasion, and resistances. It uses a stone/dark background and text is drawn directly over that bitmap.
+- **Center status/message area** – a wide dark panel occupying the bottom center. It has two responsibilities:
+  - acts as a scrolling message log (“Tu avatar se aburrió de esperar y se dejó matar”, “Has sido resucitado”, etc.);
+  - hosts the “Menú” subsection with the avatar portrait and numeric values for `Salud`, `Mana`, `Comida` plus a couple of quick‑action icons (fist, weapon, rune).
+- **Equipment + inventory/spellbook (right side)** – the bottom‑right region combines several concepts into one composite block:
+  - the **paper doll** (outline of the avatar) with equipment slots around it (helm, armor, backpack, etc.) is rendered over a dedicated background;
+  - to the right of the doll there is a fixed grid of square cells. The same grid is reused in two modes:
+    - **Inventario** – cells contain item icons (bags, potions, books) pulled from `obj.jpg`;
+    - **Hechizos** – cells show rune icons (blue glyphs) representing spells;
+  - the labels “Inventario” and “Hechizos” above the grid work as tabs, but visually they are just text drawn on the same HUD bar rather than separate windows.
+
+There is no concept of draggable windows in the original client for these elements: the minimap, stats, message log, equipment, inventory, and spell grid all live inside this monolithic bottom HUD and are positioned with absolute coordinates inside that strip. When porting to MonoGame, the goal is to reproduce this *continuous bar* (using `cjr`/`ros`/`bmenu`/`obj` assets) rather than independent floating windows. The new UI framework in `Laa.Monogame.Client.UI` exists purely to help place and skin that HUD with atlas sprites while keeping the overall structure identical to Delphi’s layout.
+
+### Legacy UI bitmap catalogue
+
+Every UI surface under `Original Pascal/Laa/grf` is referenced by name inside the Delphi client. The table below documents what each bitmap holds, which part of the HUD it skins, and the code that loads or blits it.
+
+#### `menu.jpg`
+
+- Loaded as `fondoMenu` during `PrepararInterfaz` (`Original Pascal/Laa/Juego.pas:562`).
+- `TJForm.paint` blits the full 640×480 image whenever the game is in menu/login/creation states, before overlaying dynamic text (`Original Pascal/Laa/Juego.pas:3637-3679`).
+- The picture already contains the parchment background, logo placement, and decorative frame, so none of those widgets are assembled dynamically; MonoGame should treat it as a single-screen backdrop.
+
+#### `bmenu.jpg`
+
+- Loaded into `botonesMenu` (`Original Pascal/Laa/Juego.pas:563`) and sliced via `TGBoton.DefinirGraficos`.
+- Rectangles at `Original Pascal/Laa/Juego.pas:575-592` show exactly which sprite is used for *Aceptar*, *Cancelar*, *Ingresar*, *Crear*, *Salir*, and the dice button. Each pair of `Point` arguments marks the idle and pressed state offsets inside the sheet.
+- Keep both states when porting so button hover/press feedback stays identical to Delphi.
+
+#### `fondo.bmp`
+
+- Main HUD board (`Fondo`) loaded at `Original Pascal/Laa/Juego.pas:566`.
+- Supplies virtually every static piece of the bottom strip: the minimap parchment (`CopiarCanvasASuperficie` into `PnMapa`, line 637), the stats panel/background (`PnInfo`, `Original Pascal/Laa/Juego.pas:645-669`), the grid panel (`PnGrids`, `Original Pascal/Laa/Juego.pas:635-640`), text scroll buttons (`B_txArriba/B_txAbajo` reference `fondo.canvas`, lines 583-586), the equipment slots, and the message log.
+- Extra helper sprites (minimap pointer, spell highlight frame, “can’t use” icon) are copied from specific coordinates in this bitmap (`Original Pascal/Laa/Juego.pas:618-625`). Repacking the HUD requires preserving each of those sub-rectangles.
+
+#### `tccb.jpg`
+
+- Packed into the DirectDraw surface `TablaCC_Botones` (`Original Pascal/Laa/Juego.pas:567`).
+- Provides the entire 160 px-wide side panel for the construction/information menus. `PintarMenuConstruccion` (`Original Pascal/Laa/UCliente.pas:877-904`) blits fixed areas such as the Fabricar button, the three-material strip, the scrollable list, and the four pagination buttons using the named `Area*` rectangles defined at the top of `UCliente.pas`.
+- When migrating the UI keep each area as a separate sprite so the hover logic (highlighting the proper button based on cursor position) continues to work.
+
+#### `tcca.jpg`
+
+- Loaded as `TablaCC_Arca` (`Original Pascal/Laa/Juego.pas:568`) and used whenever the right-hand inventory panel slides in.
+- `PintarMenuComercio` and `PintarMenuObjetos` (`Original Pascal/Laa/UCliente.pas:1106-1179`) draw the background grid, chest/bag/corpse icons, and the “Guardar/Sacar del baúl” buttons by sampling named regions (`AreaTablaIconos`, `AreaDeIconoDeBaul`, `AreaOrBotonGuardarEnBaul`, etc.). The asset also includes the decorative frame around the 3×N item list.
+- The MonoGame UI should keep the same 46 px spacing and button slices so that cursor hit-tests stay aligned with the art.
+
+#### `barra.bmp`
+
+- Converted into the surface `BarraVidaMana` (`Original Pascal/Laa/Juego.pas:569`).
+- `DibujarBarrasVidaMana` renders the left health bar and right mana bar by blitting the 116×32 header and then masking the fill with `BltFxMascara` (`Original Pascal/Laa/Juego.pas:2683-2699`). The PK flag swaps to the red-tinted variant in the same bitmap.
+- The file contains both frames (top half) and the fill masks (bottom half). Export both when generating atlases; the MonoGame version reuses the same rectangles to animate the fill width.
+
+#### `obj.jpg`
+
+- Item icon atlas loaded as `Iconos_Objetos` (`Original Pascal/Laa/Juego.pas:627`).
+- Every icon is 40×40 and laid out in an 8-column strip, which is why `PintarObjeto` samples `(id and $7)*40` for the X coordinate and `(id shr 3)*40` for the Y coordinate (`Original Pascal/Laa/Juego.pas:1298-1359`). The same offsets are used inside store/bag menus (`Original Pascal/Laa/UCliente.pas:854-865`).
+- Besides regular items, ids `<4` correspond to paper-doll hands; those frames are reused when drawing equipped weapons, so keep the first row intact.
+
+#### `ros.jpg`
+
+- Portrait sheet (`Rostros`) loaded at `Original Pascal/Laa/Juego.pas:628`.
+- `Tjugador.PrepararImagenJugador` paints the appropriate face and applies debuff highlights before the panel copies it into the HUD (`Original Pascal/Laa/Sprites.pas:800-825` and `Original Pascal/Laa/Juego.pas:3356-3360`).
+- Each 40×40 slot is a different “rostro” (class/race/gender). This sheet has nothing to do with spellbooks; the name literally stands for *rostros* and the MonoGame client should bind it to the portrait widget only.
+
+#### `cjr.jpg`
+
+- Rune/spell atlas, loaded as `IconosCjr` (`Original Pascal/Laa/Juego.pas:629`).
+- `PintarConjuro` picks 40×40 tiles using the same `(col,row)` math as the item sheet to render the spell grid (`Original Pascal/Laa/Juego.pas:1369-1384`), and `PintarMenuComercio` reuses those frames when merchants sell scrolls (`Original Pascal/Laa/UCliente.pas:1127-1132`).
+- The code applies brightness effects to show mana requirements, so retain full RGB data (and ensure the atlas uses straight alpha).
+
+#### `logo.bmp`
+
+- Splash image drawn while DirectX initializes in `TFEsperar` (`Original Pascal/Laa/SScreen.pas:96-130`).
+- Stored as `logo.bmp` (`CrearDeGDD` call at line 113). The loading form displays it at `(0,0)` together with the progress bar, so the MonoGame splash can simply blit the entire bitmap once.
+
 ## Atlas builder
 
 The repository now includes a small CLI (`Tools/AtlasBuilder`) that repacks the legacy `grf/*` textures (BMP, PNG, JPG/JPEG) into Texture2D-friendly atlases alongside a JSON manifest. The MonoGame client automatically loads the manifest/atlases (if present) and falls back to the raw files when they are missing.

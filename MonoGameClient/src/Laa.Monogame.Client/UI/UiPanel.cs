@@ -27,7 +27,13 @@ public sealed class UiPanel
 
     public bool Draggable { get; set; } = true;
 
+    public bool DragAnywhere { get; set; }
+
     public int HeaderHeight { get; set; } = 24;
+
+    public bool UseDefaultChrome { get; set; } = true;
+
+    public int ContentPadding { get; set; } = 8;
 
     public void SetBounds(Rectangle bounds)
     {
@@ -70,23 +76,23 @@ public sealed class UiPanel
         if (textRenderer is null) throw new ArgumentNullException(nameof(textRenderer));
         if (backgroundTexture is null) throw new ArgumentNullException(nameof(backgroundTexture));
 
-        var headerRect = new Rectangle(Bounds.X, Bounds.Y, Bounds.Width, HeaderHeight);
-        var bodyRect = new Rectangle(Bounds.X, Bounds.Y + HeaderHeight, Bounds.Width, Bounds.Height - HeaderHeight);
-        spriteBatch.Draw(backgroundTexture, headerRect, new Color(0.1f, 0.1f, 0.1f, 0.85f));
-        spriteBatch.Draw(backgroundTexture, bodyRect, new Color(0f, 0f, 0f, 0.75f));
+        if (UseDefaultChrome)
+        {
+            var headerRect = new Rectangle(Bounds.X, Bounds.Y, Bounds.Width, HeaderHeight);
+            var bodyRect = new Rectangle(Bounds.X, Bounds.Y + HeaderHeight, Bounds.Width, Bounds.Height - HeaderHeight);
+            spriteBatch.Draw(backgroundTexture, headerRect, new Color(0.1f, 0.1f, 0.1f, 0.85f));
+            spriteBatch.Draw(backgroundTexture, bodyRect, new Color(0f, 0f, 0f, 0.75f));
 
-        var titlePosition = new Vector2(headerRect.Left + 8, headerRect.Top + 5);
-        textRenderer.DrawString(spriteBatch, Title.ToUpperInvariant(), titlePosition, Color.LightGreen);
+            var titlePosition = new Vector2(headerRect.Left + 8, headerRect.Top + 5);
+            textRenderer.DrawString(spriteBatch, Title.ToUpperInvariant(), titlePosition, Color.LightGreen);
+            DrawBorder(spriteBatch, backgroundTexture, Bounds, 1, new Color(0f, 0f, 0f, 0.9f));
+        }
 
         var contentBounds = CalculateContentBounds();
         foreach (var child in _children)
         {
             child.Draw(spriteBatch, textRenderer, contentBounds);
         }
-
-        // Optional border
-        var borderColor = new Color(0f, 0f, 0f, 0.9f);
-        DrawBorder(spriteBatch, backgroundTexture, Bounds, 1, borderColor);
     }
 
     private void HandleDragging(MouseState currentMouse, MouseState previousMouse)
@@ -99,10 +105,11 @@ public sealed class UiPanel
 
         var mousePoint = new Point(currentMouse.X, currentMouse.Y);
         var headerRect = new Rectangle(Bounds.X, Bounds.Y, Bounds.Width, HeaderHeight);
+        var dragRect = DragAnywhere || !UseDefaultChrome ? Bounds : headerRect;
         var pressedNow = currentMouse.LeftButton == ButtonState.Pressed;
         var pressedBefore = previousMouse.LeftButton == ButtonState.Pressed;
 
-        if (!_isDragging && pressedNow && !pressedBefore && headerRect.Contains(mousePoint))
+        if (!_isDragging && pressedNow && !pressedBefore && dragRect.Contains(mousePoint))
         {
             _isDragging = true;
             _dragOffset = new Point(mousePoint.X - Bounds.X, mousePoint.Y - Bounds.Y);
@@ -122,11 +129,12 @@ public sealed class UiPanel
 
     private Rectangle CalculateContentBounds()
     {
-        const int contentPadding = 8;
-        var x = Bounds.X + contentPadding;
-        var y = Bounds.Y + HeaderHeight + contentPadding;
-        var width = Math.Max(0, Bounds.Width - contentPadding * 2);
-        var height = Math.Max(0, Bounds.Height - HeaderHeight - contentPadding * 2);
+        var padding = Math.Max(0, ContentPadding);
+        var headerOffset = UseDefaultChrome ? HeaderHeight : 0;
+        var x = Bounds.X + padding;
+        var y = Bounds.Y + headerOffset + padding;
+        var width = Math.Max(0, Bounds.Width - padding * 2);
+        var height = Math.Max(0, Bounds.Height - headerOffset - padding * 2);
         return new Rectangle(x, y, width, height);
     }
 

@@ -63,12 +63,14 @@ public class Game1 : Game
     private UiManager? _uiManager;
     private UiPanel? _uiRoadmapWindow;
     private UiPanel? _uiInventoryWindow;
-    private UiItemGridWidget? _uiInventoryWidget;
+    private UiInventoryWidget? _uiInventoryWidget;
+    private UiLabel? _uiInventorySelectionLabel;
     private UiPanel? _uiSpellWindow;
     private UiSpellListWidget? _uiSpellWidget;
     private UiPanel? _uiMerchantWindow;
-    private UiItemGridWidget? _uiMerchantWidget;
+    private UiListWidget? _uiMerchantWidget;
     private UiLabel? _uiMerchantInfoLabel;
+    private UiSpriteLibrary? _uiSpriteLibrary;
     private int _merchantPreviewIndex;
     private Texture2D? _hudBackgroundTexture;
     private bool _showHud = true;
@@ -87,6 +89,7 @@ public class Game1 : Game
     private CommerceDocument? _commerceDocument;
     private InfoPanel _infoPanel = InfoPanel.None;
     private Vector2 _animationPreviewAnchor = Vector2.Zero;
+    private IReadOnlyList<string> _textureRoots = Array.Empty<string>();
 
     private static readonly string[] PlayerClassNames =
     {
@@ -110,6 +113,18 @@ public class Game1 : Game
         "Orco",
         "Drow",
         "Desconocido"
+    };
+
+    private static readonly string[] EquipmentSlotNames =
+    {
+        "CASCO",
+        "ARMADURA",
+        "ARMA",
+        "ESCUDO",
+        "ANILLO 1",
+        "ANILLO 2",
+        "BOTAS",
+        "AMULETO"
     };
 
     public Game1()
@@ -148,6 +163,7 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         var textureRoots = ResolveGraphicRoots();
+        _textureRoots = textureRoots;
         _terrainRenderer = new TerrainRenderer(GraphicsDevice, TileWidth, TileHeight, textureRoots);
         _terrainRenderer.LoadContent();
         if (_animationCatalog is not null)
@@ -184,6 +200,8 @@ public class Game1 : Game
         }
 
         _uiManager?.Dispose();
+        _uiSpriteLibrary?.Dispose();
+        _uiSpriteLibrary = new UiSpriteLibrary(GraphicsDevice, _textureRoots);
         _uiManager = new UiManager(GraphicsDevice, _debugTextRenderer);
         var viewport = GraphicsDevice.Viewport;
         var roadmapBounds = new Rectangle(
@@ -205,29 +223,57 @@ public class Game1 : Game
         _uiInventoryWindow = new UiPanel("INVENTORY PREVIEW", inventoryBounds)
         {
             Draggable = true,
-            Visible = false
+            Visible = false,
+            UseDefaultChrome = false,
+            HeaderHeight = 0,
+            ContentPadding = 0,
+            DragAnywhere = true
         };
-        _uiInventoryWindow.AddWidget(new UiLabel(
-            "MOSTRANDO 12 OBJETOS DE EJEMPLO",
-            new Vector2(12f, 12f),
-            Color.Yellow));
-        _uiInventoryWidget = new UiItemGridWidget(columns: 2, cellSize: new Vector2(160f, 22f), color: Color.White)
+        if (_uiSpriteLibrary is not null)
         {
-            Offset = new Vector2(0f, 32f)
+            _uiInventoryWindow.AddWidget(new UiSpriteWidget(_uiSpriteLibrary, "cjr")
+            {
+                FillContentBounds = true
+            });
+        }
+        _uiInventoryWindow.AddWidget(new UiLabel(
+            "EQUIPO / MOCHILA",
+            new Vector2(12f, 8f),
+            Color.Yellow));
+        _uiInventoryWidget = new UiInventoryWidget
+        {
+            EquipmentColor = Color.Black,
+            ItemColor = Color.Black,
+            EquipmentOrigin = new Vector2(12f, 32f),
+            BackpackOrigin = new Vector2(180f, 32f)
         };
-        _uiInventoryWidget.SetItems(BuildInventoryPreviewItems());
+        _uiInventoryWidget.SetEquipment(BuildEquipmentPreview());
+        _uiInventoryWidget.SetBackpack(BuildBackpackPreviewItems());
         _uiInventoryWindow.AddWidget(_uiInventoryWidget);
+        _uiInventorySelectionLabel = new UiLabel("SELECCION: NINGUNO", new Vector2(12f, inventoryBounds.Height - 24f), Color.Black);
+        _uiInventoryWindow.AddWidget(_uiInventorySelectionLabel);
         _uiManager.AddWindow(_uiInventoryWindow);
 
         var spellBounds = new Rectangle(viewport.Width - 420, 300, 380, 260);
         _uiSpellWindow = new UiPanel("SPELLBOOK", spellBounds)
         {
             Draggable = true,
-            Visible = false
+            Visible = false,
+            UseDefaultChrome = false,
+            HeaderHeight = 0,
+            ContentPadding = 0,
+            DragAnywhere = true
         };
+        if (_uiSpriteLibrary is not null)
+        {
+            _uiSpellWindow.AddWidget(new UiSpriteWidget(_uiSpriteLibrary, "ros")
+            {
+                FillContentBounds = true
+            });
+        }
         _uiSpellWindow.AddWidget(new UiLabel(
             "AGRUPADO POR ESCUELA",
-            new Vector2(12f, 12f),
+            new Vector2(16f, 8f),
             Color.Yellow));
         _uiSpellWidget = new UiSpellListWidget
         {
@@ -241,13 +287,24 @@ public class Game1 : Game
         _uiMerchantWindow = new UiPanel("MERCHANT PREVIEW", merchantBounds)
         {
             Draggable = true,
-            Visible = false
+            Visible = false,
+            UseDefaultChrome = false,
+            HeaderHeight = 0,
+            ContentPadding = 0,
+            DragAnywhere = true
         };
-        _uiMerchantInfoLabel = new UiLabel(string.Empty, new Vector2(12f, 12f), Color.Yellow);
-        _uiMerchantWindow.AddWidget(_uiMerchantInfoLabel);
-        _uiMerchantWidget = new UiItemGridWidget(columns: 1, cellSize: new Vector2(320f, 22f), color: Color.White)
+        if (_uiSpriteLibrary is not null)
         {
-            Offset = new Vector2(0f, 32f)
+            _uiMerchantWindow.AddWidget(new UiSpriteWidget(_uiSpriteLibrary, "bmenu")
+            {
+                FillContentBounds = true
+            });
+        }
+        _uiMerchantInfoLabel = new UiLabel(string.Empty, new Vector2(16f, 8f), Color.Yellow);
+        _uiMerchantWindow.AddWidget(_uiMerchantInfoLabel);
+        _uiMerchantWidget = new UiListWidget(columns: 1, cellSize: new Vector2(320f, 22f), color: Color.Black)
+        {
+            Offset = new Vector2(12f, 32f)
         };
         RefreshMerchantPreview();
         _uiMerchantWindow.AddWidget(_uiMerchantWidget);
@@ -314,6 +371,10 @@ public class Game1 : Game
             _monsterSimulation?.Update(gameTime);
         }
         _uiManager?.Update(gameTime, mouse, _previousMouse);
+        if (_uiInventorySelectionLabel is not null && _uiInventoryWidget is not null)
+        {
+            _uiInventorySelectionLabel.Text = $"SELECCION: {_uiInventoryWidget.SelectionText}";
+        }
         UpdateMonsterRenderer(gameTime);
 
         if (!_loggedContent)
@@ -366,6 +427,7 @@ public class Game1 : Game
             _debugTextRenderer?.Dispose();
             _hudBackgroundTexture?.Dispose();
             _uiManager?.Dispose();
+            _uiSpriteLibrary?.Dispose();
             if (_networkClient is not null)
             {
                 _networkClient.MessageReceived -= OnNetworkMessageReceived;
@@ -1107,26 +1169,48 @@ public class Game1 : Game
         }
     }
 
-    private IReadOnlyList<string> BuildInventoryPreviewItems()
+    private IReadOnlyList<KeyValuePair<string, string>> BuildEquipmentPreview()
+    {
+        var equipment = new List<KeyValuePair<string, string>>(EquipmentSlotNames.Length);
+        if (_itemDocument is null || _itemDocument.Names.Count == 0)
+        {
+            foreach (var slot in EquipmentSlotNames)
+            {
+                equipment.Add(new KeyValuePair<string, string>(slot, "SIN DATOS"));
+            }
+
+            return equipment;
+        }
+
+        for (var i = 0; i < EquipmentSlotNames.Length; i++)
+        {
+            var slotName = EquipmentSlotNames[i];
+            var name = _itemDocument.Names.ElementAtOrDefault(i);
+            var resolved = string.IsNullOrWhiteSpace(name) ? $"ITEM #{i:D3}" : name!;
+            equipment.Add(new KeyValuePair<string, string>(slotName, resolved));
+        }
+
+        return equipment;
+    }
+
+    private IReadOnlyList<string> BuildBackpackPreviewItems()
     {
         if (_itemDocument is null || _itemDocument.Names.Count == 0)
         {
-            return new[] { "SIN DATOS DE ITEMS" };
+            return new[] { "SIN ITEMS DISPONIBLES" };
         }
 
-        var count = Math.Min(12, _itemDocument.Names.Count);
-        var list = new List<string>(count);
-        for (var i = 0; i < count; i++)
+        var list = new List<string>();
+        var start = EquipmentSlotNames.Length;
+        for (var i = start; i < _itemDocument.Names.Count && list.Count < 16; i++)
         {
             var name = _itemDocument.Names[i];
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                list.Add($"ITEM #{i:D3}");
-            }
-            else
-            {
-                list.Add(name);
-            }
+            list.Add(string.IsNullOrWhiteSpace(name) ? $"ITEM #{i:D3}" : name);
+        }
+
+        if (list.Count == 0)
+        {
+            list.Add("MOCHILA VACIA");
         }
 
         return list;

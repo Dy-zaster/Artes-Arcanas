@@ -87,8 +87,8 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 ### Upcoming UI & gameplay milestones
 
 1. **Overlay framework** – ✅ base window/labelling system now lives inside the MonoGame client (press `F3` to toggle the roadmap panel) so every future screen reuses the same plumbing.
-2. **Inventory window** – a first pass inventory preview is scaffolded on top of the new framework (press `F4`) and currently lists the first 12 extracted item names; next iterations will render slot icons, equipment segregation, and tooltips fed by `ItemDocument`.
+2. **Inventory window** – press `F4` to toggle a window that now mimics the legacy layout: equipment slots on the left (helmet/armor/weapon/etc.) and a backpack grid on the right, both populated with names from `ItemDocument`. Icons/dragging/tooltips will hook in once the runtime exposes real inventory state.
 3. **Spellbook window** – the new `B` toggle opens a grouped spell list that pulls mana/level requirements from `SpellDocument`. Future iterations will attach icons and allow filtering/hotkey binding per school.
-4. **Merchant/shop window** – the `V` toggle previews the first entry inside `CommerceDocument` so we can validate vendor inventories (name + price pulled from `ItemDocument`). Upcoming work: distinguish vendor types, add buy/sell workflow, and show gold + availability.
+4. **Merchant/shop window** – the `V` toggle previews the vendor inventories extracted via `CommerceDocument` (name + price from `ItemDocument`), and the `,`/`.` keys cycle through each merchant definition. Upcoming work: distinguish vendor types, add buy/sell workflow, and show gold + availability.
 
 Press `F3` to show/hide the roadmap panel and `F4` for the mock inventory grid—handy while iterating on layout before wiring real inventory state.
