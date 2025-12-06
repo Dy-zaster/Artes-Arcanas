@@ -35,6 +35,8 @@ The interpreter (`ClientSocketRead`) switches on the opcode byte and updates cli
 | `r` | `Count (1B) + (SpriteId (2B) + X + Y + Dir) * count` | Batch refresh for many sprites. | `Original Pascal/Laa/Juego.pas:4487`
 | `s` | `SubOp (1B)` | Applies status effects to the local avatar (resurrection, protections, berserk, etc.). | `Original Pascal/Laa/Juego.pas:4515`
 
+The MonoGame client now includes `Networking/ServerCommandDecoder`, a streaming parser that consumes the raw socket buffer and understands the opcodes in the table above. Whenever `INetworkClient` raises a `RawServerStream` payload, the decoder emits typed commands (single sprite position, batch positions, direction changes, and action toggles). `Game1` then translates them into `MonsterEntity` updates so the renderer follows scripted packets from the new `MockNetworkClient`. Direction updates are currently logged for visibility; once the renderer supports dynamic facings they will flip animation slices just like the Delphi routines.
+
 ### Vital stats and resources
 
 | Opcode | Payload | Description | Reference |

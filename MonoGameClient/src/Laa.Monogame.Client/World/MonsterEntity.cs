@@ -12,13 +12,14 @@ public enum MonsterAction
     Dead = 3
 }
 
-public sealed class MonsterEntity
+public sealed class MonsterEntity : IWorldEntity
 {
     public MonsterEntity(int id, MonsterDescriptor descriptor, Vector2 anchor, string animationKey)
     {
         Id = id;
         Descriptor = descriptor ?? throw new ArgumentNullException(nameof(descriptor));
-        Anchor = anchor;
+        BaseAnchor = anchor;
+        Position = anchor;
         AnimationKey = animationKey ?? throw new ArgumentNullException(nameof(animationKey));
         Action = MonsterAction.Idle;
         FacingSeed = id;
@@ -28,7 +29,9 @@ public sealed class MonsterEntity
 
     public MonsterDescriptor Descriptor { get; }
 
-    public Vector2 Anchor { get; }
+    public Vector2 BaseAnchor { get; }
+
+    public Vector2 Position { get; private set; }
 
     public string AnimationKey { get; }
 
@@ -39,5 +42,15 @@ public sealed class MonsterEntity
     public void SetAction(MonsterAction action)
     {
         Action = action;
+    }
+
+    public void SetPosition(Vector2 position)
+    {
+        Position = position;
+    }
+
+    public void ResetPosition()
+    {
+        Position = BaseAnchor;
     }
 }

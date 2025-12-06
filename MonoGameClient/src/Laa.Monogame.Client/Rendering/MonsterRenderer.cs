@@ -176,7 +176,7 @@ public sealed class MonsterRenderer
         public MonsterEntity Entity { get; }
         public AnimationTexture Animation { get; }
         public int DirectionIndex { get; }
-        public Vector2 Anchor => Entity.Anchor;
+        public Vector2 Anchor => Entity.Position;
         public bool Mirror => _mirror;
 
         public void Update(float elapsedSeconds)

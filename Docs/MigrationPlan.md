@@ -83,3 +83,12 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 4. Expand `Docs/Networking/Protocol.md` as more opcodes are decoded and define corresponding C# packet types/interfaces.
 5. Decide on serialization format (JSON vs. binary) for translated data tables and create adapters accordingly (plan how exporters integrate with build/patch pipeline).
 6. Add regression tests for the extraction suite (checksum validation, record counts) and wire them into CI so data drift is caught automatically.
+
+### Upcoming UI & gameplay milestones
+
+1. **Overlay framework** – ✅ base window/labelling system now lives inside the MonoGame client (press `F3` to toggle the roadmap panel) so every future screen reuses the same plumbing.
+2. **Inventory window** – a first pass inventory preview is scaffolded on top of the new framework (press `F4`) and currently lists the first 12 extracted item names; next iterations will render slot icons, equipment segregation, and tooltips fed by `ItemDocument`.
+3. **Spellbook window** – the new `B` toggle opens a grouped spell list that pulls mana/level requirements from `SpellDocument`. Future iterations will attach icons and allow filtering/hotkey binding per school.
+4. **Merchant/shop window** – the `V` toggle previews the first entry inside `CommerceDocument` so we can validate vendor inventories (name + price pulled from `ItemDocument`). Upcoming work: distinguish vendor types, add buy/sell workflow, and show gold + availability.
+
+Press `F3` to show/hide the roadmap panel and `F4` for the mock inventory grid—handy while iterating on layout before wiring real inventory state.

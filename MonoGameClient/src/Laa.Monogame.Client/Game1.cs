@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,9 @@ using Laa.Content.Core.Maps;
 using Laa.Content.Core.Monsters;
 using Laa.Content.Core.Spells;
 using Laa.Monogame.Client.Content;
+using Laa.Monogame.Client.Networking;
 using Laa.Monogame.Client.Rendering;
+using Laa.Monogame.Client.UI;
 using Laa.Monogame.Client.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -41,6 +44,7 @@ public class Game1 : Game
     private AnimationTextureProvider? _animationTextureProvider;
     private AnimationPreviewPlayer? _animationPreview;
     private MonsterRenderer? _monsterRenderer;
+    private MonsterSimulation? _monsterSimulation;
     private MapOverlayRenderer? _overlayRenderer;
     private DebugTextRenderer? _debugTextRenderer;
     private TilePalette? _tilePalette;
@@ -48,8 +52,24 @@ public class Game1 : Game
     private CameraController? _cameraController;
     private OverlayLayers _overlayLayers = OverlayLayers.None;
     private KeyboardState _previousKeyboard;
+    private MouseState _previousMouse;
     private IReadOnlyList<StaticGraphic> _sortedStaticGraphics = Array.Empty<StaticGraphic>();
-    private readonly List<MonsterEntity> _monsterEntities = new();
+    private readonly WorldState _worldState = new();
+    private INetworkClient? _networkClient;
+    private readonly ConcurrentQueue<NetworkMessage> _networkQueue = new();
+    private readonly ServerCommandDecoder _serverCommandDecoder = new();
+    private bool _networkFeedActive;
+    private bool _loggedDirectionPlaceholder;
+    private UiManager? _uiManager;
+    private UiPanel? _uiRoadmapWindow;
+    private UiPanel? _uiInventoryWindow;
+    private UiItemGridWidget? _uiInventoryWidget;
+    private UiPanel? _uiSpellWindow;
+    private UiSpellListWidget? _uiSpellWidget;
+    private UiPanel? _uiMerchantWindow;
+    private UiItemGridWidget? _uiMerchantWidget;
+    private UiLabel? _uiMerchantInfoLabel;
+    private int _merchantPreviewIndex;
     private Texture2D? _hudBackgroundTexture;
     private bool _showHud = true;
     private bool _showAnimationPreview;
@@ -137,6 +157,7 @@ public class Game1 : Game
                 _animationTextureProvider,
                 _animationCatalog.Animations.Select(a => a.Key));
             _monsterRenderer = new MonsterRenderer(_animationTextureProvider);
+            _monsterSimulation = new MonsterSimulation();
             RebuildMonsterEntities();
         }
         if (_graphicsCatalog is not null)
@@ -151,6 +172,121 @@ public class Game1 : Game
         _debugTextRenderer = new DebugTextRenderer(GraphicsDevice);
         _hudBackgroundTexture = new Texture2D(GraphicsDevice, 1, 1);
         _hudBackgroundTexture.SetData(new[] { new Color(0f, 0f, 0f, 0.65f) });
+        InitializeUiSystem();
+        InitializeNetworkClient();
+    }
+
+    private void InitializeUiSystem()
+    {
+        if (_debugTextRenderer is null)
+        {
+            return;
+        }
+
+        _uiManager?.Dispose();
+        _uiManager = new UiManager(GraphicsDevice, _debugTextRenderer);
+        var viewport = GraphicsDevice.Viewport;
+        var roadmapBounds = new Rectangle(
+            viewport.Width - 360,
+            64,
+            320,
+            200);
+        _uiRoadmapWindow = new UiPanel("UI ROADMAP", roadmapBounds)
+        {
+            Draggable = true
+        };
+        _uiRoadmapWindow.AddWidget(new UiLabel(
+            "1. OVERLAY FRAMEWORK (ACTIVE)\n2. INVENTORY WINDOW\n3. SPELLBOOK & MERCHANT UI",
+            new Vector2(12f, 12f),
+            Color.White));
+        _uiManager.AddWindow(_uiRoadmapWindow);
+
+        var inventoryBounds = new Rectangle(40, 64, 360, 220);
+        _uiInventoryWindow = new UiPanel("INVENTORY PREVIEW", inventoryBounds)
+        {
+            Draggable = true,
+            Visible = false
+        };
+        _uiInventoryWindow.AddWidget(new UiLabel(
+            "MOSTRANDO 12 OBJETOS DE EJEMPLO",
+            new Vector2(12f, 12f),
+            Color.Yellow));
+        _uiInventoryWidget = new UiItemGridWidget(columns: 2, cellSize: new Vector2(160f, 22f), color: Color.White)
+        {
+            Offset = new Vector2(0f, 32f)
+        };
+        _uiInventoryWidget.SetItems(BuildInventoryPreviewItems());
+        _uiInventoryWindow.AddWidget(_uiInventoryWidget);
+        _uiManager.AddWindow(_uiInventoryWindow);
+
+        var spellBounds = new Rectangle(viewport.Width - 420, 300, 380, 260);
+        _uiSpellWindow = new UiPanel("SPELLBOOK", spellBounds)
+        {
+            Draggable = true,
+            Visible = false
+        };
+        _uiSpellWindow.AddWidget(new UiLabel(
+            "AGRUPADO POR ESCUELA",
+            new Vector2(12f, 12f),
+            Color.Yellow));
+        _uiSpellWidget = new UiSpellListWidget
+        {
+            LineHeight = 18f
+        };
+        _uiSpellWidget.SetGroups(BuildSpellGroups());
+        _uiSpellWindow.AddWidget(_uiSpellWidget);
+        _uiManager.AddWindow(_uiSpellWindow);
+
+        var merchantBounds = new Rectangle(420, 64, 360, 220);
+        _uiMerchantWindow = new UiPanel("MERCHANT PREVIEW", merchantBounds)
+        {
+            Draggable = true,
+            Visible = false
+        };
+        _uiMerchantInfoLabel = new UiLabel(string.Empty, new Vector2(12f, 12f), Color.Yellow);
+        _uiMerchantWindow.AddWidget(_uiMerchantInfoLabel);
+        _uiMerchantWidget = new UiItemGridWidget(columns: 1, cellSize: new Vector2(320f, 22f), color: Color.White)
+        {
+            Offset = new Vector2(0f, 32f)
+        };
+        RefreshMerchantPreview();
+        _uiMerchantWindow.AddWidget(_uiMerchantWidget);
+        _uiManager.AddWindow(_uiMerchantWindow);
+    }
+
+    private void InitializeNetworkClient()
+    {
+        _networkFeedActive = false;
+        if (_networkClient is not null)
+        {
+            _networkClient.MessageReceived -= OnNetworkMessageReceived;
+            _networkClient.Dispose();
+            _networkClient = null;
+        }
+
+        try
+        {
+            var client = new MockNetworkClient();
+            client.MessageReceived += OnNetworkMessageReceived;
+            client.ConnectAsync("mock", 0).GetAwaiter().GetResult();
+            _networkClient = client;
+            _networkFeedActive = true;
+            Console.WriteLine("Mock network client connected (scripted monster updates).");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Failed to initialize mock network client: {ex.Message}");
+        }
+    }
+
+    private void OnNetworkMessageReceived(object? sender, NetworkEventArgs e)
+    {
+        if (e?.Message is null)
+        {
+            return;
+        }
+
+        _networkQueue.Enqueue(e.Message);
     }
 
     protected override void Update(GameTime gameTime)
@@ -169,8 +305,15 @@ public class Game1 : Game
         HandleInfoPanelInput(keyboard);
         HandleAnimationPreviewInput(keyboard);
         HandleMonsterDebugInput(keyboard);
+        HandleUiInput(keyboard);
+        ProcessNetworkEvents();
         _cameraController?.Update(gameTime, keyboard, mouse);
         _animationPreview?.Update(gameTime);
+        if (!_networkFeedActive)
+        {
+            _monsterSimulation?.Update(gameTime);
+        }
+        _uiManager?.Update(gameTime, mouse, _previousMouse);
         UpdateMonsterRenderer(gameTime);
 
         if (!_loggedContent)
@@ -182,6 +325,7 @@ public class Game1 : Game
         base.Update(gameTime);
 
         _previousKeyboard = keyboard;
+        _previousMouse = mouse;
     }
 
     protected override void Draw(GameTime gameTime)
@@ -201,6 +345,10 @@ public class Game1 : Game
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
         DrawHud();
         DrawInfoPanel();
+        if (_spriteBatch is not null)
+        {
+            _uiManager?.Draw(_spriteBatch);
+        }
 
         base.Draw(gameTime);
     }
@@ -217,6 +365,14 @@ public class Game1 : Game
             _overlayRenderer?.Dispose();
             _debugTextRenderer?.Dispose();
             _hudBackgroundTexture?.Dispose();
+            _uiManager?.Dispose();
+            if (_networkClient is not null)
+            {
+                _networkClient.MessageReceived -= OnNetworkMessageReceived;
+                _networkClient.Dispose();
+                _networkClient = null;
+                _networkFeedActive = false;
+            }
         }
 
         base.Dispose(disposing);
@@ -432,34 +588,269 @@ public class Game1 : Game
 
     private void RebuildMonsterEntities()
     {
-        _monsterEntities.Clear();
-        if (_activeMap is null || _monsterDocument is null)
+        var monsters = new List<MonsterEntity>();
+        if (_activeMap is not null && _monsterDocument is not null)
         {
-            _monsterRenderer?.SetMonsters(Array.Empty<MonsterEntity>());
+            var monsterLookup = _monsterDocument.Monsters
+                .GroupBy(m => (int)m.TypeId)
+                .ToDictionary(g => g.Key, g => g.First(), comparer: EqualityComparer<int>.Default);
+
+            var identifier = 0;
+            foreach (var nest in _activeMap.Nests)
+            {
+                if (!monsterLookup.TryGetValue(nest.Type, out var descriptor))
+                {
+                    continue;
+                }
+
+                var key = $"m{descriptor.TypeId}";
+                var anchor = new Vector2(
+                    (nest.X + 0.5f) * TileWidth,
+                    (nest.Y + 1f) * TileHeight);
+                monsters.Add(new MonsterEntity(identifier++, descriptor, anchor, key));
+            }
+        }
+
+        _worldState.SetMonsters(monsters);
+        _monsterRenderer?.SetMonsters(_worldState.Monsters);
+        _monsterSimulation?.SetMonsters(_worldState.Monsters);
+    }
+
+    private void ProcessNetworkEvents()
+    {
+        if (_networkQueue.IsEmpty)
+        {
             return;
         }
 
-        var monsterLookup = _monsterDocument.Monsters
-            .GroupBy(m => (int)m.TypeId)
-            .ToDictionary(g => g.Key, g => g.First(), comparer: EqualityComparer<int>.Default);
-
-        var identifier = 0;
-        foreach (var nest in _activeMap.Nests)
+        while (_networkQueue.TryDequeue(out var message))
         {
-            if (!monsterLookup.TryGetValue(nest.Type, out var descriptor))
+            if (message.Type == NetworkMessageType.RawServerStream)
             {
+                ProcessServerStream(message.Payload.Span);
                 continue;
             }
 
-            var key = $"m{descriptor.TypeId}";
-            var anchor = new Vector2(
-                (nest.X + 0.5f) * TileWidth,
-                (nest.Y + 1f) * TileHeight);
-            var entity = new MonsterEntity(identifier++, descriptor, anchor, key);
-            _monsterEntities.Add(entity);
+            HandleNetworkMessage(message);
+        }
+    }
+
+    private void ProcessServerStream(ReadOnlySpan<byte> payload)
+    {
+        if (payload.IsEmpty)
+        {
+            return;
         }
 
-        _monsterRenderer?.SetMonsters(_monsterEntities);
+        _serverCommandDecoder.Enqueue(payload);
+        foreach (var command in _serverCommandDecoder.Decode())
+        {
+            ApplyServerCommand(command);
+        }
+    }
+
+    private void HandleNetworkMessage(NetworkMessage message)
+    {
+        if (!TryDecodeMonsterPayload(message.Payload.Span, out var payload))
+        {
+            Console.Error.WriteLine($"[NET] Ignoring malformed payload for {message.Type}.");
+            return;
+        }
+
+        switch (message.Type)
+        {
+            case NetworkMessageType.MonsterSpawn:
+                HandleMonsterSpawn(payload);
+                break;
+            case NetworkMessageType.MonsterMove:
+                HandleMonsterMove(payload);
+                break;
+            case NetworkMessageType.MonsterAttack:
+                HandleMonsterAttack(payload);
+                break;
+            case NetworkMessageType.MonsterDeath:
+                HandleMonsterDeath(payload);
+                break;
+            default:
+                Console.WriteLine($"[NET] Unhandled message type {message.Type}.");
+                break;
+        }
+    }
+
+    private void ApplyServerCommand(IServerCommand command)
+    {
+        switch (command)
+        {
+            case SpritePositionCommand single:
+                ApplySpritePosition(single.SpriteId, single.X, single.Y);
+                break;
+            case SpriteBatchPositionCommand batch:
+                foreach (var entry in batch.Entries)
+                {
+                    ApplySpritePosition(entry.SpriteId, entry.X, entry.Y);
+                }
+                break;
+            case SpriteActionCommand action:
+                ApplySpriteAction(action.SpriteId, action.Action);
+                break;
+            case SpriteDirectionCommand direction:
+                ApplySpriteDirection(direction.SpriteId, direction.Direction);
+                break;
+            case LocalPlayerPositionCommand local:
+                Console.WriteLine($"[NET] Local player moved to ({local.X},{local.Y}) dir {local.Direction}.");
+                break;
+            default:
+                Console.WriteLine($"[NET] Unhandled command {command.Type}.");
+                break;
+        }
+    }
+
+    private void ApplySpritePosition(int spriteId, byte tileX, byte tileY)
+    {
+        var position = TileToWorldPosition(tileX, tileY);
+        var payload = new MonsterNetworkPayload(spriteId, position, MonsterAction.Moving, 0);
+        HandleMonsterMove(payload);
+    }
+
+    private void ApplySpriteAction(int spriteId, byte actionCode)
+    {
+        var action = TranslateServerAction(actionCode);
+        var monster = _worldState.FindMonster(spriteId);
+        if (monster is null)
+        {
+            Console.Error.WriteLine($"[NET] Action for unknown sprite {spriteId}.");
+            return;
+        }
+
+        monster.SetAction(action);
+        if (action == MonsterAction.Dead)
+        {
+            monster.ResetPosition();
+        }
+    }
+
+    private void ApplySpriteDirection(int spriteId, byte direction)
+    {
+        if (!_loggedDirectionPlaceholder)
+        {
+            Console.WriteLine("[NET] Sprite direction updates acknowledged (renderer not yet synced).");
+            _loggedDirectionPlaceholder = true;
+        }
+    }
+
+    private void HandleMonsterSpawn(in MonsterNetworkPayload payload)
+    {
+        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterSpawn);
+        if (monster is null)
+        {
+            return;
+        }
+
+        if (payload.Position != Vector2.Zero)
+        {
+            monster.SetPosition(payload.Position);
+        }
+        else
+        {
+            monster.ResetPosition();
+        }
+
+        monster.SetAction(payload.Action);
+    }
+
+    private void HandleMonsterMove(in MonsterNetworkPayload payload)
+    {
+        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterMove);
+        if (monster is null)
+        {
+            return;
+        }
+
+        if (payload.Position != Vector2.Zero)
+        {
+            monster.SetPosition(payload.Position);
+        }
+
+        monster.SetAction(payload.Action);
+    }
+
+    private void HandleMonsterAttack(in MonsterNetworkPayload payload)
+    {
+        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterAttack);
+        if (monster is null)
+        {
+            return;
+        }
+
+        monster.SetAction(MonsterAction.Attack);
+    }
+
+    private void HandleMonsterDeath(in MonsterNetworkPayload payload)
+    {
+        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterDeath);
+        if (monster is null)
+        {
+            return;
+        }
+
+        monster.SetAction(MonsterAction.Dead);
+        monster.ResetPosition();
+    }
+
+    private MonsterEntity? ResolveMonster(int id, NetworkMessageType context)
+    {
+        var monster = _worldState.FindMonster(id);
+        if (monster is null)
+        {
+            Console.Error.WriteLine($"[NET] Monster {id} not found for {context} message.");
+        }
+
+        return monster;
+    }
+
+    private static bool TryDecodeMonsterPayload(ReadOnlySpan<byte> payload, out MonsterNetworkPayload result)
+    {
+        result = default;
+        if (payload.Length < 13)
+        {
+            return false;
+        }
+
+        try
+        {
+            var id = BitConverter.ToInt32(payload.Slice(0, 4));
+            var posX = BitConverter.ToSingle(payload.Slice(4, 4));
+            var posY = BitConverter.ToSingle(payload.Slice(8, 4));
+            var action = (MonsterAction)payload[12];
+            var seed = payload.Length >= 17 ? BitConverter.ToInt32(payload.Slice(13, 4)) : 0;
+            result = new MonsterNetworkPayload(id, new Vector2(posX, posY), action, seed);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private readonly record struct MonsterNetworkPayload(int Id, Vector2 Position, MonsterAction Action, int Seed);
+
+    private static Vector2 TileToWorldPosition(byte tileX, byte tileY)
+    {
+        return new Vector2(
+            (tileX + 0.5f) * TileWidth,
+            (tileY + 1f) * TileHeight);
+    }
+
+    private static MonsterAction TranslateServerAction(byte action)
+    {
+        return action switch
+        {
+            0 => MonsterAction.Idle,
+            1 => MonsterAction.Moving,
+            2 => MonsterAction.Attack,
+            3 => MonsterAction.Dead,
+            _ => MonsterAction.Idle
+        };
     }
 
     private void UpdateMonsterRenderer(GameTime gameTime)
@@ -469,7 +860,7 @@ public class Game1 : Game
 
     private void CycleMonsterActions()
     {
-        foreach (var monster in _monsterEntities)
+        foreach (var monster in _worldState.Monsters)
         {
             var next = monster.Action switch
             {
@@ -484,7 +875,7 @@ public class Game1 : Game
 
     private void ToggleMonsterAttackMode()
     {
-        foreach (var monster in _monsterEntities)
+        foreach (var monster in _worldState.Monsters)
         {
             var next = monster.Action == MonsterAction.Attack ? MonsterAction.Idle : MonsterAction.Attack;
             monster.SetAction(next);
@@ -664,9 +1055,44 @@ public class Game1 : Game
         }
     }
 
+    private void HandleUiInput(KeyboardState keyboardState)
+    {
+        if (IsKeyPressed(keyboardState, Keys.F3) && _uiRoadmapWindow is not null)
+        {
+            _uiRoadmapWindow.Visible = !_uiRoadmapWindow.Visible;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.F4) && _uiInventoryWindow is not null)
+        {
+            _uiInventoryWindow.Visible = !_uiInventoryWindow.Visible;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.B) && _uiSpellWindow is not null)
+        {
+            _uiSpellWindow.Visible = !_uiSpellWindow.Visible;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.V) && _uiMerchantWindow is not null)
+        {
+            _uiMerchantWindow.Visible = !_uiMerchantWindow.Visible;
+        }
+
+        if (_commerceDocument is not null && _commerceDocument.Inventories.Count > 0)
+        {
+            if (IsKeyPressed(keyboardState, Keys.OemComma))
+            {
+                CycleMerchantPreview(-1);
+            }
+            else if (IsKeyPressed(keyboardState, Keys.OemPeriod))
+            {
+                CycleMerchantPreview(1);
+            }
+        }
+    }
+
     private void HandleMonsterDebugInput(KeyboardState keyboardState)
     {
-        if (_monsterEntities.Count == 0)
+        if (_worldState.Monsters.Count == 0)
         {
             return;
         }
@@ -679,6 +1105,152 @@ public class Game1 : Game
         {
             ToggleMonsterAttackMode();
         }
+    }
+
+    private IReadOnlyList<string> BuildInventoryPreviewItems()
+    {
+        if (_itemDocument is null || _itemDocument.Names.Count == 0)
+        {
+            return new[] { "SIN DATOS DE ITEMS" };
+        }
+
+        var count = Math.Min(12, _itemDocument.Names.Count);
+        var list = new List<string>(count);
+        for (var i = 0; i < count; i++)
+        {
+            var name = _itemDocument.Names[i];
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                list.Add($"ITEM #{i:D3}");
+            }
+            else
+            {
+                list.Add(name);
+            }
+        }
+
+        return list;
+    }
+
+    private IReadOnlyList<UiSpellGroup> BuildSpellGroups()
+    {
+        if (_spellDocument is null || _spellDocument.Spells.Count == 0)
+        {
+            return new[] { new UiSpellGroup("SIN HECHIZOS", Array.Empty<string>()) };
+        }
+
+        var groups = new Dictionary<byte, List<string>>();
+        for (var i = 0; i < _spellDocument.Spells.Count; i++)
+        {
+            var descriptor = _spellDocument.Spells[i];
+            var school = descriptor.School;
+            var name = _spellDocument.Names.ElementAtOrDefault(i);
+            var resolvedName = string.IsNullOrWhiteSpace(name) ? $"HECHIZO #{i:D3}" : name;
+            var entry = $"{resolvedName}  MN {descriptor.RequiredMana:D2}  LV {descriptor.RequiredPlayerLevel:D2}";
+            if (!groups.TryGetValue(school, out var list))
+            {
+                list = new List<string>();
+                groups[school] = list;
+            }
+            list.Add(entry);
+        }
+
+        var ordered = new List<UiSpellGroup>();
+        foreach (var (school, entries) in groups.OrderBy(kvp => kvp.Key))
+        {
+            ordered.Add(new UiSpellGroup(ResolveSpellSchoolName(school), entries));
+        }
+
+        return ordered;
+    }
+
+    private static string ResolveSpellSchoolName(byte school)
+    {
+        return school switch
+        {
+            0 => "GENERAL",
+            1 => "OFENSIVO",
+            2 => "DEFENSIVO",
+            3 => "APOYO",
+            4 => "INVOCACION",
+            5 => "BENDICION",
+            6 => "MALDICION",
+            _ => $"ESCUELA #{school}"
+        };
+    }
+
+    private void CycleMerchantPreview(int delta)
+    {
+        if (_commerceDocument is null || _commerceDocument.Inventories.Count == 0)
+        {
+            return;
+        }
+
+        _merchantPreviewIndex = WrapValue(_merchantPreviewIndex, delta, _commerceDocument.Inventories.Count);
+        RefreshMerchantPreview();
+    }
+
+    private void RefreshMerchantPreview()
+    {
+        if (_uiMerchantInfoLabel is null || _uiMerchantWidget is null)
+        {
+            return;
+        }
+
+        if (_commerceDocument is null || _commerceDocument.Inventories.Count == 0)
+        {
+            _uiMerchantInfoLabel.Text = "SIN DATOS DE COMERCIO";
+            _uiMerchantWidget.SetItems(Array.Empty<string>());
+            return;
+        }
+
+        var clampedIndex = Math.Clamp(_merchantPreviewIndex, 0, _commerceDocument.Inventories.Count - 1);
+        _merchantPreviewIndex = clampedIndex;
+        var total = _commerceDocument.Inventories.Count;
+        var title = $"MOSTRANDO INVENTARIO {clampedIndex + 1}/{total}";
+        _uiMerchantInfoLabel.Text = title;
+        _uiMerchantWidget.SetItems(BuildMerchantPreviewItems(clampedIndex));
+    }
+
+    private IReadOnlyList<string> BuildMerchantPreviewItems(int inventoryIndex)
+    {
+        if (_commerceDocument is null || _commerceDocument.Inventories.Count == 0)
+        {
+            return new[] { "SIN DATOS DE COMERCIO" };
+        }
+
+        var clamped = Math.Clamp(inventoryIndex, 0, _commerceDocument.Inventories.Count - 1);
+        var inventory = _commerceDocument.Inventories[clamped];
+        if (inventory.Items.Count == 0)
+        {
+            return new[] { "EL INVENTARIO ESTA VACIO" };
+        }
+
+        var items = new List<string>();
+        foreach (var slot in inventory.Items)
+        {
+            if (items.Count >= 12)
+            {
+                break;
+            }
+
+            var name = ResolveItemName(slot.Id);
+            var cost = ResolveItemCost(slot.Id);
+            var modifier = slot.Modifier > 0 ? $" MOD {slot.Modifier}" : string.Empty;
+            items.Add($"{name} ${cost}{modifier}");
+        }
+
+        return items;
+    }
+
+    private int ResolveItemCost(int itemId)
+    {
+        if (_itemDocument is null || itemId < 0 || itemId >= _itemDocument.Items.Count)
+        {
+            return 0;
+        }
+
+        return _itemDocument.Items[itemId].Cost;
     }
 
     private void CycleOverlayMode()
@@ -773,7 +1345,7 @@ public class Game1 : Game
         {
             builder.AppendLine(animationLine);
         }
-        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD  F5 PREVIEW  F6/F7 ANIM  F8 DIR  F9 MIR  F10 AV MODE  J/U ARM  K/I CLASS  L/O RACE  P GEND  F11 MON CYCLE  F12 MON ATT");
+        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD  F5 PREVIEW  F6/F7 ANIM  F8 DIR  F9 MIR  F10 AV MODE  J/U ARM  K/I CLASS  L/O RACE  P GEND  F11 MON CYCLE  F12 MON ATT  F3 UI PLAN  F4 INV  B SPELLS  V MERCHANT  ,/. MERCH +/-");
         return builder.ToString().ToUpperInvariant();
     }
 
