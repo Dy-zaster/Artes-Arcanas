@@ -150,7 +150,7 @@ public sealed class AnimationPreviewPlayer
             blendState: BlendState.NonPremultiplied,
             transformMatrix: camera.GetViewMatrix());
 
-        var position = CalculateDrawPosition(anchor, direction, frame, _mirror);
+        var position = AnimationRenderHelper.CalculateDrawPosition(anchor, direction, frame, _mirror);
         spriteBatch.Draw(
             _current.Texture,
             position,
@@ -165,49 +165,52 @@ public sealed class AnimationPreviewPlayer
         spriteBatch.End();
     }
 
+    public bool TrySetAnimation(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            return false;
+        }
+
+        if (!_textureProvider.TryGetAnimation(key, out var animation))
+        {
+            return false;
+        }
+
+        var index = _keys.FindIndex(k => string.Equals(k, key, StringComparison.OrdinalIgnoreCase));
+        ApplyAnimation(animation, key, index);
+        return true;
+    }
+
     private void SetAnimationIndex(int index)
     {
         if (_keys.Count == 0)
         {
-            _currentIndex = -1;
-            _current = null;
-            _currentKey = null;
+            ApplyAnimation(null, null, -1);
             return;
         }
 
-        _currentIndex = Math.Clamp(index, 0, _keys.Count - 1);
-        var key = _keys[_currentIndex];
+        var clamped = Math.Clamp(index, 0, _keys.Count - 1);
+        var key = _keys[clamped];
         if (_textureProvider.TryGetAnimation(key, out var animation))
         {
-            _current = animation;
-            _currentKey = key;
-            _currentDirection = 0;
-            _currentFrame = 0;
-            _frameTimer = 0;
-            _mirror = false;
+            ApplyAnimation(animation, key, clamped);
         }
         else
         {
-            _current = null;
-            _currentKey = key;
+            ApplyAnimation(null, key, clamped);
         }
     }
 
-    private static Vector2 CalculateDrawPosition(Vector2 anchor, AnimationDirectionSlice direction, AnimationFrameSlice frame, bool mirror)
+    private void ApplyAnimation(AnimationTexture? animation, string? key, int index)
     {
-        var x = anchor.X;
-        var y = anchor.Y;
-
-        if (mirror)
-        {
-            x += direction.OffsetX - frame.CenterX - frame.Source.Width;
-        }
-        else
-        {
-            x += frame.CenterX - direction.OffsetX;
-        }
-
-        y += frame.CenterY - direction.OffsetY;
-        return new Vector2(x, y);
+        _current = animation;
+        _currentKey = key;
+        _currentIndex = index;
+        _currentDirection = 0;
+        _currentFrame = 0;
+        _frameTimer = 0;
+        _mirror = false;
     }
+
 }

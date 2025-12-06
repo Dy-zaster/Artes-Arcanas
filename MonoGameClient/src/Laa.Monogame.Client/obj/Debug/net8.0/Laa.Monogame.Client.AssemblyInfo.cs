@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Laa.Monogame.Client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e756f3ae96ab830d59eb79eae5a09a8b2e7d4c13")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f929b01050557a807849f31267dc4d3ffe9f31f2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Laa.Monogame.Client")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Laa.Monogame.Client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

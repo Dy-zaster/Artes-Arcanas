@@ -7,6 +7,7 @@ using Laa.Content.Core.Animations;
 using Laa.Content.Core.Commerce;
 using Laa.Content.Core.Graphics;
 using Laa.Content.Core.Items;
+using Laa.Content.Core.Mappings;
 using Laa.Content.Core.Maps;
 using Laa.Content.Core.Monsters;
 using Laa.Content.Core.Spells;
@@ -22,6 +23,9 @@ public class Game1 : Game
 {
     private const int TileWidth = 24;
     private const int TileHeight = 16;
+    private const int AvatarArmorCount = 32;
+    private const int AvatarClassCount = 8;
+    private const int AvatarRaceCount = 8;
 
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch? _spriteBatch;
@@ -29,6 +33,7 @@ public class Game1 : Game
     private MapDocument? _activeMap;
     private GraphicDocument? _graphicsCatalog;
     private AnimationDocument? _animationCatalog;
+    private AnimationMappingDocument? _animationMapping;
     private bool _loggedContent;
     private TerrainRenderer? _terrainRenderer;
     private StaticGraphicRenderer? _staticGraphicRenderer;
@@ -42,9 +47,16 @@ public class Game1 : Game
     private OverlayLayers _overlayLayers = OverlayLayers.None;
     private KeyboardState _previousKeyboard;
     private IReadOnlyList<StaticGraphic> _sortedStaticGraphics = Array.Empty<StaticGraphic>();
+    private readonly List<MonsterPreviewInstance> _monsterPreviews = new();
     private Texture2D? _hudBackgroundTexture;
     private bool _showHud = true;
     private bool _showAnimationPreview;
+    private bool _avatarPreviewMode;
+    private int _previewArmorIndex;
+    private int _previewClassIndex;
+    private int _previewRaceIndex;
+    private bool _previewIsMale = true;
+    private byte _previewAnimationId;
     private string[] _mapIds = Array.Empty<string>();
     private int _currentMapIndex;
     private ItemDocument? _itemDocument;
@@ -53,6 +65,30 @@ public class Game1 : Game
     private CommerceDocument? _commerceDocument;
     private InfoPanel _infoPanel = InfoPanel.None;
     private Vector2 _animationPreviewAnchor = Vector2.Zero;
+
+    private static readonly string[] PlayerClassNames =
+    {
+        "Guerrero",
+        "Clerigo",
+        "Mago",
+        "Bribon",
+        "Montaraz",
+        "Paladin",
+        "Bardo",
+        "Guerrero-Mago"
+    };
+
+    private static readonly string[] PlayerRaceNames =
+    {
+        "Humano",
+        "Elfo",
+        "Enano",
+        "Gnomo",
+        "Semielfo",
+        "Orco",
+        "Drow",
+        "Desconocido"
+    };
 
     public Game1()
     {
@@ -70,6 +106,7 @@ public class Game1 : Game
         _content = ContentContext.Create();
         _graphicsCatalog = _content.Graphics.GetGraphics();
         _animationCatalog = _content.Animations.GetAnimations();
+        _animationMapping = _content.AnimationMappings.GetMappings();
         _itemDocument = _content.Items.GetItems();
         _spellDocument = _content.Spells.GetSpells();
         _monsterDocument = _content.Monsters.GetMonsters();
@@ -97,6 +134,7 @@ public class Game1 : Game
             _animationPreview = new AnimationPreviewPlayer(
                 _animationTextureProvider,
                 _animationCatalog.Animations.Select(a => a.Key));
+            PrepareMonsterPreviews();
         }
         if (_graphicsCatalog is not null)
         {
@@ -129,6 +167,7 @@ public class Game1 : Game
         HandleAnimationPreviewInput(keyboard);
         _cameraController?.Update(gameTime, keyboard, mouse);
         _animationPreview?.Update(gameTime);
+        UpdateMonsterPreviews(gameTime);
 
         if (!_loggedContent)
         {
@@ -153,6 +192,7 @@ public class Game1 : Game
 
         _terrainRenderer.Draw(_spriteBatch, _activeMap, _camera, _tilePalette, gameTime);
         _staticGraphicRenderer?.Draw(_spriteBatch, _sortedStaticGraphics, _camera);
+        DrawMonsterPreviews();
         DrawAnimationPreview();
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
         DrawHud();
@@ -212,6 +252,7 @@ public class Game1 : Game
             PrepareStaticGraphics();
             ConfigureCameraBounds();
             UpdateAnimationPreviewAnchor();
+            PrepareMonsterPreviews();
             Console.WriteLine($"Loaded map: {mapId} (index {_currentMapIndex + 1}/{count})");
         }
         catch (Exception ex)
@@ -291,6 +332,50 @@ public class Game1 : Game
         _animationPreviewAnchor = new Vector2(width * TileWidth / 2f, height * TileHeight / 2f);
     }
 
+    private static int WrapValue(int value, int delta, int modulo)
+    {
+        if (modulo <= 0)
+        {
+            return value;
+        }
+
+        var next = (value + delta) % modulo;
+        return next < 0 ? next + modulo : next;
+    }
+
+    private void UpdateAvatarPreviewAnimation()
+    {
+        if (!_avatarPreviewMode || _animationPreview is null || _animationMapping is null)
+        {
+            return;
+        }
+
+        var ids = _animationMapping.AnimationIds;
+        if (ids.Count == 0)
+        {
+            return;
+        }
+
+        var genderMask = _previewIsMale ? 0 : (1 << 11);
+        var index = (_previewArmorIndex & 0x1F) |
+                    ((_previewClassIndex & 0x7) << 5) |
+                    ((_previewRaceIndex & 0x7) << 8) |
+                    genderMask;
+
+        if (index < 0 || index >= ids.Count)
+        {
+            Console.Error.WriteLine($"Avatar animation index {index} out of range.");
+            return;
+        }
+
+        _previewAnimationId = ids[index];
+        var key = $"m{_previewAnimationId}";
+        if (!_animationPreview.TrySetAnimation(key))
+        {
+            Console.Error.WriteLine($"Avatar preview animation '{key}' not found in atlas.");
+        }
+    }
+
     private void OnClientSizeChanged(object? sender, EventArgs e)
     {
         if (_camera is null)
@@ -339,6 +424,92 @@ public class Game1 : Game
             .OrderBy(g => ((g.Y << 9) | g.SubLayer))
             .ThenBy(g => g.X)
             .ToArray();
+    }
+
+    private void PrepareMonsterPreviews()
+    {
+        _monsterPreviews.Clear();
+        if (_activeMap is null || _monsterDocument is null || _animationTextureProvider is null)
+        {
+            return;
+        }
+
+        var monsterLookup = _monsterDocument.Monsters
+            .GroupBy(m => (int)m.TypeId)
+            .ToDictionary(g => g.Key, g => g.First(), comparer: EqualityComparer<int>.Default);
+
+        foreach (var nest in _activeMap.Nests)
+        {
+            if (!monsterLookup.TryGetValue(nest.Type, out var descriptor))
+            {
+                continue;
+            }
+
+            var key = $"m{descriptor.TypeId}";
+            if (!_animationTextureProvider.TryGetAnimation(key, out var animation))
+            {
+                continue;
+            }
+
+            if (animation.Directions.Count == 0)
+            {
+                continue;
+            }
+
+            var directionIndex = GetDirectionIndex(animation, nest.X, nest.Y);
+            var direction = animation.Directions[directionIndex];
+            var firstFrameIndex = AnimationRenderHelper.FindPlayableFrameIndex(direction);
+            if (firstFrameIndex < 0)
+            {
+                continue;
+            }
+
+            var anchor = new Vector2(
+                (nest.X + 0.5f) * TileWidth,
+                (nest.Y + 1f) * TileHeight);
+            var instance = new MonsterPreviewInstance(animation, anchor, directionIndex, firstFrameIndex, descriptor.Name ?? $"#{descriptor.TypeId}");
+            _monsterPreviews.Add(instance);
+        }
+
+        _monsterPreviews.Sort((a, b) => a.Anchor.Y.CompareTo(b.Anchor.Y));
+    }
+
+    private static int GetDirectionIndex(AnimationTexture animation, int x, int y)
+    {
+        if (animation.Directions.Count == 0)
+        {
+            return 0;
+        }
+
+        var preferred = (x + y) % animation.Directions.Count;
+        if (animation.Directions[preferred].Frames.Count > 0)
+        {
+            return preferred;
+        }
+
+        for (var i = 0; i < animation.Directions.Count; i++)
+        {
+            if (animation.Directions[i].Frames.Count > 0)
+            {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    private void UpdateMonsterPreviews(GameTime gameTime)
+    {
+        if (_monsterPreviews.Count == 0)
+        {
+            return;
+        }
+
+        var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        foreach (var preview in _monsterPreviews)
+        {
+            preview.Update(elapsed);
+        }
     }
 
     private void HandleOverlayInput(KeyboardState keyboardState)
@@ -414,6 +585,51 @@ public class Game1 : Game
         }
     }
 
+    private bool HandleAvatarModeInput(KeyboardState keyboardState)
+    {
+        var updated = false;
+        if (IsKeyPressed(keyboardState, Keys.U))
+        {
+            _previewArmorIndex = WrapValue(_previewArmorIndex, 1, AvatarArmorCount);
+            updated = true;
+        }
+        else if (IsKeyPressed(keyboardState, Keys.J))
+        {
+            _previewArmorIndex = WrapValue(_previewArmorIndex, -1, AvatarArmorCount);
+            updated = true;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.I))
+        {
+            _previewClassIndex = WrapValue(_previewClassIndex, 1, AvatarClassCount);
+            updated = true;
+        }
+        else if (IsKeyPressed(keyboardState, Keys.K))
+        {
+            _previewClassIndex = WrapValue(_previewClassIndex, -1, AvatarClassCount);
+            updated = true;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.O))
+        {
+            _previewRaceIndex = WrapValue(_previewRaceIndex, 1, AvatarRaceCount);
+            updated = true;
+        }
+        else if (IsKeyPressed(keyboardState, Keys.L))
+        {
+            _previewRaceIndex = WrapValue(_previewRaceIndex, -1, AvatarRaceCount);
+            updated = true;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.P))
+        {
+            _previewIsMale = !_previewIsMale;
+            updated = true;
+        }
+
+        return updated;
+    }
+
     private void HandleAnimationPreviewInput(KeyboardState keyboardState)
     {
         if (_animationPreview is null)
@@ -424,6 +640,19 @@ public class Game1 : Game
         if (IsKeyPressed(keyboardState, Keys.F5))
         {
             _showAnimationPreview = !_showAnimationPreview;
+        }
+
+        if (IsKeyPressed(keyboardState, Keys.F10))
+        {
+            _avatarPreviewMode = !_avatarPreviewMode;
+            if (_avatarPreviewMode)
+            {
+                if (!_showAnimationPreview)
+                {
+                    _showAnimationPreview = true;
+                }
+                UpdateAvatarPreviewAnimation();
+            }
         }
 
         if (!_showAnimationPreview)
@@ -448,6 +677,11 @@ public class Game1 : Game
         if (IsKeyPressed(keyboardState, Keys.F9))
         {
             _animationPreview.ToggleMirror();
+        }
+
+        if (_avatarPreviewMode && HandleAvatarModeInput(keyboardState))
+        {
+            UpdateAvatarPreviewAnimation();
         }
     }
 
@@ -543,7 +777,7 @@ public class Game1 : Game
         {
             builder.AppendLine(animationLine);
         }
-        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD  F5 PREVIEW  F6/F7 ANIM  F8 DIR  F9 MIR");
+        builder.Append("CONTROLS TAB CYCLE 0 NONE 1 SEN 2 NES 3 MER 4 ALL  +/- ZOOM  [] MAP  F1 HUD  F5 PREVIEW  F6/F7 ANIM  F8 DIR  F9 MIR  F10 AV MODE  J/U ARM  K/I CLASS  L/O RACE  P GEND");
         return builder.ToString().ToUpperInvariant();
     }
 
@@ -591,6 +825,41 @@ public class Game1 : Game
         }
 
         _animationPreview.Draw(_spriteBatch, _camera, _animationPreviewAnchor);
+    }
+
+    private void DrawMonsterPreviews()
+    {
+        if (_monsterPreviews.Count == 0 || _spriteBatch is null || _camera is null)
+        {
+            return;
+        }
+
+        _spriteBatch.Begin(
+            samplerState: SamplerState.PointClamp,
+            blendState: BlendState.NonPremultiplied,
+            transformMatrix: _camera.GetViewMatrix());
+
+        foreach (var preview in _monsterPreviews)
+        {
+            if (!preview.TryGetFrame(out var direction, out var frame))
+            {
+                continue;
+            }
+
+            var position = AnimationRenderHelper.CalculateDrawPosition(preview.Anchor, direction, frame, false);
+            _spriteBatch.Draw(
+                preview.Animation.Texture,
+                position,
+                frame.Source,
+                Color.White,
+                0f,
+                Vector2.Zero,
+                Vector2.One,
+                SpriteEffects.None,
+                0.7f);
+        }
+
+        _spriteBatch.End();
     }
 
     private string BuildInfoPanelText()
@@ -770,7 +1039,17 @@ public class Game1 : Game
         var direction = _animationPreview.DirectionIndex;
         var mirror = _animationPreview.Mirror ? "MIR" : "FWD";
         var kind = _animationPreview.CurrentKind?.ToString() ?? "UNK";
-        return $"ANIM {key} DIR {direction} {mirror} {kind}";
+        var builder = new StringBuilder();
+        builder.Append($"ANIM {key} DIR {direction} {mirror} {kind}");
+        if (_avatarPreviewMode)
+        {
+            var className = PlayerClassNames[Math.Clamp(_previewClassIndex, 0, PlayerClassNames.Length - 1)];
+            var raceName = PlayerRaceNames[Math.Clamp(_previewRaceIndex, 0, PlayerRaceNames.Length - 1)];
+            var gender = _previewIsMale ? "M" : "F";
+            builder.Append($" AV {className}/{raceName} ARM {_previewArmorIndex:D2} G {gender} ID {_previewAnimationId:D3}");
+        }
+
+        return builder.ToString();
     }
 
     private string ResolveItemName(int itemId)
@@ -790,5 +1069,87 @@ public class Game1 : Game
         }
 
         return $"ITEM #{itemId:D3}";
+    }
+
+    private sealed class MonsterPreviewInstance
+    {
+        private const float DefaultFrameDuration = 0.12f;
+
+        public MonsterPreviewInstance(AnimationTexture animation, Vector2 anchor, int directionIndex, int initialFrame, string name)
+        {
+            Animation = animation;
+            Anchor = anchor;
+            DirectionIndex = directionIndex;
+            Name = name;
+            _frameIndices = BuildFrameIndices(animation.Directions[directionIndex]);
+            var startIndex = _frameIndices.IndexOf(initialFrame);
+            _currentIndex = startIndex >= 0 ? startIndex : 0;
+            _frameDuration = _frameIndices.Count > 4 ? DefaultFrameDuration : DefaultFrameDuration * 1.5f;
+        }
+
+        public AnimationTexture Animation { get; }
+
+        public Vector2 Anchor { get; }
+
+        public int DirectionIndex { get; }
+
+        public string Name { get; }
+
+        private readonly List<int> _frameIndices;
+        private readonly float _frameDuration;
+        private float _timer;
+        private int _currentIndex;
+
+        public void Update(float elapsedSeconds)
+        {
+            if (_frameIndices.Count <= 1)
+            {
+                return;
+            }
+
+            _timer += elapsedSeconds;
+            while (_timer >= _frameDuration)
+            {
+                _timer -= _frameDuration;
+                _currentIndex++;
+                if (_currentIndex >= _frameIndices.Count)
+                {
+                    _currentIndex = 0;
+                }
+            }
+        }
+
+        public bool TryGetFrame(out AnimationDirectionSlice direction, out AnimationFrameSlice frame)
+        {
+            direction = Animation.Directions[DirectionIndex];
+            if (_frameIndices.Count == 0)
+            {
+                frame = default;
+                return false;
+            }
+
+            var index = _frameIndices[_currentIndex];
+            frame = direction.Frames[index];
+            return frame.Source != Rectangle.Empty;
+        }
+
+        private static List<int> BuildFrameIndices(AnimationDirectionSlice direction)
+        {
+            var list = new List<int>(direction.Frames.Count);
+            for (var i = 0; i < direction.Frames.Count; i++)
+            {
+                if (direction.Frames[i].Source != Rectangle.Empty)
+                {
+                    list.Add(i);
+                }
+            }
+
+            if (list.Count == 0)
+            {
+                list.Add(0);
+            }
+
+            return list;
+        }
     }
 }
