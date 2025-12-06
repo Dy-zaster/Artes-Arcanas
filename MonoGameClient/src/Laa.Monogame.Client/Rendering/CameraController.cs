@@ -19,7 +19,7 @@ public sealed class CameraController
         _camera = camera;
     }
 
-    public void Update(GameTime gameTime, KeyboardState keyboardState, MouseState mouseState)
+    public void Update(GameTime gameTime, KeyboardState keyboardState, MouseState mouseState, bool enableZoom = true)
     {
         var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
         var moveDirection = Vector2.Zero;
@@ -50,13 +50,13 @@ public sealed class CameraController
             _camera.Move(moveDirection * MoveSpeedPixelsPerSecond * elapsed);
         }
 
-        HandleZoom(mouseState, keyboardState);
+        HandleZoom(mouseState, keyboardState, enableZoom);
     }
 
-    private void HandleZoom(MouseState mouseState, KeyboardState keyboardState)
+    private void HandleZoom(MouseState mouseState, KeyboardState keyboardState, bool enableZoom)
     {
         var scrollDelta = mouseState.ScrollWheelValue - _previousScrollValue;
-        if (scrollDelta != 0)
+        if (enableZoom && scrollDelta != 0)
         {
             var zoomDelta = (scrollDelta / 120f) * ZoomStepPerWheelNotch;
             _camera.Zoom(zoomDelta);

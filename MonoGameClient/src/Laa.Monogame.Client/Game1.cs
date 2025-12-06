@@ -30,6 +30,9 @@ public class Game1 : Game
     private const int AvatarArmorCount = 32;
     private const int AvatarClassCount = 8;
     private const int AvatarRaceCount = 8;
+    private const float HudContentOffsetY = 16f;
+    private const int PortraitTileSize = 40;
+    private const string HudControlsHelpText = "[F1] UI  [F5] Animaciones  [PgUp/PgDn] Mapas  [F2] Panel Mundial";
 
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch? _spriteBatch;
@@ -61,16 +64,41 @@ public class Game1 : Game
     private bool _networkFeedActive;
     private bool _loggedDirectionPlaceholder;
     private UiManager? _uiManager;
+    private UiPanel? _uiHudPanel;
     private UiPanel? _uiRoadmapWindow;
     private UiPanel? _uiInventoryWindow;
     private UiInventoryWidget? _uiInventoryWidget;
     private UiLabel? _uiInventorySelectionLabel;
+    private UiLabel? _uiItemDetailLabel;
     private UiPanel? _uiSpellWindow;
     private UiSpellListWidget? _uiSpellWidget;
     private UiPanel? _uiMerchantWindow;
     private UiListWidget? _uiMerchantWidget;
     private UiLabel? _uiMerchantInfoLabel;
     private UiSpriteLibrary? _uiSpriteLibrary;
+    private UiMinimapWidget? _uiMinimapWidget;
+    private HudPaperDollWidget? _hudPaperDollWidget;
+    private HudPortraitWidget? _hudPortraitWidget;
+    private HudQuickActionWidget? _hudQuickActionWidget;
+    private UiLabel? _uiMapNameLabel;
+    private string _welcomeMessage =
+        "Bienvenido al mundo de Artes Arcanas\nEl servidor permite usar varios avatares al mismo tiempo.";
+    private Vector2 _welcomeMessagePosition = new(16f, 96f);
+    private UiLabel? _uiHudHintLabel;
+    private UiLabel? _uiHudStatsLabel;
+    private UiLabel? _uiHudSkillLabel;
+    private UiLabel? _uiHudCombatStatsLabel;
+    private UiLabel? _uiHudItemDetailLabel;
+    private UiLabel? _uiHudSpellDetailLabel;
+    private UiLabel? _uiHudHealthLabel;
+    private UiLabel? _uiHudManaLabel;
+    private UiLabel? _uiHudFoodLabel;
+    private UiLabel? _uiHudGoldLabel;
+    private UiLabel? _uiHudSilverLabel;
+    private UiLabel? _uiHudMenuLabel;
+    private UiLabel? _uiHudInventoryTabLabel;
+    private UiLabel? _uiHudSpellTabLabel;
+    private UiLabel[]? _uiHudMessageLabels;
     private int _merchantPreviewIndex;
     private Texture2D? _hudBackgroundTexture;
     private bool _showHud = true;
@@ -90,6 +118,19 @@ public class Game1 : Game
     private InfoPanel _infoPanel = InfoPanel.None;
     private Vector2 _animationPreviewAnchor = Vector2.Zero;
     private IReadOnlyList<string> _textureRoots = Array.Empty<string>();
+    private Point _hudSpriteSize = Point.Zero;
+    private readonly HudMessageLog _hudMessageLog = new();
+    private float _hudHealthFill = 0.25f;
+    private float _hudManaFill = 0.5f;
+    private IReadOnlyList<int> _backpackPreviewItemIds = Array.Empty<int>();
+    private int _hudPortraitIndex;
+    private int _portraitCount = 1;
+    private QuickActionIcon? _activeQuickItemIcon;
+    private QuickActionIcon? _activeQuickSpellIcon;
+    private int _activeQuickActionSlot = -1;
+    private string _hudQuickAttackLabel = "Sin seleccionar";
+    private string _hudQuickSpellLabel = "Ninguno";
+    private readonly PlayerState _playerState = PlayerState.CreateSample();
 
     private static readonly string[] PlayerClassNames =
     {
@@ -112,7 +153,7 @@ public class Game1 : Game
         "Semielfo",
         "Orco",
         "Drow",
-        "Desconocido"
+        "Deva"
     };
 
     private static readonly string[] EquipmentSlotNames =
@@ -126,6 +167,158 @@ public class Game1 : Game
         "BOTAS",
         "AMULETO"
     };
+
+    private static readonly string[] WeaponTypeNames =
+    {
+        "Cortante",
+        "Punzante",
+        "Contundente",
+        "Veneno",
+        "Fuego",
+        "Hielo",
+        "Rayo",
+        "Magia",
+        "Municion",
+        "N/A"
+    };
+
+    private static readonly string[] WeaponWeightNames =
+    {
+        "Ligera",
+        "Normal",
+        "Pesada",
+        "No es arma"
+    };
+
+    private static readonly string[] WeaponRangeNames =
+    {
+        "Cuerpo a cuerpo",
+        "A distancia",
+        "Magica",
+        "No es arma"
+    };
+
+    private static readonly string[] CraftDisciplineNames =
+    {
+        "No se construye",
+        "Herrero",
+        "Gran Herrero",
+        "Alquimista",
+        "Gran Alquimista",
+        "Sastre",
+        "Gran Sastre",
+        "Carpintero Armero",
+        "Herbalista",
+        "Carpintero",
+        "Gran Carpintero"
+    };
+
+    private static readonly string[] RepairTypeNames =
+    {
+        "No reparable",
+        "Afilar",
+        "Aceitar",
+        "Martillar",
+        "Coser"
+    };
+
+    private static readonly string[] AttackNames =
+    {
+        "ácido",
+        "aguijón",
+        "alabarda",
+        "aliento",
+        "arcabuz",
+        "arco y flecha",
+        "ballesta",
+        "cola",
+        "cuernos",
+        "daga",
+        "embestida",
+        "espada",
+        "fuego",
+        "garra",
+        "golpe",
+        "hacha",
+        "hechizo",
+        "hielo",
+        "lanza",
+        "mandoble",
+        "maza",
+        "dardo venenoso",
+        "mordida",
+        "patada",
+        "picotazo",
+        "rayo",
+        "tenazas",
+        "flecha venenosa",
+        "aliento frío",
+        "hechizo mortal"
+    };
+
+    private sealed record StatEntry(string Label, string Value);
+
+    private sealed class PlayerState
+    {
+        public string AvatarName { get; init; } = "Testin";
+        public int Level { get; init; } = 1;
+        public int ClassIndex { get; init; } = 6;
+        public int RaceIndex { get; init; } = 0;
+        public bool IsMale { get; init; } = true;
+        public int ExperienceNeeded { get; set; } = 200;
+        public string HonorTitle { get; init; } = "Plebeyo";
+        public IReadOnlyList<StatEntry> CoreStats { get; init; } = Array.Empty<StatEntry>();
+        public IReadOnlyList<string> SkillLines { get; init; } = Array.Empty<string>();
+        public IReadOnlyList<string> CombatLines { get; init; } = Array.Empty<string>();
+        public int Health { get; set; } = 9;
+        public int MaxHealth { get; set; } = 9;
+        public int Mana { get; set; } = 3;
+        public int MaxMana { get; set; } = 3;
+        public int FoodPercent { get; set; } = 48;
+        public int Gold { get; set; } = 50;
+        public int Silver { get; set; } = 1;
+
+        public static PlayerState CreateSample()
+        {
+            return new PlayerState
+            {
+                AvatarName = "Testin",
+                Level = 1,
+                ClassIndex = 6,
+                RaceIndex = 0,
+                ExperienceNeeded = 200,
+                HonorTitle = "Plebeyo",
+                CoreStats = new[]
+                {
+                    new StatEntry("Fuerza", "40%"),
+                    new StatEntry("Constitución", "35%"),
+                    new StatEntry("Inteligencia", "45%"),
+                    new StatEntry("Sabiduría", "15%"),
+                    new StatEntry("Destreza", "55%")
+                },
+                SkillLines = new[]
+                {
+                    "o Herbalismo",
+                    "o Elocuencia",
+                    "o Apuñalar"
+                },
+                CombatLines = new[]
+                {
+                    "Daño: 100%",
+                    "Evasión: 19% [+15%]",
+                    "Armadura: 20% 20% 20%",
+                    "HO% FO% RO% VO%"
+                },
+                Health = 9,
+                MaxHealth = 9,
+                Mana = 3,
+                MaxMana = 3,
+                FoodPercent = 48,
+                Gold = 50,
+                Silver = 1
+            };
+        }
+    }
 
     public Game1()
     {
@@ -200,10 +393,17 @@ public class Game1 : Game
         }
 
         _uiManager?.Dispose();
+        _uiMinimapWidget?.Dispose();
+        _uiMinimapWidget = null;
         _uiSpriteLibrary?.Dispose();
         _uiSpriteLibrary = new UiSpriteLibrary(GraphicsDevice, _textureRoots);
         _uiManager = new UiManager(GraphicsDevice, _debugTextRenderer);
         var viewport = GraphicsDevice.Viewport;
+        BuildHudPanel(viewport);
+        if (_uiHudPanel is not null)
+        {
+            _uiManager.AddWindow(_uiHudPanel);
+        }
         var roadmapBounds = new Rectangle(
             viewport.Width - 360,
             64,
@@ -236,10 +436,6 @@ public class Game1 : Game
                 FillContentBounds = true
             });
         }
-        _uiInventoryWindow.AddWidget(new UiLabel(
-            "EQUIPO / MOCHILA",
-            new Vector2(12f, 8f),
-            Color.Yellow));
         _uiInventoryWidget = new UiInventoryWidget
         {
             EquipmentColor = Color.Black,
@@ -247,12 +443,18 @@ public class Game1 : Game
             EquipmentOrigin = new Vector2(12f, 32f),
             BackpackOrigin = new Vector2(180f, 32f)
         };
-        _uiInventoryWidget.SetEquipment(BuildEquipmentPreview());
-        _uiInventoryWidget.SetBackpack(BuildBackpackPreviewItems());
+        _uiInventoryWidget.SelectionChanged += OnInventorySelectionChanged;
+        _uiInventoryWindow.AddWidget(new UiLabel(
+            "EQUIPO / MOCHILA",
+            new Vector2(12f, 8f),
+            Color.Yellow));
         _uiInventoryWindow.AddWidget(_uiInventoryWidget);
-        _uiInventorySelectionLabel = new UiLabel("SELECCION: NINGUNO", new Vector2(12f, inventoryBounds.Height - 24f), Color.Black);
+        _uiInventorySelectionLabel = new UiLabel("SELECCION: NINGUNO", new Vector2(12f, inventoryBounds.Height - 42f), Color.Black);
         _uiInventoryWindow.AddWidget(_uiInventorySelectionLabel);
+        _uiItemDetailLabel = new UiLabel("DETALLE: --", new Vector2(12f, inventoryBounds.Height - 22f), Color.Black);
+        _uiInventoryWindow.AddWidget(_uiItemDetailLabel);
         _uiManager.AddWindow(_uiInventoryWindow);
+        PopulateInventoryPreview();
 
         var spellBounds = new Rectangle(viewport.Width - 420, 300, 380, 260);
         _uiSpellWindow = new UiPanel("SPELLBOOK", spellBounds)
@@ -364,17 +566,16 @@ public class Game1 : Game
         HandleMonsterDebugInput(keyboard);
         HandleUiInput(keyboard);
         ProcessNetworkEvents();
-        _cameraController?.Update(gameTime, keyboard, mouse);
+        var hudCapturedScroll = HandleHudScroll(mouse, _previousMouse);
+        _cameraController?.Update(gameTime, keyboard, mouse, !hudCapturedScroll);
         _animationPreview?.Update(gameTime);
         if (!_networkFeedActive)
         {
             _monsterSimulation?.Update(gameTime);
         }
         _uiManager?.Update(gameTime, mouse, _previousMouse);
-        if (_uiInventorySelectionLabel is not null && _uiInventoryWidget is not null)
-        {
-            _uiInventorySelectionLabel.Text = $"SELECCION: {_uiInventoryWidget.SelectionText}";
-        }
+        // Selection labels now updated via event handler.
+        UpdateHudText();
         UpdateMonsterRenderer(gameTime);
 
         if (!_loggedContent)
@@ -404,6 +605,8 @@ public class Game1 : Game
         _staticGraphicRenderer?.Draw(_spriteBatch, _sortedStaticGraphics, _camera);
         DrawAnimationPreview();
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
+        DrawResourceBars();
+        DrawWelcomeMessage();
         DrawHud();
         DrawInfoPanel();
         if (_spriteBatch is not null)
@@ -426,6 +629,8 @@ public class Game1 : Game
             _overlayRenderer?.Dispose();
             _debugTextRenderer?.Dispose();
             _hudBackgroundTexture?.Dispose();
+            _uiMinimapWidget?.Dispose();
+            _uiMinimapWidget = null;
             _uiManager?.Dispose();
             _uiSpriteLibrary?.Dispose();
             if (_networkClient is not null)
@@ -475,6 +680,8 @@ public class Game1 : Game
             ConfigureCameraBounds();
             UpdateAnimationPreviewAnchor();
             RebuildMonsterEntities();
+            _uiMinimapWidget?.SetMap(_activeMap);
+            AddHudMessage($"Mapa cargado: {_activeMap.Header.Name} ({mapId})");
             Console.WriteLine($"Loaded map: {mapId} (index {_currentMapIndex + 1}/{count})");
         }
         catch (Exception ex)
@@ -600,13 +807,13 @@ public class Game1 : Game
 
     private void OnClientSizeChanged(object? sender, EventArgs e)
     {
-        if (_camera is null)
+        if (_camera is not null)
         {
-            return;
+            _camera.ResizeViewport(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            ConfigureCameraBounds();
         }
 
-        _camera.ResizeViewport(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-        ConfigureCameraBounds();
+        UpdateHudPanelBounds(GraphicsDevice.Viewport);
     }
 
     private IReadOnlyList<string> ResolveGraphicRoots()
@@ -709,6 +916,12 @@ public class Game1 : Game
         {
             ApplyServerCommand(command);
         }
+
+        foreach (var error in _serverCommandDecoder.FlushErrors())
+        {
+            Console.Error.WriteLine($"[NET] {error}");
+            AddHudMessage($"Red: {error}");
+        }
     }
 
     private void HandleNetworkMessage(NetworkMessage message)
@@ -761,6 +974,30 @@ public class Game1 : Game
             case LocalPlayerPositionCommand local:
                 Console.WriteLine($"[NET] Local player moved to ({local.X},{local.Y}) dir {local.Direction}.");
                 break;
+            case PlayerHealthCommand hp:
+                ApplyPlayerHealth(hp.Value);
+                break;
+            case PlayerManaCommand mana:
+                ApplyPlayerMana(mana.Value);
+                break;
+            case PlayerFoodCommand food:
+                ApplyPlayerFood(food.Value);
+                break;
+            case PlayerMoneyCommand money:
+                ApplyPlayerMoney(money.Amount);
+                break;
+            case PlayerExperienceCommand xp:
+                ApplyPlayerExperience(xp.Value);
+                break;
+            case PlayerDamageFromMonsterCommand dmgMonster:
+                ApplyPlayerDamageFromMonster(dmgMonster);
+                break;
+            case PlayerDamageFromObjectCommand dmgObject:
+                ApplyPlayerDamageFromObject(dmgObject);
+                break;
+            case PlayerDamageFromSpellCommand dmgSpell:
+                ApplyPlayerDamageFromSpell(dmgSpell);
+                break;
             default:
                 Console.WriteLine($"[NET] Unhandled command {command.Type}.");
                 break;
@@ -798,6 +1035,66 @@ public class Game1 : Game
             Console.WriteLine("[NET] Sprite direction updates acknowledged (renderer not yet synced).");
             _loggedDirectionPlaceholder = true;
         }
+    }
+
+    private void ApplyPlayerHealth(ushort value)
+    {
+        var hp = Math.Clamp((int)value, 0, 2000);
+        _playerState.Health = hp;
+        if (hp > _playerState.MaxHealth)
+        {
+            _playerState.MaxHealth = hp;
+        }
+    }
+
+    private void ApplyPlayerMana(byte value)
+    {
+        var mana = Math.Clamp((int)value, 0, 200);
+        _playerState.Mana = mana;
+        if (mana > _playerState.MaxMana)
+        {
+            _playerState.MaxMana = mana;
+        }
+    }
+
+    private void ApplyPlayerFood(byte value)
+    {
+        _playerState.FoodPercent = Math.Clamp((int)value, 0, 100);
+    }
+
+    private void ApplyPlayerMoney(uint rawValue)
+    {
+        var gold = (int)Math.Clamp(rawValue / 100, 0, int.MaxValue);
+        var silver = (int)(rawValue % 100);
+        _playerState.Gold = gold;
+        _playerState.Silver = silver;
+    }
+
+    private void ApplyPlayerExperience(ushort value)
+    {
+        _playerState.ExperienceNeeded = value;
+    }
+
+    private void ApplyPlayerDamageFromMonster(PlayerDamageFromMonsterCommand command)
+    {
+        ApplyPlayerHealth(command.NewHealth);
+        var monsterName = ResolveMonsterName(command.MonsterIndex);
+        var attack = ResolveAttackName(command.AttackIndex);
+        AddHudMessage($"{monsterName} te ataca con {attack}. Salud {_playerState.Health}/{_playerState.MaxHealth}.");
+    }
+
+    private void ApplyPlayerDamageFromObject(PlayerDamageFromObjectCommand command)
+    {
+        ApplyPlayerHealth(command.NewHealth);
+        var itemName = ResolveItemName(command.ObjectId);
+        AddHudMessage($"Recibes daño de {itemName} (avatar #{command.AttackerId}). Salud {_playerState.Health}/{_playerState.MaxHealth}.");
+    }
+
+    private void ApplyPlayerDamageFromSpell(PlayerDamageFromSpellCommand command)
+    {
+        ApplyPlayerHealth(command.NewHealth);
+        var spellName = ResolveSpellName(command.SpellId);
+        AddHudMessage($"El hechizo {spellName} te alcanza (avatar #{command.AttackerId}). Salud {_playerState.Health}/{_playerState.MaxHealth}.");
     }
 
     private void HandleMonsterSpawn(in MonsterNetworkPayload payload)
@@ -1014,7 +1311,33 @@ public class Game1 : Game
         if (IsKeyPressed(keyboardState, Keys.F1))
         {
             _showHud = !_showHud;
+            UpdateHudVisibility();
         }
+        else if (IsKeyPressed(keyboardState, Keys.Home))
+        {
+            ScrollHudMessages(-1);
+        }
+        else if (IsKeyPressed(keyboardState, Keys.End))
+        {
+            ScrollHudMessages(1);
+        }
+    }
+
+    private bool HandleHudScroll(MouseState currentMouse, MouseState previousMouse)
+    {
+        var scrollDelta = currentMouse.ScrollWheelValue - previousMouse.ScrollWheelValue;
+        if (scrollDelta == 0 || !_showHud || _uiHudPanel is null || _hudPaperDollWidget is null)
+        {
+            return false;
+        }
+
+        var mousePoint = new Point(currentMouse.X, currentMouse.Y);
+        if (!_uiHudPanel.Bounds.Contains(mousePoint))
+        {
+            return false;
+        }
+
+        return _hudPaperDollWidget.HandleScroll(mousePoint, _uiHudPanel.Bounds, scrollDelta);
     }
 
     private bool HandleAvatarModeInput(KeyboardState keyboardState)
@@ -1193,27 +1516,492 @@ public class Game1 : Game
         return equipment;
     }
 
-    private IReadOnlyList<string> BuildBackpackPreviewItems()
+    private IReadOnlyList<string> BuildBackpackPreviewItems(out List<int> itemIds)
     {
+        itemIds = new List<int>();
         if (_itemDocument is null || _itemDocument.Names.Count == 0)
         {
+            itemIds.Add(-1);
             return new[] { "SIN ITEMS DISPONIBLES" };
         }
 
         var list = new List<string>();
         var start = EquipmentSlotNames.Length;
-        for (var i = start; i < _itemDocument.Names.Count && list.Count < 16; i++)
+        for (var i = start; i < _itemDocument.Names.Count; i++)
         {
             var name = _itemDocument.Names[i];
             list.Add(string.IsNullOrWhiteSpace(name) ? $"ITEM #{i:D3}" : name);
+            itemIds.Add(i);
         }
 
         if (list.Count == 0)
         {
             list.Add("MOCHILA VACIA");
+            itemIds.Add(-1);
         }
 
         return list;
+    }
+
+    private string BuildCharacterSummary()
+    {
+        if (_playerState is null)
+        {
+            return string.Empty;
+        }
+
+        var builder = new StringBuilder();
+        var className = PlayerClassNames[Math.Clamp(_playerState.ClassIndex, 0, PlayerClassNames.Length - 1)];
+        builder.AppendLine($"{className}, nivel {_playerState.Level}");
+        foreach (var stat in _playerState.CoreStats)
+        {
+            builder.AppendLine($"{stat.Label}: {stat.Value}");
+        }
+
+        builder.AppendLine($"Exp. necesaria: {_playerState.ExperienceNeeded}");
+        builder.AppendLine($"Honor: {_playerState.HonorTitle}");
+        return builder.ToString();
+    }
+
+    private IReadOnlyList<int> BuildEquipmentIconPreview()
+    {
+        var icons = new List<int>(EquipmentSlotNames.Length);
+        if (_itemDocument is null || _itemDocument.Names.Count == 0)
+        {
+            for (var i = 0; i < EquipmentSlotNames.Length; i++)
+            {
+                icons.Add(-1);
+            }
+
+            return icons;
+        }
+
+        var count = Math.Min(EquipmentSlotNames.Length, _itemDocument.Names.Count);
+        for (var i = 0; i < count; i++)
+        {
+            icons.Add(i);
+        }
+
+        while (icons.Count < EquipmentSlotNames.Length)
+        {
+            icons.Add(-1);
+        }
+
+        return icons;
+    }
+
+    private IReadOnlyList<int> BuildBackpackIconPreview()
+    {
+        var icons = new List<int>();
+        if (_itemDocument is null || _itemDocument.Names.Count == 0)
+        {
+            for (var i = 0; i < HudPaperDollWidget.VisibleBackpackSlots; i++)
+            {
+                icons.Add(-1);
+            }
+
+            return icons;
+        }
+
+        var start = EquipmentSlotNames.Length;
+        for (var i = start; i < _itemDocument.Names.Count; i++)
+        {
+            icons.Add(i);
+        }
+
+        return icons;
+    }
+
+    private IReadOnlyList<int> BuildSpellIconPreview()
+    {
+        var maxSlots = HudPaperDollWidget.VisibleBackpackSlots * 2;
+        var icons = new List<int>(maxSlots);
+        if (_spellDocument is null || _spellDocument.Spells.Count == 0)
+        {
+            for (var i = 0; i < maxSlots; i++)
+            {
+                icons.Add(i);
+            }
+
+            return icons;
+        }
+
+        for (var i = 0; i < _spellDocument.Spells.Count && icons.Count < maxSlots; i++)
+        {
+            icons.Add(i);
+        }
+
+        return icons;
+    }
+
+    private IReadOnlyList<QuickActionIcon> BuildQuickActionIcons(
+        IReadOnlyList<int> equipmentIcons,
+        IReadOnlyList<int> backpackIcons,
+        IReadOnlyList<int> spellIcons)
+    {
+        var list = new List<QuickActionIcon>(3);
+        var equipmentIcon = equipmentIcons.FirstOrDefault(id => id >= 0);
+        if (equipmentIcon >= 0)
+        {
+            list.Add(new QuickActionIcon(QuickActionIconType.Item, equipmentIcon));
+        }
+        else
+        {
+            list.Add(new QuickActionIcon(QuickActionIconType.Item, 0));
+        }
+
+        var backpackIcon = backpackIcons.FirstOrDefault(id => id >= 0);
+        if (backpackIcon >= 0)
+        {
+            list.Add(new QuickActionIcon(QuickActionIconType.Item, backpackIcon));
+        }
+        else
+        {
+            list.Add(new QuickActionIcon(QuickActionIconType.Item, 1));
+        }
+
+        var spellIcon = spellIcons.FirstOrDefault(id => id >= 0);
+        if (spellIcon >= 0)
+        {
+            list.Add(new QuickActionIcon(QuickActionIconType.Spell, spellIcon));
+        }
+        else
+        {
+            list.Add(new QuickActionIcon(QuickActionIconType.Spell, 0));
+        }
+
+        return list;
+    }
+
+    private void HandleQuickActionInvoked(int slot, QuickActionIcon icon)
+    {
+        SetQuickActionHighlight(slot);
+        if (icon.Type == QuickActionIconType.Spell)
+        {
+            _activeQuickSpellIcon = icon;
+            var spellName = ResolveSpellName(icon.Id);
+            _hudQuickSpellLabel = spellName;
+            UpdateSpellDetail(icon);
+            AddHudMessage($"Conjuro rápido preparado: {spellName}.");
+        }
+        else
+        {
+            _activeQuickItemIcon = icon;
+            var itemName = ResolveItemName(icon.Id);
+            _hudQuickAttackLabel = itemName;
+            UpdateHudItemDetail(icon.Id);
+            AddHudMessage($"Ataque rápido configurado con {itemName}.");
+        }
+
+        RefreshHudHintLabel();
+    }
+
+    private void HandlePortraitClicked(int portraitIndex)
+    {
+        if (_portraitCount <= 0)
+        {
+            _portraitCount = 1;
+        }
+
+        _hudPortraitIndex = (portraitIndex + 1) % _portraitCount;
+        UpdateHudPortrait();
+        AddHudMessage($"Cambiaste el retrato al slot #{_hudPortraitIndex + 1:D2}.");
+    }
+
+    private void HandleSpellSlotActivated(int index, QuickActionIcon icon)
+    {
+        UpdateSpellDetail(icon);
+        _activeQuickSpellIcon = icon;
+        _hudQuickSpellLabel = ResolveSpellName(icon.Id);
+        RefreshHudHintLabel();
+        AddHudMessage($"Hechizo seleccionado #{icon.Id:D3} (slot {index + 1}).");
+    }
+
+    private void HandleHudInventorySlotActivated(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= _backpackPreviewItemIds.Count)
+        {
+            UpdateHudItemDetail(null);
+            return;
+        }
+
+        var itemId = _backpackPreviewItemIds[slotIndex];
+        if (itemId < 0)
+        {
+            UpdateHudItemDetail(null);
+            return;
+        }
+
+        UpdateHudItemDetail(itemId);
+        var itemName = ResolveItemName(itemId);
+        AddHudMessage($"Objeto seleccionado #{itemId:D3}: {itemName}.");
+    }
+
+    private void OnInventorySelectionChanged(InventorySelectionChangedEventArgs args)
+    {
+        if (_uiInventorySelectionLabel is not null)
+        {
+            var label = args.Kind == InventorySelectionKind.None ? "NINGUNO" : args.Label;
+            _uiInventorySelectionLabel.Text = $"SELECCION: {label}";
+        }
+
+        UpdateItemDetailText(args);
+    }
+
+    private void UpdateItemDetailText(InventorySelectionChangedEventArgs args)
+    {
+        if (_uiItemDetailLabel is null)
+        {
+            return;
+        }
+
+        if (args.Kind != InventorySelectionKind.Backpack || _itemDocument is null)
+        {
+            _uiItemDetailLabel.Text = "DETALLE: --";
+            return;
+        }
+
+        var id = args.Index >= 0 && args.Index < _backpackPreviewItemIds.Count
+            ? _backpackPreviewItemIds[args.Index]
+            : -1;
+        if (id < 0 || id >= _itemDocument.Items.Count)
+        {
+            _uiItemDetailLabel.Text = $"DETALLE: {args.Label}";
+            return;
+        }
+
+        var descriptor = _itemDocument.Items[id];
+        var name = !string.IsNullOrWhiteSpace(_itemDocument.Names.ElementAtOrDefault(id))
+            ? _itemDocument.Names[id]
+            : $"ITEM #{id:D3}";
+        var detail =
+            $"DETALLE: {name}  MO {descriptor.Cost}  Nivel {descriptor.MinimumLevel}  Tipo {descriptor.WeaponType}";
+        _uiItemDetailLabel.Text = detail;
+    }
+    private void UpdateHudItemDetail(int? itemId)
+    {
+        if (_uiHudItemDetailLabel is null)
+        {
+            return;
+        }
+
+        if (itemId is null || _itemDocument is null)
+        {
+            _uiHudItemDetailLabel.Text = "Item: --";
+            return;
+        }
+
+        _uiHudItemDetailLabel.Text = BuildHudItemDetailText(itemId.Value);
+    }
+
+    private void UpdateSpellDetail(QuickActionIcon? icon)
+    {
+        if (_uiHudSpellDetailLabel is null)
+        {
+            return;
+        }
+
+        if (icon is null || icon.Value.Id < 0 || _spellDocument is null)
+        {
+            _uiHudSpellDetailLabel.Text = "Hechizo: Ninguno";
+            return;
+        }
+
+        var id = icon.Value.Id;
+        var spell = id >= 0 && id < _spellDocument.Spells.Count ? _spellDocument.Spells[id] : null;
+        var name = id >= 0 && id < _spellDocument.Names.Count ? _spellDocument.Names[id] : $"Hechizo #{id:D3}";
+        if (spell is null)
+        {
+            _uiHudSpellDetailLabel.Text = $"Hechizo: {name}";
+            return;
+        }
+
+        var detail =
+            $"{name}, Nivel: {spell.RequiredPlayerLevel}, Maná: {spell.RequiredMana}, I: {spell.RequiredIntelligence * 5}, S: {spell.RequiredWisdom * 5}";
+        _uiHudSpellDetailLabel.Text = detail;
+    }
+
+    private string BuildHudItemDetailText(int itemId)
+    {
+        if (_itemDocument is null || itemId < 0 || itemId >= _itemDocument.Items.Count)
+        {
+            return "Item: --";
+        }
+
+        var descriptor = _itemDocument.Items[itemId];
+        var name = ResolveItemName(itemId);
+        var builder = new StringBuilder();
+        builder.AppendLine($"Item: {name}");
+        builder.AppendLine(
+            $"MO {descriptor.Cost}  Nivel {descriptor.MinimumLevel}  Peso {ResolveWeaponWeightName(descriptor.WeaponWeight)}  Alcance {ResolveWeaponRangeName(descriptor.RangeType)}");
+
+        if (IsAmmoLikeItem(itemId))
+        {
+            builder.AppendLine(BuildWeaponDetail(descriptor));
+        }
+        else if (IsWeaponItem(itemId))
+        {
+            builder.AppendLine(BuildWeaponDetail(descriptor));
+        }
+        else if (IsArmorItem(itemId))
+        {
+            builder.AppendLine(
+                $"Evasión: {FormatPercent(descriptor.DefenseModifier)}  Punz: {FormatArmor(descriptor.Damage1Blunt)}  Cort: {FormatArmor(descriptor.Damage1Pierce)}  Cont: {FormatArmor(descriptor.Damage2Blunt)}  Magia: {FormatArmor(descriptor.Damage2Pierce)}");
+        }
+        else
+        {
+            builder.AppendLine($"Ataque/Evasión: {FormatPercent(descriptor.DefenseModifier)}");
+        }
+
+        var raceRestrictions = FormatRestrictionList(descriptor.ForbiddenRaces, PlayerRaceNames);
+        if (!string.IsNullOrEmpty(raceRestrictions))
+        {
+            builder.AppendLine($"Razas prohibidas: {raceRestrictions}");
+        }
+
+        var classRestrictions = FormatRestrictionList(descriptor.ForbiddenClasses, PlayerClassNames);
+        if (!string.IsNullOrEmpty(classRestrictions))
+        {
+            builder.AppendLine($"Clases prohibidas: {classRestrictions}");
+        }
+
+        var craft = ResolveCraftDisciplineName(descriptor.CraftDiscipline);
+        if (!string.IsNullOrEmpty(craft))
+        {
+            builder.AppendLine($"Construye: {craft} (Nivel {descriptor.CrafterLevel})");
+        }
+
+        var repair = ResolveRepairTypeName(descriptor.RepairType);
+        if (!string.IsNullOrEmpty(repair))
+        {
+            builder.AppendLine($"Reparación: {repair}");
+        }
+
+        return builder.ToString().TrimEnd();
+    }
+
+    private static string BuildWeaponDetail(ItemDescriptor descriptor)
+    {
+        var attack = FormatPercent(descriptor.DefenseModifier);
+        var damageType = ResolveWeaponTypeName(descriptor.WeaponType);
+        var pm = FormatDamageRange(descriptor.Damage1Blunt, descriptor.Damage1Pierce);
+        var g = FormatDamageRange(descriptor.Damage2Blunt, descriptor.Damage2Pierce);
+        return $"Ataque: {attack}  Daño {damageType}: {pm} PM, {g} G";
+    }
+
+    private static bool IsAmmoLikeItem(int itemId)
+    {
+        return (itemId >= 8 && itemId <= 15) || (itemId >= 48 && itemId <= 55);
+    }
+
+    private static bool IsWeaponItem(int itemId)
+    {
+        return itemId >= 16 && itemId <= 47;
+    }
+
+    private static bool IsArmorItem(int itemId)
+    {
+        return (itemId >= 56 && itemId <= 103) || (itemId >= 248 && itemId <= 253);
+    }
+
+    private static string FormatRestrictionList(byte mask, IReadOnlyList<string> names)
+    {
+        if (mask == 0)
+        {
+            return string.Empty;
+        }
+
+        var list = new List<string>();
+        for (var i = 0; i < names.Count; i++)
+        {
+            var bit = 1 << i;
+            if ((mask & bit) != 0)
+            {
+                var name = names[i];
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    list.Add(name);
+                }
+            }
+        }
+
+        return string.Join(", ", list);
+    }
+
+    private static string ResolveWeaponTypeName(byte weaponType)
+    {
+        return weaponType < WeaponTypeNames.Length
+            ? WeaponTypeNames[weaponType]
+            : $"Tipo #{weaponType}";
+    }
+
+    private static string ResolveWeaponWeightName(byte weight)
+    {
+        return weight < WeaponWeightNames.Length
+            ? WeaponWeightNames[weight]
+            : $"Peso #{weight}";
+    }
+
+    private static string ResolveWeaponRangeName(byte range)
+    {
+        return range < WeaponRangeNames.Length
+            ? WeaponRangeNames[range]
+            : $"Alcance #{range}";
+    }
+
+    private static string ResolveCraftDisciplineName(byte discipline)
+    {
+        if (discipline <= 0 || discipline >= CraftDisciplineNames.Length)
+        {
+            return string.Empty;
+        }
+
+        return CraftDisciplineNames[discipline];
+    }
+
+    private static string ResolveRepairTypeName(byte repairType)
+    {
+        return repairType < RepairTypeNames.Length
+            ? RepairTypeNames[repairType]
+            : string.Empty;
+    }
+
+    private static string FormatPercent(int value)
+    {
+        var sign = value > 0 ? "+" : string.Empty;
+        return $"{sign}{value}%";
+    }
+
+    private static string FormatDamageRange(int baseValue, int bonus)
+    {
+        if (bonus <= 1)
+        {
+            if (baseValue == 0)
+            {
+                return "---";
+            }
+
+            return baseValue > 0 ? $"+{baseValue}" : baseValue.ToString();
+        }
+
+        var max = baseValue + bonus - 1;
+        return $"{baseValue} a {max}";
+    }
+
+    private static string FormatArmor(int level)
+    {
+        if (level > 0)
+        {
+            return $"{100 - (400 / (level + 4))}%";
+        }
+
+        if (level < 0)
+        {
+            var penalty = (100 * -level) >> 2;
+            return $"-{penalty}%";
+        }
+
+        return "0%";
     }
 
     private IReadOnlyList<UiSpellGroup> BuildSpellGroups()
@@ -1360,16 +2148,457 @@ public class Game1 : Game
 
         _overlayLayers = layers;
         Console.WriteLine($"Overlay mode: {_overlayLayers}");
+        AddHudMessage($"Overlay activo: {_overlayLayers}");
     }
 
     private void ToggleInfoPanel(InfoPanel panel)
     {
         _infoPanel = _infoPanel == panel ? InfoPanel.None : panel;
+        if (_infoPanel == InfoPanel.None)
+        {
+            AddHudMessage("Panel de información oculto.");
+        }
+        else
+        {
+            AddHudMessage($"Panel de información: {_infoPanel}");
+        }
+    }
+
+    private void BuildHudPanel(Viewport viewport)
+    {
+        _uiHudPanel = null;
+        _hudPaperDollWidget = null;
+        _hudPortraitWidget = null;
+        _hudQuickActionWidget = null;
+        _hudSpriteSize = Point.Zero;
+        if (_uiSpriteLibrary is null)
+        {
+            return;
+        }
+
+        if (!_uiSpriteLibrary.TryGetSprite("fondo", out var sprite))
+        {
+            Console.Error.WriteLine("HUD sprite 'fondo' not found in atlas.");
+            return;
+        }
+
+        _hudSpriteSize = new Point(sprite.Source.Width, sprite.Source.Height);
+        var hudPanel = new UiPanel(string.Empty, Rectangle.Empty)
+        {
+            Draggable = false,
+            DragAnywhere = false,
+            UseDefaultChrome = false,
+            HeaderHeight = 0,
+            ContentPadding = 0,
+            Visible = _showHud
+        };
+        hudPanel.AddWidget(new UiSpriteWidget(_uiSpriteLibrary, "fondo"));
+        _uiMinimapWidget = new UiMinimapWidget(GraphicsDevice, _textureRoots);
+        _uiMinimapWidget.SetMap(_activeMap);
+        _uiMinimapWidget.Offset = new Vector2(0f, HudContentOffsetY);
+        hudPanel.AddWidget(_uiMinimapWidget);
+        _uiMapNameLabel = new UiLabel(string.Empty, HudPoint(8f, -6f), Color.LightGreen);
+        hudPanel.AddWidget(_uiMapNameLabel);
+        _uiHudHintLabel = new UiLabel(string.Empty, HudPoint(482f, 70f), Color.White);
+        hudPanel.AddWidget(_uiHudHintLabel);
+        _uiHudStatsLabel = new UiLabel(string.Empty, HudPoint(140f, 32f), Color.White);
+        hudPanel.AddWidget(_uiHudStatsLabel);
+        _uiHudSkillLabel = new UiLabel(string.Empty, HudPoint(300f, 32f), Color.White);
+        hudPanel.AddWidget(_uiHudSkillLabel);
+        _uiHudCombatStatsLabel = new UiLabel(string.Empty, HudPoint(300f, 82f), Color.White);
+        hudPanel.AddWidget(_uiHudCombatStatsLabel);
+        _uiHudSpellDetailLabel = new UiLabel(string.Empty, HudPoint(640f, 68f), Color.White);
+        hudPanel.AddWidget(_uiHudSpellDetailLabel);
+        _uiHudHealthLabel = new UiLabel(string.Empty, HudPoint(522f, 86f), Color.White);
+        hudPanel.AddWidget(_uiHudHealthLabel);
+        _uiHudManaLabel = new UiLabel(string.Empty, HudPoint(522f, 100f), Color.White);
+        hudPanel.AddWidget(_uiHudManaLabel);
+        _uiHudFoodLabel = new UiLabel(string.Empty, HudPoint(522f, 114f), Color.White);
+        hudPanel.AddWidget(_uiHudFoodLabel);
+        _uiHudGoldLabel = new UiLabel(string.Empty, HudPoint(916f, 115f), Color.White);
+        hudPanel.AddWidget(_uiHudGoldLabel);
+        _uiHudSilverLabel = new UiLabel(string.Empty, HudPoint(916f, 102f), Color.White);
+        hudPanel.AddWidget(_uiHudSilverLabel);
+        _uiHudMenuLabel = new UiLabel("Menú", HudPoint(522f, 68f), Color.LightYellow);
+        hudPanel.AddWidget(_uiHudMenuLabel);
+        _uiHudItemDetailLabel = new UiLabel("Item: --", HudPoint(640f, 128f), Color.White);
+        hudPanel.AddWidget(_uiHudItemDetailLabel);
+        _uiHudInventoryTabLabel = new UiLabel("Inventario", HudPoint(1148f, 6f), Color.White);
+        hudPanel.AddWidget(_uiHudInventoryTabLabel);
+        _uiHudSpellTabLabel = new UiLabel("Hechizos", HudPoint(1212f, 6f), Color.Gray);
+        hudPanel.AddWidget(_uiHudSpellTabLabel);
+        _uiHudMessageLabels = new UiLabel[5];
+        for (var i = 0; i < _uiHudMessageLabels.Length; i++)
+        {
+            var offset = HudPoint(432f, 54f - 13f * i);
+            var label = new UiLabel(string.Empty, offset, Color.White);
+            _uiHudMessageLabels[i] = label;
+            hudPanel.AddWidget(label);
+        }
+        if (_uiSpriteLibrary is not null)
+        {
+            if (_uiSpriteLibrary.TryGetSprite("ros", out var portraitSprite))
+            {
+                var columns = Math.Max(1, portraitSprite.Source.Width / PortraitTileSize);
+                var rows = Math.Max(1, portraitSprite.Source.Height / PortraitTileSize);
+                _portraitCount = Math.Max(1, columns * rows);
+                if (_portraitCount > 0)
+                {
+                    _hudPortraitIndex %= _portraitCount;
+                }
+            }
+            _hudPortraitWidget = new HudPortraitWidget(_uiSpriteLibrary)
+            {
+                PortraitIndex = _hudPortraitIndex,
+                Offset = HudPoint(432f, 86f)
+            };
+            _hudPortraitWidget.PortraitClicked += HandlePortraitClicked;
+            hudPanel.AddWidget(_hudPortraitWidget);
+
+            _hudPaperDollWidget = new HudPaperDollWidget(_uiSpriteLibrary);
+            _hudPaperDollWidget.GridModeChanged += mode => UpdateHudTabLabels();
+            _hudPaperDollWidget.SpellTabBlocked += () => AddHudMessage("Los guerreros y los bribones no lanzan conjuros.");
+            _hudPaperDollWidget.SpellSlotActivated += HandleSpellSlotActivated;
+            _hudPaperDollWidget.InventorySlotActivated += HandleHudInventorySlotActivated;
+            _hudPaperDollWidget.AdditionalOffset = new Vector2(0f, HudContentOffsetY);
+            hudPanel.AddWidget(_hudPaperDollWidget);
+
+            _hudQuickActionWidget = new HudQuickActionWidget(_uiSpriteLibrary);
+            _hudQuickActionWidget.Offset = HudPoint(640f, 94f);
+            _hudQuickActionWidget.ActionInvoked += HandleQuickActionInvoked;
+            hudPanel.AddWidget(_hudQuickActionWidget);
+        }
+        _hudMessageLog.StickToBottom(_uiHudMessageLabels.Length);
+        _uiHudPanel = hudPanel;
+        AddHudMessage("Interfaz preparada.");
+        UpdateHudPanelBounds(viewport);
+        PopulateInventoryPreview();
+        UpdateHudTabLabels();
+        UpdateHudPortrait();
+    }
+
+    private void UpdateHudPanelBounds(Viewport viewport)
+    {
+        if (_uiHudPanel is null)
+        {
+            UpdateWelcomeMessageAnchor(viewport);
+            return;
+        }
+
+        var width = _hudSpriteSize.X > 0 ? _hudSpriteSize.X : viewport.Width;
+        var height = _hudSpriteSize.Y > 0 ? _hudSpriteSize.Y : 144;
+        var x = width >= viewport.Width ? 0 : (viewport.Width - width) / 2;
+        var y = Math.Max(0, viewport.Height - height);
+        var bounds = new Rectangle(x, y, Math.Min(width, viewport.Width), height);
+        _uiHudPanel.SetBounds(bounds);
+        UpdateWelcomeMessageAnchor(viewport);
+    }
+
+    private void UpdateWelcomeMessageAnchor(Viewport viewport)
+    {
+        var minimapTop = _uiHudPanel?.Bounds.Top + HudContentOffsetY ?? viewport.Height * 0.75f;
+        var healthBottom = 32f;
+        var y = MathHelper.Lerp(healthBottom, minimapTop, 0.5f);
+        _welcomeMessagePosition = new Vector2(16f, y);
+    }
+
+    private void UpdateHudVisibility()
+    {
+        if (_uiHudPanel is not null)
+        {
+            _uiHudPanel.Visible = _showHud;
+        }
+    }
+
+    private void UpdateHudTabLabels()
+    {
+        var activeMode = _hudPaperDollWidget?.GridMode ?? HudGridMode.Inventory;
+        var hasSpells = _hudPaperDollWidget?.SpellTabAvailable ?? false;
+        var activeColor = Color.LightYellow;
+        var inactiveColor = new Color(140, 140, 140);
+        var disabledColor = new Color(80, 80, 80);
+        if (_uiHudInventoryTabLabel is not null)
+        {
+            _uiHudInventoryTabLabel.Color = activeMode == HudGridMode.Inventory ? activeColor : inactiveColor;
+        }
+
+        if (_uiHudSpellTabLabel is not null)
+        {
+            if (!hasSpells)
+            {
+                _uiHudSpellTabLabel.Color = disabledColor;
+            }
+            else
+            {
+                _uiHudSpellTabLabel.Color = activeMode == HudGridMode.Spells ? activeColor : inactiveColor;
+            }
+        }
+    }
+
+    private static Vector2 HudPoint(float x, float y)
+    {
+        return new Vector2(x, y + HudContentOffsetY);
+    }
+
+    private void UpdateHudPortrait()
+    {
+        if (_hudPortraitWidget is not null)
+        {
+            _hudPortraitWidget.PortraitIndex = _hudPortraitIndex;
+        }
+    }
+
+    private void PopulateInventoryPreview()
+    {
+        var equipment = BuildEquipmentPreview();
+        var backpack = BuildBackpackPreviewItems(out var backpackIds);
+        _backpackPreviewItemIds = backpackIds;
+        _uiInventoryWidget?.SetEquipment(equipment);
+        _uiInventoryWidget?.SetBackpack(backpack);
+        var equipmentIcons = BuildEquipmentIconPreview();
+        var backpackIcons = BuildBackpackIconPreview();
+        _hudPaperDollWidget?.SetEquipmentIcons(equipmentIcons);
+        _hudPaperDollWidget?.SetBackpackIcons(backpackIcons);
+        var spellIcons = BuildSpellIconPreview();
+        _hudPaperDollWidget?.SetSpellIcons(spellIcons);
+        var quickIcons = BuildQuickActionIcons(equipmentIcons, backpackIcons, spellIcons);
+        _hudQuickActionWidget?.SetIcons(quickIcons);
+        UpdateHudTabLabels();
+        UpdateSpellDetail(null);
+        UpdateHudItemDetail(null);
+        OnInventorySelectionChanged(InventorySelectionChangedEventArgs.None);
+        ResetQuickActionState();
+    }
+
+    private void ResetQuickActionState()
+    {
+        _activeQuickActionSlot = -1;
+        _activeQuickItemIcon = null;
+        _activeQuickSpellIcon = null;
+        _hudQuickAttackLabel = "Sin seleccionar";
+        _hudQuickSpellLabel = "Ninguno";
+        if (_hudQuickActionWidget is not null)
+        {
+            _hudQuickActionWidget.ActiveIndex = -1;
+        }
+        RefreshHudHintLabel();
+    }
+
+    private void RefreshHudHintLabel()
+    {
+        if (_uiHudHintLabel is null)
+        {
+            return;
+        }
+
+        _uiHudHintLabel.Text =
+            $"Ataque rápido: {_hudQuickAttackLabel}\nHechizo rápido: {_hudQuickSpellLabel}\n{HudControlsHelpText}";
+    }
+
+    private void SetQuickActionHighlight(int slot)
+    {
+        _activeQuickActionSlot = slot;
+        if (_hudQuickActionWidget is not null)
+        {
+            _hudQuickActionWidget.ActiveIndex = slot;
+        }
+    }
+
+    private void AddHudMessage(string message)
+    {
+        var visible = _uiHudMessageLabels?.Length ?? 5;
+        _hudMessageLog.Add(message, visible);
+    }
+
+    private void ScrollHudMessages(int delta)
+    {
+        var visible = _uiHudMessageLabels?.Length ?? 5;
+        _hudMessageLog.Scroll(delta, visible);
+    }
+
+    private void UpdateHudText()
+    {
+        var mapName = _activeMap?.Header.Name ?? "SIN MAPA";
+        var mapWidth = _activeMap?.Terrain.FirstOrDefault()?.Count ?? 0;
+        var mapHeight = _activeMap?.Terrain.Count ?? 0;
+        var nestCount = _activeMap?.Nests.Count ?? 0;
+        var merchantCount = _activeMap?.Merchants.Count ?? 0;
+        var sensorCount = _activeMap?.Sensors.Count ?? 0;
+        var monsterCount = _worldState.Monsters.Count;
+        var networkMode = _networkFeedActive ? "Servidor" : "Simulación local";
+        var overlayLabel = _overlayLayers == OverlayLayers.None ? "sin overlay" : _overlayLayers.ToString();
+        var infoPanelLabel = _infoPanel == InfoPanel.None ? "ninguno" : _infoPanel.ToString();
+
+        if (_activeMap is not null && _camera is not null)
+        {
+            var worldWidth = mapWidth * TileWidth;
+            var worldHeight = mapHeight * TileHeight;
+            if (worldWidth > 0 && worldHeight > 0)
+            {
+                var center = _camera.Position + new Vector2(
+                    _camera.ViewportWidth / (2f * _camera.ZoomFactor),
+                    _camera.ViewportHeight / (2f * _camera.ZoomFactor));
+                var normalized = new Vector2(
+                    MathHelper.Clamp(center.X / worldWidth, 0f, 1f),
+                    MathHelper.Clamp(center.Y / worldHeight, 0f, 1f));
+                _uiMinimapWidget?.SetHighlight(normalized);
+            }
+        }
+        else
+        {
+            _uiMinimapWidget?.SetHighlight(null);
+        }
+
+        if (_uiMapNameLabel is not null)
+        {
+            _uiMapNameLabel.Text = mapName;
+        }
+
+        _welcomeMessage =
+            "Bienvenido al mundo de Artes Arcanas\nEl servidor permite usar varios avatares al mismo tiempo.";
+
+        RefreshHudHintLabel();
+
+        if (_uiHudMenuLabel is not null)
+        {
+            _uiHudMenuLabel.Text = "Menú";
+        }
+
+        if (_uiHudStatsLabel is not null)
+        {
+            _uiHudStatsLabel.Text = BuildCharacterSummary();
+        }
+
+        if (_uiHudSkillLabel is not null)
+        {
+            var skills = _playerState.SkillLines.Count > 0
+                ? string.Join('\n', _playerState.SkillLines)
+                : string.Empty;
+            _uiHudSkillLabel.Text = skills;
+        }
+
+        if (_uiHudCombatStatsLabel is not null)
+        {
+            _uiHudCombatStatsLabel.Text = _playerState.CombatLines.Count > 0
+                ? string.Join('\n', _playerState.CombatLines)
+                : string.Empty;
+        }
+
+        var healthRatio = _playerState.MaxHealth > 0
+            ? Math.Clamp((float)_playerState.Health / _playerState.MaxHealth, 0f, 1f)
+            : 0f;
+        _hudHealthFill = healthRatio;
+        if (_uiHudHealthLabel is not null)
+        {
+            _uiHudHealthLabel.Text = $"Salud {_playerState.Health} / {_playerState.MaxHealth}";
+        }
+
+        var manaRatio = _playerState.MaxMana > 0
+            ? Math.Clamp((float)_playerState.Mana / _playerState.MaxMana, 0f, 1f)
+            : 0f;
+        _hudManaFill = manaRatio;
+        if (_uiHudManaLabel is not null)
+        {
+            _uiHudManaLabel.Text = $"Mana {_playerState.Mana} / {_playerState.MaxMana}";
+        }
+
+        if (_uiHudFoodLabel is not null)
+        {
+            _uiHudFoodLabel.Text = $"Comida {_playerState.FoodPercent}%";
+        }
+
+        if (_uiHudGoldLabel is not null)
+        {
+            _uiHudGoldLabel.Text = $"MO {_playerState.Gold}";
+        }
+
+        if (_uiHudSilverLabel is not null)
+        {
+            _uiHudSilverLabel.Text = $"MP {_playerState.Silver}";
+        }
+
+        if (_uiHudMessageLabels is not null)
+        {
+            var lines = _hudMessageLog.GetVisibleLines(_uiHudMessageLabels.Length);
+            for (var i = 0; i < _uiHudMessageLabels.Length; i++)
+            {
+                _uiHudMessageLabels[i].Text = i < lines.Count ? lines[i] : string.Empty;
+            }
+        }
     }
 
     private bool IsKeyPressed(KeyboardState current, Keys key)
     {
         return current.IsKeyDown(key) && !_previousKeyboard.IsKeyDown(key);
+    }
+
+    private void DrawResourceBars()
+    {
+        if (!_showHud || _spriteBatch is null || _uiSpriteLibrary is null)
+        {
+            return;
+        }
+
+        if (!_uiSpriteLibrary.TryGetSprite("barra", out var sprite))
+        {
+            return;
+        }
+
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.NonPremultiplied);
+
+        DrawResourceBar(sprite, new Vector2(0f, 0f), _hudHealthFill, flip: false, Color.DarkRed);
+        var rightX = GraphicsDevice.Viewport.Width - sprite.Source.Width;
+        DrawResourceBar(sprite, new Vector2(rightX, 0f), _hudManaFill, flip: true, Color.CornflowerBlue);
+
+        _spriteBatch.End();
+    }
+
+    private void DrawResourceBar(UiSprite sprite, Vector2 position, float ratio, bool flip, Color tint)
+    {
+        ratio = Math.Clamp(ratio, 0f, 1f);
+        var frameSource = new Rectangle(sprite.Source.X, sprite.Source.Y, 116, 32);
+        var dest = new Rectangle(
+            (int)Math.Round(position.X),
+            (int)Math.Round(position.Y),
+            frameSource.Width,
+            frameSource.Height);
+        var effects = flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        _spriteBatch!.Draw(sprite.Texture, dest, frameSource, Color.White, 0f, Vector2.Zero, effects, 0f);
+
+        var fillPixels = (int)Math.Round(96f * ratio);
+        if (fillPixels <= 0)
+        {
+            return;
+        }
+
+        var sourceX = sprite.Source.X + 20;
+        if (flip)
+        {
+            sourceX += 96 - fillPixels;
+        }
+
+        var fillSource = new Rectangle(sourceX, sprite.Source.Y + 32, fillPixels, 24);
+        var fillDestX = flip ? dest.Right - 16 - fillPixels : dest.Left + 16;
+        var fillDest = new Rectangle(fillDestX, dest.Top + 8, fillPixels, 24);
+        _spriteBatch.Draw(sprite.Texture, fillDest, fillSource, tint * 0.85f);
+    }
+
+    private void DrawWelcomeMessage()
+    {
+        if (!_showHud || _spriteBatch is null || _debugTextRenderer is null)
+        {
+            return;
+        }
+
+        var text = _welcomeMessage;
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return;
+        }
+
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp, blendState: BlendState.NonPremultiplied);
+        _debugTextRenderer.DrawString(_spriteBatch, text, _welcomeMessagePosition, Color.LightYellow, scale: 2f);
+        _spriteBatch.End();
     }
 
     private void DrawHud()
@@ -1696,5 +2925,54 @@ public class Game1 : Game
         }
 
         return $"ITEM #{itemId:D3}";
+    }
+
+    private string ResolveSpellName(int spellId)
+    {
+        if (_spellDocument is null)
+        {
+            return $"Hechizo #{spellId:D3}";
+        }
+
+        if (spellId >= 0 && spellId < _spellDocument.Names.Count)
+        {
+            var name = _spellDocument.Names[spellId];
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                return name;
+            }
+        }
+
+        return $"Hechizo #{spellId:D3}";
+    }
+
+    private string ResolveMonsterName(int monsterIndex)
+    {
+        if (_monsterDocument is null)
+        {
+            return $"Monstruo #{monsterIndex:D3}";
+        }
+
+        if (monsterIndex >= 0 && monsterIndex < _monsterDocument.Monsters.Count)
+        {
+            var name = _monsterDocument.Monsters[monsterIndex].Name;
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                return name;
+            }
+        }
+
+        return $"Monstruo #{monsterIndex:D3}";
+    }
+
+    private static string ResolveAttackName(int attackIndex)
+    {
+        if (AttackNames.Length == 0)
+        {
+            return $"Ataque #{attackIndex}";
+        }
+
+        var index = Math.Abs(attackIndex) % AttackNames.Length;
+        return AttackNames[index];
     }
 }

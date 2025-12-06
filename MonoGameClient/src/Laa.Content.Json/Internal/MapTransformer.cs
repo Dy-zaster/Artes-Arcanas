@@ -15,10 +15,10 @@ internal static class MapTransformer
     private const int CompressedSize = 64;
     private const int ExpandedSize = 256;
     private const int ExpansionFactor = ExpandedSize / CompressedSize;
-    private const bool ApplyRotation180 = false;
-    private const bool ApplyTranspose = true;
-    private const bool ApplyEntityRotation180 = false;
-    private const bool ApplyEntityTranspose = false;
+    private static readonly bool ApplyRotation180 = false;
+    private static readonly bool ApplyTranspose = true;
+    private static readonly bool ApplyEntityRotation180 = false;
+    private static readonly bool ApplyEntityTranspose = false;
 
     public static MapDocument Normalize(MapDocument document)
     {

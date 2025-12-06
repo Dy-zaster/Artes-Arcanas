@@ -143,6 +143,26 @@ Every UI surface under `Original Pascal/Laa/grf` is referenced by name inside th
 - Splash image drawn while DirectX initializes in `TFEsperar` (`Original Pascal/Laa/SScreen.pas:96-130`).
 - Stored as `logo.bmp` (`CrearDeGDD` call at line 113). The loading form displays it at `(0,0)` together with the progress bar, so the MonoGame splash can simply blit the entire bitmap once.
 
+#### Atlas coordinates for HUD sprites
+
+The AtlasBuilder already packed these files into `MonoGameClient/content/graphics/atlases`. `UiSpriteLibrary` pulls directly from `atlas_manifest.json`, so we can stamp the exact rectangles into code/UI widgets without re-reading BMPs. Coordinates below are straight from the manifest (X/Y/W/H in pixels relative to the named `atlas_0X.png` texture):
+
+| Key | Atlas | Rect | Notes |
+| --- | --- | --- | --- |
+| `fondo` | `atlas_02.png` | `469,0,1280,144` | Entire bottom bar backing (PnMapa/PnInfo/PnGrids regions live inside this strip). |
+| `barra` | `atlas_01.png` | `276,0,116,56` | Contains both HP and MP frame + fill masks; reused by `DibujarBarrasVidaMana`. |
+| `obj` | `atlas_07.png` | `0,0,320,1280` | 8×N grid of 40×40 inventory icons. |
+| `ros` | `atlas_07.png` | `442,0,320,320` | 40×40 portrait grid used by `Tjugador.PrepararImagenJugador`. |
+| `cjr` | `atlas_02.png` | `75,0,320,160` | 40×40 rune tiles for spell slots and merchant scrolls. |
+| `tcca` | `atlas_07.png` | `762,0,160,680` | Construction/comercio inventory panel (baúl/bolsa buttons + grid). |
+| `tccb` | `atlas_07.png` | `922,0,160,664` | Construction menu frame (Fabricar button, materials strip, pagination). |
+| `bmenu` | `atlas_01.png` | `392,0,216,488` | Login/menu buttons (Aceptar/Cancelar/Crear/etc.). |
+| `menu` | `atlas_06.png` | `215,1128,640,480` | Full-screen parchment for menu/login/character creation flow. |
+| `mapa` | `atlas_06.png` | `87,1128,128,128` | Minimap parchment that sits on the far left of the HUD. |
+| `mira` | `atlas_06.png` | `855,1128,56,302` | Minimap crosshair/resaltado overlay extracted from `fondo.bmp` in Delphi. |
+
+Having these rectangles centralized lets the MonoGame HUD request sprites by key instead of duplicating hard-coded offsets from Delphi. Future steps (HUD anchoring, panel composition, inventory grids, etc.) can now reference this table directly or copy it into the UI subsystem as constants.
+
 ## Atlas builder
 
 The repository now includes a small CLI (`Tools/AtlasBuilder`) that repacks the legacy `grf/*` textures (BMP, PNG, JPG/JPEG) into Texture2D-friendly atlases alongside a JSON manifest. The MonoGame client automatically loads the manifest/atlases (if present) and falls back to the raw files when they are missing.

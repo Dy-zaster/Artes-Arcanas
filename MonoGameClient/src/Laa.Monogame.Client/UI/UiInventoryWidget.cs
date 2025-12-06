@@ -7,6 +7,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Laa.Monogame.Client.UI;
 
+public enum InventorySelectionKind
+{
+    None,
+    Equipment,
+    Backpack
+}
+
+public readonly record struct InventorySelectionChangedEventArgs(
+    InventorySelectionKind Kind,
+    int Index,
+    string Label
+)
+{
+    public static readonly InventorySelectionChangedEventArgs None =
+        new(InventorySelectionKind.None, -1, "NINGUNO");
+}
+
 public sealed class UiInventoryWidget : IUiWidget
 {
     private readonly List<KeyValuePair<string, string>> _equipment = new();
@@ -31,6 +48,8 @@ public sealed class UiInventoryWidget : IUiWidget
 
     public string SelectionText { get; private set; } = "NINGUNO";
 
+    public event Action<InventorySelectionChangedEventArgs>? SelectionChanged;
+
     public void SetEquipment(IEnumerable<KeyValuePair<string, string>> entries)
     {
         _equipment.Clear();
@@ -49,6 +68,7 @@ public sealed class UiInventoryWidget : IUiWidget
         _selectedEquipmentIndex = -1;
         _selectedBackpackIndex = -1;
         SelectionText = "NINGUNO";
+        SelectionChanged?.Invoke(InventorySelectionChangedEventArgs.None);
     }
 
     public void SetBackpack(IReadOnlyList<string> items)
@@ -63,6 +83,7 @@ public sealed class UiInventoryWidget : IUiWidget
         _selectedEquipmentIndex = -1;
         _selectedBackpackIndex = -1;
         SelectionText = "NINGUNO";
+        SelectionChanged?.Invoke(InventorySelectionChangedEventArgs.None);
     }
 
     public void Update(GameTime gameTime, MouseState currentMouse, MouseState previousMouse, Rectangle contentBounds)
@@ -172,6 +193,10 @@ public sealed class UiInventoryWidget : IUiWidget
         _selectedBackpackIndex = -1;
         var entry = _equipment[index];
         SelectionText = $"{entry.Key}: {entry.Value}".ToUpperInvariant();
+        SelectionChanged?.Invoke(new InventorySelectionChangedEventArgs(
+            InventorySelectionKind.Equipment,
+            index,
+            SelectionText));
         return true;
     }
 
@@ -210,6 +235,10 @@ public sealed class UiInventoryWidget : IUiWidget
         _selectedBackpackIndex = index;
         _selectedEquipmentIndex = -1;
         SelectionText = $"MOCHILA: {_backpack[index]}".ToUpperInvariant();
+        SelectionChanged?.Invoke(new InventorySelectionChangedEventArgs(
+            InventorySelectionKind.Backpack,
+            index,
+            SelectionText));
         return true;
     }
 }
