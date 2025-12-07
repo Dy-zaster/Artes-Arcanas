@@ -2,11 +2,9 @@
 
 ## Current snapshot
 
-- Legacy client (`Original Pascal/Laa`) built with Delphi 6, heavily tied to Windows-specific APIs and Spanish identifiers.
-- New solution `MonoGameClient/Laa.Monogame.Client` created with .NET 8 and MonoGame DesktopGL.
+- Solution `MonoGameClient/Laa.Monogame.Client` created with .NET 8 and MonoGame DesktopGL.
 - Game bootstrap (`Program.cs`) instantiates `Game1`, which sets up a 1280×720 swap chain, a placeholder sprite batch, and a Content Pipeline definition (`Content/Content.mgcb`).
 - NuGet dependencies declared but not yet restored locally (MonoGame feeds blocked inside this environment). Restoration succeeds when NuGet is reachable.
-- Networking research started: see `Docs/Networking/Protocol.md` for opcode-level documentation extracted from the Delphi sources.
 - Map loading now expands the legacy 64×64 compressed terrain to 256×256 and applies a transpose so screen quadrants match the Delphi client; static graphics/sensors/nests/merchants are transformed accordingly and camera zoom allows viewing the full map. Temporary edge gradients are suppressed when a real terrain sheet is present to avoid neon artifacts.
 
 ## Goals
@@ -21,9 +19,9 @@
 | Phase | Focus | Status | Key Tasks |
 | --- | --- | --- | --- |
 | 0. Foundations | Build system & render loop | ✅ Completed | Solution bootstrap, MonoGame packages, placeholder rendering, repo documentation. |
-| 1. Data extraction | Understand Delphi assets | ✅ Completed | `Tools/LegacyDataExtractor` exports maps, items, spells, commerce tables, monsters, attack/animation mappings, and static graphics as JSON; sample snapshots live under `Docs/Formats/Samples`. |
-| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer that consumes the legacy `terreno.jpg` sheet (from atlases or raw files), animates water/lava tiles, **and now ports the true pseudo-mosaic system using `ti.bmp` masks + Delphi’s 4× upscaling rules**; the oc.b-driven static graphic loader and debug overlays/panels are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is expanding the scene graph/input abstractions. |
-| 3. Gameplay & networking | Logic parity | ⏳ Pending | Port combat loop, inventory/trade, quests, and networking protocol (client-first, server later). |
+| 1. Data extraction | Understand legacy assets | ✅ Completed | `Tools/LegacyDataExtractor` exports maps, items, spells, commerce tables, monsters, attack/animation mappings, and static graphics as JSON; sample snapshots live under `Docs/Formats/Samples`. |
+| 2. Core systems | Rendering & content | 🛠️ In progress | Content layer scaffolding plus a camera-driven tile renderer that consumes the terrain sheet (from atlases), animates water/lava tiles, **and now ports the true pseudo-mosaic system using `ti.bmp` masks + 4× upscaling rules**; the oc.b-driven static graphic loader and debug overlays/panels are in place (`Laa.Content.Core` + `Laa.Content.Json` + `ContentContext` feed the MonoGame client); next up is expanding the scene graph/input abstractions. |
+| 3. Gameplay & networking | Logic parity | ⏳ Pending | Port combat loop, inventory/trade, quests, and design the new protocol (client-first, server later). |
 | 4. Polishing | UX + toolchain | ⏳ Pending | Recreate audio, localization, accessibility, add modern updater/launcher, QA automation. |
 
 Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
@@ -52,9 +50,9 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 - Each module gets a design note (problem statement, Pascal references, and chosen C# structure).
 
 ### 4. Networking
-- Document packet formats from the Pascal client (`Docs/Networking/Protocol.md`). **Status:** ✅ initial opcodes captured; keep expanding as we port features.
-- Implement a .NET socket client with pluggable encryption/compression so it can talk to the existing server before any server rewrite.
-- Abstract serialization/deserialization to isolate endianness and versioning concerns.
+- Define a clean message-based protocol with explicit IDs (login, account, map streaming, combat, commerce) instead of mirroring the Pascal wire format. **Status:** ⏳ design pending.
+- Implement a .NET socket client with pluggable framing/encryption; keep serialization isolated from game logic so server iterations remain safe.
+- Add builders/decoders for request/response messages and document them alongside integration tests.
 
 ### 5. Tooling + QA
 - Recreate essential editors (maps, sprites) either as MonoGame tools or web apps once the core client stabilizes.
@@ -72,8 +70,8 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 ## Risks & mitigations
 
 - **NuGet/network access** – Document commands and keep `NuGet.config` customizable so contributors behind firewalls can restore packages via an internal feed.
-- **Legacy unknowns** – Some Delphi behaviors may rely on undefined order or Windows messages; capture findings early in Docs to avoid rewrites.
-- **Server protocol drift** – Until the server gets modernized, the client must mimic the exact packet structure; prioritize protocol documentation before touching networking.
+- **Legacy unknowns** – Some legacy behaviors may rely on undefined order; capture findings early to avoid rewrites.
+- **Server protocol drift** – Design the new protocol with versioning and explicit message IDs to avoid future rewrites.
 
 ## Immediate next steps
 

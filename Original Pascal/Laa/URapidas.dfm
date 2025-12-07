@@ -1,2 +1,0 @@
-object FRapidas:TFRapidas
-end

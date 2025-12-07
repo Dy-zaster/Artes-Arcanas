@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +12,6 @@ using Laa.Content.Core.Maps;
 using Laa.Content.Core.Monsters;
 using Laa.Content.Core.Spells;
 using Laa.Monogame.Client.Content;
-using Laa.Monogame.Client.Networking;
 using Laa.Monogame.Client.Rendering;
 using Laa.Monogame.Client.UI;
 using Laa.Monogame.Client.World;
@@ -58,11 +56,6 @@ public class Game1 : Game
     private MouseState _previousMouse;
     private IReadOnlyList<StaticGraphic> _sortedStaticGraphics = Array.Empty<StaticGraphic>();
     private readonly WorldState _worldState = new();
-    private INetworkClient? _networkClient;
-    private readonly ConcurrentQueue<NetworkMessage> _networkQueue = new();
-    private readonly ServerCommandDecoder _serverCommandDecoder = new();
-    private bool _networkFeedActive;
-    private bool _loggedDirectionPlaceholder;
     private UiManager? _uiManager;
     private UiPanel? _uiHudPanel;
     private UiPanel? _uiRoadmapWindow;
@@ -382,7 +375,6 @@ public class Game1 : Game
         _hudBackgroundTexture = new Texture2D(GraphicsDevice, 1, 1);
         _hudBackgroundTexture.SetData(new[] { new Color(0f, 0f, 0f, 0.65f) });
         InitializeUiSystem();
-        InitializeNetworkClient();
     }
 
     private void InitializeUiSystem()
@@ -513,41 +505,6 @@ public class Game1 : Game
         _uiManager.AddWindow(_uiMerchantWindow);
     }
 
-    private void InitializeNetworkClient()
-    {
-        _networkFeedActive = false;
-        if (_networkClient is not null)
-        {
-            _networkClient.MessageReceived -= OnNetworkMessageReceived;
-            _networkClient.Dispose();
-            _networkClient = null;
-        }
-
-        try
-        {
-            var client = new MockNetworkClient();
-            client.MessageReceived += OnNetworkMessageReceived;
-            client.ConnectAsync("mock", 0).GetAwaiter().GetResult();
-            _networkClient = client;
-            _networkFeedActive = true;
-            Console.WriteLine("Mock network client connected (scripted monster updates).");
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Failed to initialize mock network client: {ex.Message}");
-        }
-    }
-
-    private void OnNetworkMessageReceived(object? sender, NetworkEventArgs e)
-    {
-        if (e?.Message is null)
-        {
-            return;
-        }
-
-        _networkQueue.Enqueue(e.Message);
-    }
-
     protected override void Update(GameTime gameTime)
     {
         var keyboard = Keyboard.GetState();
@@ -565,14 +522,10 @@ public class Game1 : Game
         HandleAnimationPreviewInput(keyboard);
         HandleMonsterDebugInput(keyboard);
         HandleUiInput(keyboard);
-        ProcessNetworkEvents();
         var hudCapturedScroll = HandleHudScroll(mouse, _previousMouse);
         _cameraController?.Update(gameTime, keyboard, mouse, !hudCapturedScroll);
         _animationPreview?.Update(gameTime);
-        if (!_networkFeedActive)
-        {
-            _monsterSimulation?.Update(gameTime);
-        }
+        _monsterSimulation?.Update(gameTime);
         _uiManager?.Update(gameTime, mouse, _previousMouse);
         // Selection labels now updated via event handler.
         UpdateHudText();
@@ -633,13 +586,6 @@ public class Game1 : Game
             _uiMinimapWidget = null;
             _uiManager?.Dispose();
             _uiSpriteLibrary?.Dispose();
-            if (_networkClient is not null)
-            {
-                _networkClient.MessageReceived -= OnNetworkMessageReceived;
-                _networkClient.Dispose();
-                _networkClient = null;
-                _networkFeedActive = false;
-            }
         }
 
         base.Dispose(disposing);
@@ -883,333 +829,6 @@ public class Game1 : Game
         _worldState.SetMonsters(monsters);
         _monsterRenderer?.SetMonsters(_worldState.Monsters);
         _monsterSimulation?.SetMonsters(_worldState.Monsters);
-    }
-
-    private void ProcessNetworkEvents()
-    {
-        if (_networkQueue.IsEmpty)
-        {
-            return;
-        }
-
-        while (_networkQueue.TryDequeue(out var message))
-        {
-            if (message.Type == NetworkMessageType.RawServerStream)
-            {
-                ProcessServerStream(message.Payload.Span);
-                continue;
-            }
-
-            HandleNetworkMessage(message);
-        }
-    }
-
-    private void ProcessServerStream(ReadOnlySpan<byte> payload)
-    {
-        if (payload.IsEmpty)
-        {
-            return;
-        }
-
-        _serverCommandDecoder.Enqueue(payload);
-        foreach (var command in _serverCommandDecoder.Decode())
-        {
-            ApplyServerCommand(command);
-        }
-
-        foreach (var error in _serverCommandDecoder.FlushErrors())
-        {
-            Console.Error.WriteLine($"[NET] {error}");
-            AddHudMessage($"Red: {error}");
-        }
-    }
-
-    private void HandleNetworkMessage(NetworkMessage message)
-    {
-        if (!TryDecodeMonsterPayload(message.Payload.Span, out var payload))
-        {
-            Console.Error.WriteLine($"[NET] Ignoring malformed payload for {message.Type}.");
-            return;
-        }
-
-        switch (message.Type)
-        {
-            case NetworkMessageType.MonsterSpawn:
-                HandleMonsterSpawn(payload);
-                break;
-            case NetworkMessageType.MonsterMove:
-                HandleMonsterMove(payload);
-                break;
-            case NetworkMessageType.MonsterAttack:
-                HandleMonsterAttack(payload);
-                break;
-            case NetworkMessageType.MonsterDeath:
-                HandleMonsterDeath(payload);
-                break;
-            default:
-                Console.WriteLine($"[NET] Unhandled message type {message.Type}.");
-                break;
-        }
-    }
-
-    private void ApplyServerCommand(IServerCommand command)
-    {
-        switch (command)
-        {
-            case SpritePositionCommand single:
-                ApplySpritePosition(single.SpriteId, single.X, single.Y);
-                break;
-            case SpriteBatchPositionCommand batch:
-                foreach (var entry in batch.Entries)
-                {
-                    ApplySpritePosition(entry.SpriteId, entry.X, entry.Y);
-                }
-                break;
-            case SpriteActionCommand action:
-                ApplySpriteAction(action.SpriteId, action.Action);
-                break;
-            case SpriteDirectionCommand direction:
-                ApplySpriteDirection(direction.SpriteId, direction.Direction);
-                break;
-            case LocalPlayerPositionCommand local:
-                Console.WriteLine($"[NET] Local player moved to ({local.X},{local.Y}) dir {local.Direction}.");
-                break;
-            case PlayerHealthCommand hp:
-                ApplyPlayerHealth(hp.Value);
-                break;
-            case PlayerManaCommand mana:
-                ApplyPlayerMana(mana.Value);
-                break;
-            case PlayerFoodCommand food:
-                ApplyPlayerFood(food.Value);
-                break;
-            case PlayerMoneyCommand money:
-                ApplyPlayerMoney(money.Amount);
-                break;
-            case PlayerExperienceCommand xp:
-                ApplyPlayerExperience(xp.Value);
-                break;
-            case PlayerDamageFromMonsterCommand dmgMonster:
-                ApplyPlayerDamageFromMonster(dmgMonster);
-                break;
-            case PlayerDamageFromObjectCommand dmgObject:
-                ApplyPlayerDamageFromObject(dmgObject);
-                break;
-            case PlayerDamageFromSpellCommand dmgSpell:
-                ApplyPlayerDamageFromSpell(dmgSpell);
-                break;
-            default:
-                Console.WriteLine($"[NET] Unhandled command {command.Type}.");
-                break;
-        }
-    }
-
-    private void ApplySpritePosition(int spriteId, byte tileX, byte tileY)
-    {
-        var position = TileToWorldPosition(tileX, tileY);
-        var payload = new MonsterNetworkPayload(spriteId, position, MonsterAction.Moving, 0);
-        HandleMonsterMove(payload);
-    }
-
-    private void ApplySpriteAction(int spriteId, byte actionCode)
-    {
-        var action = TranslateServerAction(actionCode);
-        var monster = _worldState.FindMonster(spriteId);
-        if (monster is null)
-        {
-            Console.Error.WriteLine($"[NET] Action for unknown sprite {spriteId}.");
-            return;
-        }
-
-        monster.SetAction(action);
-        if (action == MonsterAction.Dead)
-        {
-            monster.ResetPosition();
-        }
-    }
-
-    private void ApplySpriteDirection(int spriteId, byte direction)
-    {
-        if (!_loggedDirectionPlaceholder)
-        {
-            Console.WriteLine("[NET] Sprite direction updates acknowledged (renderer not yet synced).");
-            _loggedDirectionPlaceholder = true;
-        }
-    }
-
-    private void ApplyPlayerHealth(ushort value)
-    {
-        var hp = Math.Clamp((int)value, 0, 2000);
-        _playerState.Health = hp;
-        if (hp > _playerState.MaxHealth)
-        {
-            _playerState.MaxHealth = hp;
-        }
-    }
-
-    private void ApplyPlayerMana(byte value)
-    {
-        var mana = Math.Clamp((int)value, 0, 200);
-        _playerState.Mana = mana;
-        if (mana > _playerState.MaxMana)
-        {
-            _playerState.MaxMana = mana;
-        }
-    }
-
-    private void ApplyPlayerFood(byte value)
-    {
-        _playerState.FoodPercent = Math.Clamp((int)value, 0, 100);
-    }
-
-    private void ApplyPlayerMoney(uint rawValue)
-    {
-        var gold = (int)Math.Clamp(rawValue / 100, 0, int.MaxValue);
-        var silver = (int)(rawValue % 100);
-        _playerState.Gold = gold;
-        _playerState.Silver = silver;
-    }
-
-    private void ApplyPlayerExperience(ushort value)
-    {
-        _playerState.ExperienceNeeded = value;
-    }
-
-    private void ApplyPlayerDamageFromMonster(PlayerDamageFromMonsterCommand command)
-    {
-        ApplyPlayerHealth(command.NewHealth);
-        var monsterName = ResolveMonsterName(command.MonsterIndex);
-        var attack = ResolveAttackName(command.AttackIndex);
-        AddHudMessage($"{monsterName} te ataca con {attack}. Salud {_playerState.Health}/{_playerState.MaxHealth}.");
-    }
-
-    private void ApplyPlayerDamageFromObject(PlayerDamageFromObjectCommand command)
-    {
-        ApplyPlayerHealth(command.NewHealth);
-        var itemName = ResolveItemName(command.ObjectId);
-        AddHudMessage($"Recibes daño de {itemName} (avatar #{command.AttackerId}). Salud {_playerState.Health}/{_playerState.MaxHealth}.");
-    }
-
-    private void ApplyPlayerDamageFromSpell(PlayerDamageFromSpellCommand command)
-    {
-        ApplyPlayerHealth(command.NewHealth);
-        var spellName = ResolveSpellName(command.SpellId);
-        AddHudMessage($"El hechizo {spellName} te alcanza (avatar #{command.AttackerId}). Salud {_playerState.Health}/{_playerState.MaxHealth}.");
-    }
-
-    private void HandleMonsterSpawn(in MonsterNetworkPayload payload)
-    {
-        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterSpawn);
-        if (monster is null)
-        {
-            return;
-        }
-
-        if (payload.Position != Vector2.Zero)
-        {
-            monster.SetPosition(payload.Position);
-        }
-        else
-        {
-            monster.ResetPosition();
-        }
-
-        monster.SetAction(payload.Action);
-    }
-
-    private void HandleMonsterMove(in MonsterNetworkPayload payload)
-    {
-        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterMove);
-        if (monster is null)
-        {
-            return;
-        }
-
-        if (payload.Position != Vector2.Zero)
-        {
-            monster.SetPosition(payload.Position);
-        }
-
-        monster.SetAction(payload.Action);
-    }
-
-    private void HandleMonsterAttack(in MonsterNetworkPayload payload)
-    {
-        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterAttack);
-        if (monster is null)
-        {
-            return;
-        }
-
-        monster.SetAction(MonsterAction.Attack);
-    }
-
-    private void HandleMonsterDeath(in MonsterNetworkPayload payload)
-    {
-        var monster = ResolveMonster(payload.Id, NetworkMessageType.MonsterDeath);
-        if (monster is null)
-        {
-            return;
-        }
-
-        monster.SetAction(MonsterAction.Dead);
-        monster.ResetPosition();
-    }
-
-    private MonsterEntity? ResolveMonster(int id, NetworkMessageType context)
-    {
-        var monster = _worldState.FindMonster(id);
-        if (monster is null)
-        {
-            Console.Error.WriteLine($"[NET] Monster {id} not found for {context} message.");
-        }
-
-        return monster;
-    }
-
-    private static bool TryDecodeMonsterPayload(ReadOnlySpan<byte> payload, out MonsterNetworkPayload result)
-    {
-        result = default;
-        if (payload.Length < 13)
-        {
-            return false;
-        }
-
-        try
-        {
-            var id = BitConverter.ToInt32(payload.Slice(0, 4));
-            var posX = BitConverter.ToSingle(payload.Slice(4, 4));
-            var posY = BitConverter.ToSingle(payload.Slice(8, 4));
-            var action = (MonsterAction)payload[12];
-            var seed = payload.Length >= 17 ? BitConverter.ToInt32(payload.Slice(13, 4)) : 0;
-            result = new MonsterNetworkPayload(id, new Vector2(posX, posY), action, seed);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    private readonly record struct MonsterNetworkPayload(int Id, Vector2 Position, MonsterAction Action, int Seed);
-
-    private static Vector2 TileToWorldPosition(byte tileX, byte tileY)
-    {
-        return new Vector2(
-            (tileX + 0.5f) * TileWidth,
-            (tileY + 1f) * TileHeight);
-    }
-
-    private static MonsterAction TranslateServerAction(byte action)
-    {
-        return action switch
-        {
-            0 => MonsterAction.Idle,
-            1 => MonsterAction.Moving,
-            2 => MonsterAction.Attack,
-            3 => MonsterAction.Dead,
-            _ => MonsterAction.Idle
-        };
     }
 
     private void UpdateMonsterRenderer(GameTime gameTime)
@@ -2425,7 +2044,6 @@ public class Game1 : Game
         var merchantCount = _activeMap?.Merchants.Count ?? 0;
         var sensorCount = _activeMap?.Sensors.Count ?? 0;
         var monsterCount = _worldState.Monsters.Count;
-        var networkMode = _networkFeedActive ? "Servidor" : "Simulación local";
         var overlayLabel = _overlayLayers == OverlayLayers.None ? "sin overlay" : _overlayLayers.ToString();
         var infoPanelLabel = _infoPanel == InfoPanel.None ? "ninguno" : _infoPanel.ToString();
 

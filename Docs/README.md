@@ -1,12 +1,12 @@
 # Laa MonoGame Client Modernization
 
-The legacy LAa client lives under `Original Pascal/Laa` and was written with Delphi 6. This repository now also contains an incremental rewrite that targets MonoGame + .NET 8 to give the project a maintainable and cross-platform future.
+This repository contains the MonoGame + .NET 8 rewrite of the LAa client. The historical Delphi sources have been removed from the tree to keep the codebase focused on the modern implementation.
 
 ## Repository layout
 
-- `Original Pascal/` – historical Pascal/Delphi sources for the client, server, and tooling.
-- `MonoGameClient/` – new .NET 8 solution that will host the MonoGame-driven client.
+- `MonoGameClient/` – .NET 8 solution that hosts the MonoGame-driven client.
 - `Docs/` – planning notes, architecture decisions, and migration status.
+- `Tools/` – legacy data extraction utilities kept in a separate solution.
 
 ## Technology stack
 
@@ -26,7 +26,7 @@ All runtime names, classes, and variables inside the new client are written in E
    ```bash
    DOTNET_CLI_HOME="$PWD" dotnet new install MonoGame.Templates.CSharp
    ```
-3. Restore and build the new solution (network access to NuGet is required to download the MonoGame packages listed below):
+3. Restore and build the solution (network access to NuGet is required to download the MonoGame packages listed below):
    ```bash
    cd MonoGameClient
    DOTNET_CLI_HOME="$PWD" dotnet restore
@@ -58,11 +58,11 @@ Additional packages (serialization, networking, UI widgets, etc.) will be introd
 
 ## Current MonoGame client snapshot
 
-The new client already boots with the extracted JSON data and renders the sample maps via a camera-driven tile renderer plus oc.b-driven textures pulled directly from the legacy `grf/*.bmp` files (or from `content/graphics` if you provide PNG exports).
+The client boots with the extracted JSON data and renders the sample maps via a camera-driven tile renderer plus oc.b-driven textures pulled from the packaged atlases under `MonoGameClient/content/graphics`.
 
 - Use `dotnet run` under `MonoGameClient/src/Laa.Monogame.Client` to launch the prototype scene.
 - Pan with `WASD`/arrow keys, zoom with the mouse wheel or `+`/`-`.
-- Keep the original assets under `Original Pascal/Laa/grf` (relative to the repo) or copy the converted images into `MonoGameClient/content/graphics`; the renderer auto-discovers both locations and draws the real sprites with oc.b offsets, falling back to gray placeholders only when files are missing.
+- Assets are read from `MonoGameClient/content/graphics` (PNG atlases); the renderer logs placeholders when something is missing.
 - Switch between exported maps with `[` `]` (or PageDown/PageUp) and inspect counts/controls through the built-in HUD (`F1` toggles it).
 - Toggle metadata overlays: `Tab` cycles through sensors → nests → merchants → all → off, number keys `0-4` jump directly to None/Sensors/Nests/Merchants/All.
 - Inspect exported data via panels: `I` (items), `S` (spells), `M` (monsters), `C` (commerce), `F2` (map sensors/nests/merchants). Panels render on the lower-right corner using the built-in debug font; press the same key again to hide them.
