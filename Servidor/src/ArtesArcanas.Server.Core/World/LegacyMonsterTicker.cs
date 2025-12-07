@@ -20,7 +20,7 @@ internal sealed class LegacyMonsterTicker : ILegacyWorldTicker
         _sessions = sessions;
     }
 
-    public async ValueTask TickAsync(LegacyWorldState world, CancellationToken cancellationToken)
+    public async Task TickAsync(LegacyWorldState world, CancellationToken cancellationToken)
     {
         var monsters = world.GetAllMonsters();
         List<Task>? broadcasts = null;

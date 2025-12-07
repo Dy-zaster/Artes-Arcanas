@@ -6,12 +6,14 @@ internal static class LegacyBinaryEncoding
 {
     public static void AppendB2(StringBuilder builder, ushort value)
     {
+        builder.Append((char)2);
         builder.Append((char)(value & 0xFF));
         builder.Append((char)((value >> 8) & 0xFF));
     }
 
     public static void AppendB3(StringBuilder builder, int value)
     {
+        builder.Append((char)3);
         builder.Append((char)(value & 0xFF));
         builder.Append((char)((value >> 8) & 0xFF));
         builder.Append((char)((value >> 16) & 0xFF));
@@ -19,6 +21,7 @@ internal static class LegacyBinaryEncoding
 
     public static void AppendB4(StringBuilder builder, uint value)
     {
+        builder.Append((char)4);
         builder.Append((char)(value & 0xFF));
         builder.Append((char)((value >> 8) & 0xFF));
         builder.Append((char)((value >> 16) & 0xFF));
