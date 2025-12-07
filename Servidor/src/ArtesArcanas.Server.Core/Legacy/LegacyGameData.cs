@@ -8,8 +8,7 @@ public sealed class LegacyGameData
         LegacyCastleStorage castles,
         LegacyPriceStorage prices,
         LegacyItemCatalog items,
-        LegacyMonsterCatalog monsters,
-        LegacyAnimationMap animationMap)
+        LegacyMonsterCatalog monsters)
     {
         Administrators = administrators;
         Clans = clans;
@@ -17,7 +16,6 @@ public sealed class LegacyGameData
         Prices = prices;
         Items = items;
         Monsters = monsters;
-        AnimationMap = animationMap;
     }
 
     public LegacyAdministratorRegistry Administrators { get; }
@@ -26,5 +24,4 @@ public sealed class LegacyGameData
     public LegacyPriceStorage Prices { get; }
     public LegacyItemCatalog Items { get; }
     public LegacyMonsterCatalog Monsters { get; }
-    public LegacyAnimationMap AnimationMap { get; }
 }

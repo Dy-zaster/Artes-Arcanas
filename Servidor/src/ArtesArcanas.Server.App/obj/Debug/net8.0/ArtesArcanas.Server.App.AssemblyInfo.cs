@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ArtesArcanas.Server.App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1302e0d3db9f9c50a6ed6288902cc6c584db249")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8fa3948774e4568e38e7207762991be313ab2972")]
 [assembly: System.Reflection.AssemblyProductAttribute("ArtesArcanas.Server.App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ArtesArcanas.Server.App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

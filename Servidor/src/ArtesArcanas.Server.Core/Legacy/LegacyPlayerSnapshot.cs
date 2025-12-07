@@ -110,34 +110,8 @@ public unsafe struct LegacyPlayerSnapshot
     public byte[] ToByteArray()
     {
         var buffer = new byte[RawSize];
-        MemoryMarshal.Write(buffer.AsSpan(), in this);
+        MemoryMarshal.Write(buffer.AsSpan(), ref this);
         return buffer;
-    }
-
-    public unsafe void SetArmorValue(int index, sbyte value)
-    {
-        if ((uint)index >= 8)
-        {
-            return;
-        }
-
-        fixed (sbyte* armor = Armadura)
-        {
-            armor[index] = value;
-        }
-    }
-
-    public unsafe void SetPartySlot(int index, ushort value)
-    {
-        if ((uint)index >= LegacyConstants.PartySlots)
-        {
-            return;
-        }
-
-        fixed (ushort* party = Camaradas)
-        {
-            party[index] = value;
-        }
     }
 
     public string BuildLoginPayload()
@@ -173,74 +147,6 @@ public unsafe struct LegacyPlayerSnapshot
         {
             var length = Math.Min(name[0], (byte)16);
             return LegacyConstants.LegacyEncoding.GetString(new ReadOnlySpan<byte>(name + 1, length));
-        }
-    }
-
-    public unsafe void GetEquipmentArtifact(int slot, out byte id, out byte modifier)
-    {
-        id = 0;
-        modifier = 0;
-        if ((uint)slot >= LegacyConstants.EquipmentSlots)
-        {
-            return;
-        }
-
-        fixed (byte* equipment = Usando)
-        {
-            var index = slot * 2;
-            id = equipment[index];
-            modifier = equipment[index + 1];
-        }
-    }
-
-    public unsafe void SetEquipmentArtifact(int slot, byte id, byte modifier)
-    {
-        if ((uint)slot >= LegacyConstants.EquipmentSlots)
-        {
-            return;
-        }
-
-        fixed (byte* equipment = Usando)
-        {
-            var index = slot * 2;
-            equipment[index] = id;
-            equipment[index + 1] = modifier;
-        }
-    }
-
-    public unsafe void SetInventoryArtifact(int slot, byte id, byte modifier)
-    {
-        if ((uint)slot >= LegacyConstants.InventoryArtifactSlots)
-        {
-            return;
-        }
-
-        fixed (byte* inventory = Inventario)
-        {
-            var index = slot * 2;
-            inventory[index] = id;
-            inventory[index + 1] = modifier;
-        }
-    }
-
-    public unsafe void SetAvatarName(string name)
-    {
-        var bytes = string.IsNullOrEmpty(name)
-            ? Array.Empty<byte>()
-            : LegacyConstants.LegacyEncoding.GetBytes(name);
-        var length = (byte)Math.Min(16, bytes.Length);
-        fixed (byte* destination = NombreAvatar)
-        {
-            destination[0] = length;
-            for (var i = 0; i < length; i++)
-            {
-                destination[i + 1] = bytes[i];
-            }
-
-            for (var i = length; i < 16; i++)
-            {
-                destination[i + 1] = 0;
-            }
         }
     }
 

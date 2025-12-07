@@ -26,7 +26,6 @@ public sealed class ServerPaths
     public string MapDirectory { get; }
     public string ItemCatalogFile { get; }
     public string MonsterFile { get; }
-    public string AnimationMapFile => Path.Combine(MapDirectory, "mp_anim.b");
 
     public string AvatarDirectory => Path.Combine(LegacyDataDirectory, Legacy.LegacyConstants.AvatarDirectoryName);
     public string AdministratorFile => Path.Combine(LegacyDataDirectory, "admin.dat");
@@ -43,7 +42,7 @@ public sealed class ServerPaths
             Path.Combine(root, "..", "Original Pascal", "Servidor");
         var legacy = Directory.Exists(suggestedLegacy) ? NormalizeDirectory(suggestedLegacy) : root;
 
-        var options = optionsOverride ?? Path.Combine(legacy, "opciones.json");
+        var options = optionsOverride ?? Path.Combine(legacy, "opciones.txt");
         if (!File.Exists(options))
         {
             throw new FileNotFoundException($"No se encontró el archivo de configuración: {options}");

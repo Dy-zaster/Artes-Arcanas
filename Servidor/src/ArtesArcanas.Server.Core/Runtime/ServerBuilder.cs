@@ -46,8 +46,7 @@ public sealed class ServerBuilder
         var prices = LegacyPriceStorage.Load(paths.PricesFile);
         var itemCatalog = LegacyItemCatalog.Load(paths.ItemCatalogFile);
         var monsters = LegacyMonsterCatalog.Load(paths.MonsterFile);
-        var animationMap = LegacyAnimationMap.Load(paths.AnimationMapFile);
-        var data = new LegacyGameData(admins, clans, castles, prices, itemCatalog, monsters, animationMap);
+        var data = new LegacyGameData(admins, clans, castles, prices, itemCatalog, monsters);
         var accountStorage = new LegacyAccountStorage(paths.AvatarDirectory);
         var mapLoader = new LegacyMapLoader(paths.MapDirectory, logger);
         var mapManager = new LegacyMapManager(mapLoader.LoadMaps(options.HighestMapId));

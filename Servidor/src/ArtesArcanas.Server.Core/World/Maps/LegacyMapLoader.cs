@@ -273,9 +273,9 @@ internal sealed class LegacyMapLoader
 
     private static string ReadShortString(BinaryReader reader, int capacity)
     {
-        var declaredLength = reader.ReadByte();
-        var raw = reader.ReadBytes(capacity);
-        var actual = Math.Min((int)declaredLength, capacity);
+            var declaredLength = reader.ReadByte();
+            var raw = reader.ReadBytes(capacity);
+            var actual = Math.Min((int)declaredLength, capacity);
         if (actual <= 0)
         {
             return string.Empty;
@@ -283,7 +283,7 @@ internal sealed class LegacyMapLoader
 
         return LegacyConstants.LegacyEncoding.GetString(raw, 0, actual);
     }
-
+}
     private static IReadOnlyList<LegacyMapSensorDefinition> ReadSensors(BinaryReader reader, int count)
     {
         if (count <= 0)
@@ -310,5 +310,3 @@ internal sealed class LegacyMapLoader
 
         return sensors;
     }
-
-}

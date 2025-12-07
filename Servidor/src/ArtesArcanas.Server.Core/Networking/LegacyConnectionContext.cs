@@ -2,7 +2,6 @@ using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -28,7 +27,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
     private readonly LegacySessionManager _sessionManager;
     private readonly IServerLogger _logger;
     private readonly CancellationToken _serverToken;
-    private readonly int _remoteAddress;
     private readonly List<byte> _buffer = new();
     private readonly SemaphoreSlim _writeLock = new(1, 1);
 
@@ -47,7 +45,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
     private bool _spawnNotificationSent;
     private bool _spawnRepositioned;
     private byte _lastBroadcastedMapId = byte.MaxValue;
-    private int _packetTraceCount;
 
     public LegacyConnectionContext(
         TcpClient client,
@@ -74,7 +71,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         _serverToken = serverToken;
         Code = code;
         HandshakeSeed = CreateHandshakeSeed();
-        _remoteAddress = EncodeRemoteAddress(client);
     }
 
     public ushort Code { get; }
@@ -188,29 +184,20 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
 
             if (!_loggedIn)
             {
-                switch (opcode)
+                if (opcode != '!')
                 {
-                    case '!':
-                        if (!TryExtractLoginCommand(out var loginCommand))
-                        {
-                            return true;
-                        }
-
-                        await HandleLoginCommandAsync(loginCommand, token).ConfigureAwait(false);
-                        continue;
-                    case '*':
-                        if (!TryExtractCreationCommand(out var creationCommand))
-                        {
-                            return true;
-                        }
-
-                        await HandleCreationCommandAsync(creationCommand, token).ConfigureAwait(false);
-                        continue;
-                    default:
-                        _logger.Warning($"[{Code}] Comando inesperado antes de iniciar sesión ('{opcode}').");
-                        Consume(1);
-                        continue;
+                    _logger.Warning($"[{Code}] Comando inesperado antes de iniciar sesión ('{opcode}').");
+                    Consume(1);
+                    continue;
                 }
+
+                if (!TryExtractLoginCommand(out var loginCommand))
+                {
+                    return true;
+                }
+
+                await HandleLoginCommandAsync(loginCommand, token).ConfigureAwait(false);
+                continue;
             }
 
             switch (opcode)
@@ -303,56 +290,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         return true;
     }
 
-    private bool TryExtractCreationCommand(out CreationCommand command)
-    {
-        command = default;
-        const int passwordLength = 32;
-        const int headerLength = 1 + 2 + 1 + 4 + 1;
-        if (!EnsureAvailable(headerLength))
-        {
-            return false;
-        }
-
-        var header = PeekSpan(headerLength);
-        var pericias = BinaryPrimitives.ReadUInt16LittleEndian(header.Slice(1, 2));
-        var raceCategory = header[3];
-        var packedSkills = BinaryPrimitives.ReadUInt32LittleEndian(header.Slice(4, 4));
-        var nameLength = header[8];
-        var totalLength = headerLength + nameLength + passwordLength;
-        if (!EnsureAvailable(totalLength))
-        {
-            return false;
-        }
-
-        var span = PeekSpan(totalLength);
-        var nameBytes = span.Slice(headerLength, nameLength);
-        var trimmedLength = Math.Min(nameBytes.Length, 16);
-        var avatarName = trimmedLength > 0
-            ? LegacyConstants.LegacyEncoding.GetString(nameBytes[..trimmedLength])
-            : string.Empty;
-        avatarName = avatarName.TrimEnd('\0');
-
-        var password = new byte[passwordLength];
-        span.Slice(headerLength + nameLength, passwordLength).CopyTo(password);
-        Consume(totalLength);
-
-        var data = new LegacyCharacterCreationData(
-            pericias,
-            (byte)(raceCategory & 0x0F),
-            (byte)(raceCategory >> 4),
-            (packedSkills & 0x8000_0000) != 0,
-            (byte)((packedSkills >> 5) & 0x1F),
-            (byte)((packedSkills >> 15) & 0x1F),
-            (byte)((packedSkills >> 10) & 0x1F),
-            (byte)((packedSkills >> 20) & 0x1F),
-            (byte)(packedSkills & 0x1F),
-            avatarName,
-            password);
-
-        command = new CreationCommand(data);
-        return true;
-    }
-
     private async Task HandleLoginCommandAsync(LoginCommand command, CancellationToken token)
     {
         if (_loginName is not null)
@@ -419,54 +356,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         await SendMapRefreshAsync(_playerSnapshot, token).ConfigureAwait(false);
         await SendInitialWorldStateAsync(token).ConfigureAwait(false);
         await NotifyArrivalAsync().ConfigureAwait(false);
-        await SendLoginFinalizationAsync(token).ConfigureAwait(false);
-    }
-
-    private async Task HandleCreationCommandAsync(CreationCommand command, CancellationToken token)
-    {
-        if (_options.VerificationMode)
-        {
-            await SendLegacyAsync("EM", token).ConfigureAwait(false);
-            return;
-        }
-
-        var login = LegacySecurity.SanitizeLogin(command.Data.AvatarName);
-        if (_accounts.Exists(login))
-        {
-            await SendLegacyAsync("EO", token).ConfigureAwait(false);
-            return;
-        }
-
-        try
-        {
-            var status = LegacyCharacterCreator.TryCreate(
-                command.Data,
-                login,
-                _remoteAddress,
-                _options,
-                _gameData,
-                out var account);
-
-            switch (status)
-            {
-                case LegacyCreationStatus.Success when account is not null:
-                    await _accounts.WriteAsync(account, token).ConfigureAwait(false);
-                    await SendLegacyAsync("IC" + ((char)login.Length) + login, token).ConfigureAwait(false);
-                    _logger.Info($"[{Code}] Cuenta creada: {login}.");
-                    break;
-                case LegacyCreationStatus.Denied:
-                    await SendLegacyAsync("ED", token).ConfigureAwait(false);
-                    break;
-                default:
-                    await SendLegacyAsync("EO", token).ConfigureAwait(false);
-                    break;
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.Error($"[{Code}] Error creando la cuenta {login}.", ex);
-            await SendLegacyAsync("EO", token).ConfigureAwait(false);
-        }
     }
 
     private async Task SendLoginSequenceAsync(CancellationToken token)
@@ -485,16 +374,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         builder.Append(payload);
 
         await SendLegacyAsync(builder.ToString(), token).ConfigureAwait(false);
-        await SendActiveClanListAsync(token).ConfigureAwait(false);
-    }
-
-    private async Task SendLoginFinalizationAsync(CancellationToken token)
-    {
-        if (!_loggedIn)
-        {
-            return;
-        }
-
         await SendLegacyAsync("!", token).ConfigureAwait(false);
 
         if (!string.IsNullOrWhiteSpace(_options.WelcomeMessage))
@@ -505,6 +384,7 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         await SendInfoMessageAsync("Servidor en migración a .NET: aún no hay mundo activo.", token).ConfigureAwait(false);
         await SendClanStatusAsync(token).ConfigureAwait(false);
         await SendMapEconomyStatusAsync(token).ConfigureAwait(false);
+        await SendActiveClanListAsync(token).ConfigureAwait(false);
         await SendMapCastleStatusAsync(token).ConfigureAwait(false);
 
         if (_options.AllowMultipleSessions)
@@ -633,6 +513,11 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
 
         foreach (var other in _world.GetPlayers())
         {
+            if (other.Code == Code)
+            {
+                continue;
+            }
+
             var snapshot = other.Snapshot;
             if (snapshot.CodigoMapa != mapId)
             {
@@ -1076,19 +961,19 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         switch (command.SubCommand)
         {
             case 'P':
-                await HandleClanBannerChangeAsync(command.Payload, token).ConfigureAwait(false);
+                await HandleClanBannerChangeAsync(command.Payload.Span, token).ConfigureAwait(false);
                 break;
             case '(':
-                await HandleClanColorChangeAsync(command.Payload, token).ConfigureAwait(false);
+                await HandleClanColorChangeAsync(command.Payload.Span, token).ConfigureAwait(false);
                 break;
             case 'N':
                 await HandleClanRenameAsync(command.Payload, token).ConfigureAwait(false);
                 break;
             case 'R':
-                await HandleClanRecruitAsync(command.Payload, token).ConfigureAwait(false);
+                await HandleClanRecruitAsync(command.Payload.Span, token).ConfigureAwait(false);
                 break;
             case 'D':
-                await HandleClanRemovalAsync(command.Payload, token).ConfigureAwait(false);
+                await HandleClanRemovalAsync(command.Payload.Span, token).ConfigureAwait(false);
                 break;
             case 'L':
                 await HandleClanMemberListAsync(token).ConfigureAwait(false);
@@ -1099,7 +984,7 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         }
     }
 
-    private async Task HandleClanBannerChangeAsync(ReadOnlyMemory<byte> payload, CancellationToken token)
+    private async Task HandleClanBannerChangeAsync(ReadOnlySpan<byte> payload, CancellationToken token)
     {
         if (payload.Length < 8)
         {
@@ -1113,21 +998,20 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
             return;
         }
 
-        var resolvedClan = clan!;
-        var primary = BinaryPrimitives.ReadUInt32LittleEndian(payload.Span[..4]);
-        var secondary = BinaryPrimitives.ReadUInt32LittleEndian(payload.Span.Slice(4, 4));
+        var primary = BinaryPrimitives.ReadUInt32LittleEndian(payload[..4]);
+        var secondary = BinaryPrimitives.ReadUInt32LittleEndian(payload.Slice(4, 4));
 
-        if (!_gameData.Clans.TrySetBanner(resolvedClan.Id, primary, secondary, out _, out var updateError))
+        if (!_gameData.Clans.TrySetBanner(clan.Id, primary, secondary, out _, out var updateError))
         {
             await SendInfoMessageAsync(updateError ?? "No se pudo actualizar el pendón del clan.", token).ConfigureAwait(false);
             return;
         }
 
-        await BroadcastClanBannerAsync(resolvedClan.Id, primary, secondary).ConfigureAwait(false);
+        await BroadcastClanBannerAsync(clan.Id, primary, secondary).ConfigureAwait(false);
         await SendInfoMessageAsync("Pendón actualizado.", token).ConfigureAwait(false);
     }
 
-    private async Task HandleClanColorChangeAsync(ReadOnlyMemory<byte> payload, CancellationToken token)
+    private async Task HandleClanColorChangeAsync(ReadOnlySpan<byte> payload, CancellationToken token)
     {
         if (payload.Length < 1)
         {
@@ -1141,23 +1025,30 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
             return;
         }
 
-        var color = payload.Span[0];
-        var resolvedClan = clan!;
-        if (!_gameData.Clans.TrySetColor(resolvedClan.Id, color, out _, out var updateError))
+        var color = payload[0];
+        if (!_gameData.Clans.TrySetColor(clan.Id, color, out _, out var updateError))
         {
             await SendInfoMessageAsync(updateError ?? "No se pudo actualizar el color del clan.", token).ConfigureAwait(false);
             return;
         }
 
-        await BroadcastClanColorAsync(resolvedClan.Id, color).ConfigureAwait(false);
+        await BroadcastClanColorAsync(clan.Id, color).ConfigureAwait(false);
         await SendInfoMessageAsync("Color del clan actualizado.", token).ConfigureAwait(false);
     }
 
     private async Task HandleClanRenameAsync(ReadOnlyMemory<byte> payload, CancellationToken token)
     {
-        if (!TryParseClanRenamePayload(payload, out var desiredName, out var parseError))
+        if (payload.Length <= 0)
         {
-            await SendInfoMessageAsync(parseError ?? "Nombre del clan inválido.", token).ConfigureAwait(false);
+            await SendInfoMessageAsync("Nombre del clan inválido.", token).ConfigureAwait(false);
+            return;
+        }
+
+        var span = payload.Span;
+        var length = span[0];
+        if (length == 0 || payload.Length - 1 < length)
+        {
+            await SendInfoMessageAsync("Nombre del clan inválido.", token).ConfigureAwait(false);
             return;
         }
 
@@ -1167,41 +1058,20 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
             return;
         }
 
-        var resolvedClan = clan!;
-        if (!_gameData.Clans.TryRename(resolvedClan.Id, desiredName, out var updated, out var updateError))
+        var nameBytes = span.Slice(1, length);
+        var desiredName = LegacyConstants.LegacyEncoding.GetString(nameBytes);
+        if (!_gameData.Clans.TryRename(clan.Id, desiredName, out var updated, out var updateError))
         {
             await SendInfoMessageAsync(updateError ?? "No se pudo renombrar el clan.", token).ConfigureAwait(false);
             return;
         }
 
-        var effective = updated ?? resolvedClan;
+        var effective = updated ?? clan;
         await BroadcastClanRenameAsync(effective.Id, effective.Name).ConfigureAwait(false);
         await SendInfoMessageAsync($"El clan ahora se llama {effective.Name}.", token).ConfigureAwait(false);
     }
 
-    private static bool TryParseClanRenamePayload(ReadOnlyMemory<byte> payload, out string desiredName, out string? error)
-    {
-        desiredName = string.Empty;
-        error = null;
-
-        if (payload.Length == 0)
-        {
-            error = "Nombre del clan inválido.";
-            return false;
-        }
-
-        var length = payload.Span[0];
-        if (length == 0 || payload.Length - 1 < length)
-        {
-            error = "Nombre del clan inválido.";
-            return false;
-        }
-
-        desiredName = LegacyConstants.LegacyEncoding.GetString(payload.Span.Slice(1, length));
-        return true;
-    }
-
-    private async Task HandleClanRecruitAsync(ReadOnlyMemory<byte> payload, CancellationToken token)
+    private async Task HandleClanRecruitAsync(ReadOnlySpan<byte> payload, CancellationToken token)
     {
         if (payload.Length < 2)
         {
@@ -1215,8 +1085,7 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
             return;
         }
 
-        var resolvedClan = clan!;
-        var recruitCode = BinaryPrimitives.ReadUInt16LittleEndian(payload.Span);
+        var recruitCode = BinaryPrimitives.ReadUInt16LittleEndian(payload);
         if (recruitCode == Code)
         {
             await SendInfoMessageAsync("Ya perteneces a tu clan.", token).ConfigureAwait(false);
@@ -1236,23 +1105,23 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         }
 
         var recruitSnapshot = recruit.Snapshot;
-        recruitSnapshot.Clan = resolvedClan.Id;
+        recruitSnapshot.Clan = clan.Id;
         recruit.UpdateSnapshot(recruitSnapshot);
 
         if (_sessionManager.TryGetContext(recruitCode, out var recruitConnection) && recruitConnection is not null)
         {
-            await recruitConnection.ApplyClanAssignmentAsync(recruitSnapshot, resolvedClan, token).ConfigureAwait(false);
-            await recruitConnection.SendInfoMessageAsync($"Fuiste reclutado en el clan {resolvedClan.Name}.", token).ConfigureAwait(false);
+            await recruitConnection.ApplyClanAssignmentAsync(recruitSnapshot, clan, token).ConfigureAwait(false);
+            await recruitConnection.SendInfoMessageAsync($"Fuiste reclutado en el clan {clan.Name}.", token).ConfigureAwait(false);
         }
 
-        var assignment = LegacyWorldPacketFactory.BuildClanAssignmentPacket(resolvedClan.Id, recruitCode);
+        var assignment = LegacyWorldPacketFactory.BuildClanAssignmentPacket(clan.Id, recruitCode);
         await _sessionManager.BroadcastToMapAsync(_world, recruitSnapshot.CodigoMapa, assignment).ConfigureAwait(false);
 
-        _ = _gameData.Clans.TryAdjustActiveMembers(resolvedClan.Id, 1, out _, out _);
+        _ = _gameData.Clans.TryAdjustActiveMembers(clan.Id, 1, out _, out _);
         await SendInfoMessageAsync($"Reclutaste a {recruit.AvatarName}.", token).ConfigureAwait(false);
     }
 
-    private async Task HandleClanRemovalAsync(ReadOnlyMemory<byte> payload, CancellationToken token)
+    private async Task HandleClanRemovalAsync(ReadOnlySpan<byte> payload, CancellationToken token)
     {
         if (payload.Length < 2)
         {
@@ -1266,7 +1135,7 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
             return;
         }
 
-        var targetCode = BinaryPrimitives.ReadUInt16LittleEndian(payload.Span);
+        var targetCode = BinaryPrimitives.ReadUInt16LittleEndian(payload);
         if (targetCode == Code)
         {
             if (string.Equals(clan.Leader, _avatarName, StringComparison.Ordinal))
@@ -1396,18 +1265,18 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         }
     }
 
-    private bool TryEnsureClanLeader(out LegacyClanInfo? clan, out string? error)
+    private bool TryEnsureClanLeader(out LegacyClanInfo clan, out string? error)
     {
         if (!TryResolveClan(out clan, out error) || clan is null)
         {
-            clan = null;
+            clan = default!;
             return false;
         }
 
         if (!string.Equals(clan.Leader, _avatarName, StringComparison.Ordinal))
         {
             error = "No eres el líder de tu clan.";
-            clan = null;
+            clan = default!;
             return false;
         }
 
@@ -1670,8 +1539,12 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
 
     private static void AppendInt32(List<byte> buffer, int value)
     {
-        var bytes = BitConverter.GetBytes(value);
-        buffer.AddRange(bytes);
+        var span = stackalloc byte[4];
+        BinaryPrimitives.WriteInt32LittleEndian(span, value);
+        buffer.Add(span[0]);
+        buffer.Add(span[1]);
+        buffer.Add(span[2]);
+        buffer.Add(span[3]);
     }
 
     private static void AppendString(List<byte> buffer, string? text, int maxLength)
@@ -1696,7 +1569,7 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
 
         if (_world.TryGetMapDefinition(mapId, out var definition) && definition is not null)
         {
-            if ((definition.MapFlags & LegacyMapFlags.AlwaysNight) != 0)
+            if ((definition.Flags & LegacyMapFlags.AlwaysNight) != 0)
             {
                 return ((byte)LegacyWeatherType.Night, (byte)255, 0);
             }
@@ -1778,28 +1651,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         Span<byte> buffer = stackalloc byte[4];
         RandomNumberGenerator.Fill(buffer);
         return BinaryPrimitives.ReadUInt32LittleEndian(buffer);
-    }
-
-    private static int EncodeRemoteAddress(TcpClient client)
-    {
-        try
-        {
-            if (client.Client.RemoteEndPoint is IPEndPoint endpoint)
-            {
-                var ipv4 = endpoint.Address.MapToIPv4();
-                var bytes = ipv4.GetAddressBytes();
-                if (bytes.Length == 4)
-                {
-                    return BinaryPrimitives.ReadInt32LittleEndian(bytes);
-                }
-            }
-        }
-        catch
-        {
-            // ignored
-        }
-
-        return 0;
     }
 
     private void AppendBuffer(ReadOnlySpan<byte> data)
@@ -1949,14 +1800,6 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
         try
         {
             await _stream.WriteAsync(payload, token).ConfigureAwait(false);
-            if (PacketTraceLogger.IsEnabled)
-            {
-                var next = Interlocked.Increment(ref _packetTraceCount);
-                if (next <= PacketTraceLogger.MaxPacketsPerSession)
-                {
-                    PacketTraceLogger.Log(Code, next, payload.Span);
-                }
-            }
         }
         finally
         {
@@ -1967,6 +1810,4 @@ internal sealed class LegacyConnectionContext : IAsyncDisposable
     private readonly record struct LoginCommand(byte[] PasswordHash, string Login);
 
     private readonly record struct ClanCommand(char SubCommand, ReadOnlyMemory<byte> Payload);
-
-    private readonly record struct CreationCommand(LegacyCharacterCreationData Data);
 }
