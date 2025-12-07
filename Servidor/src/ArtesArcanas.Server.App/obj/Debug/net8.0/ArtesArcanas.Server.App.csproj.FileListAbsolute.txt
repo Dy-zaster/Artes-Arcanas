@@ -1,0 +1,6 @@
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.App\obj\Debug\net8.0\ArtesArcanas.Server.App.csproj.AssemblyReference.cache
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.App\obj\Debug\net8.0\ArtesArcanas.Server.App.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.App\obj\Debug\net8.0\ArtesArcanas.Server.App.AssemblyInfoInputs.cache
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.App\obj\Debug\net8.0\ArtesArcanas.Server.App.AssemblyInfo.cs
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.App\obj\Debug\net8.0\ArtesArcanas.Server.App.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.App\obj\Debug\net8.0\ArtesArcanas.Server.App.sourcelink.json

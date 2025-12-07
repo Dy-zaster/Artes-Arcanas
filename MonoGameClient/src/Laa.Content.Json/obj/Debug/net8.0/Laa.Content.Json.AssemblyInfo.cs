@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Laa.Content.Json")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2a9d05366f826bf192482683353ec44978478b1f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8fa3948774e4568e38e7207762991be313ab2972")]
 [assembly: System.Reflection.AssemblyProductAttribute("Laa.Content.Json")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Laa.Content.Json")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

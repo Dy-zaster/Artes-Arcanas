@@ -2,6 +2,7 @@ using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Laa.Monogame.Client.Networking;
 
@@ -19,7 +20,15 @@ public enum ServerCommandType
     PlayerExperience,
     PlayerDamageFromMonster,
     PlayerDamageFromObject,
-    PlayerDamageFromSpell
+    PlayerDamageFromSpell,
+    PlayerAttackReport,
+    SpriteEffect,
+    TileEffect,
+    PlayerSpellCastReport,
+    PlayerStatusEffect,
+    SpriteChat,
+    SpriteNotification,
+    ServerInfoMessage
 }
 
 public interface IServerCommand
@@ -94,10 +103,51 @@ public sealed record PlayerDamageFromSpellCommand(ushort NewHealth, byte SpellId
     public ServerCommandType Type => ServerCommandType.PlayerDamageFromSpell;
 }
 
+public sealed record PlayerAttackReportCommand(ushort Damage, ushort RemainingHealth, ushort? TargetSpriteId) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.PlayerAttackReport;
+}
+
+public sealed record PlayerSpellCastReportCommand(byte SpellId, ushort CasterSpriteId) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.PlayerSpellCastReport;
+}
+
+public sealed record SpriteEffectCommand(ushort SpriteId, byte EffectCode) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.SpriteEffect;
+}
+
+public sealed record TileEffectCommand(byte X, byte Y, byte EffectCode) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.TileEffect;
+}
+
+public sealed record PlayerStatusEffectCommand(byte Code) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.PlayerStatusEffect;
+}
+
+public sealed record SpriteChatCommand(ushort SpriteId, string Message) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.SpriteChat;
+}
+
+public sealed record SpriteNotificationCommand(ushort SpriteId, byte Code) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.SpriteNotification;
+}
+
+public sealed record ServerInfoMessageCommand(byte Code) : IServerCommand
+{
+    public ServerCommandType Type => ServerCommandType.ServerInfoMessage;
+}
+
 public sealed class ServerCommandDecoder
 {
     private readonly List<byte> _buffer = new();
     private readonly List<string> _errors = new();
+    private static readonly Encoding Latin1Encoding = Encoding.Latin1;
 
     private enum CommandParseStatus
     {
@@ -198,6 +248,24 @@ public sealed class ServerCommandDecoder
                 return TryReadSpriteBatchPosition(data, out command, out consumed, out error);
             case (byte)'e':
                 return TryReadPlayerExperience(data, out command, out consumed);
+            case (byte)'d':
+                return TryReadPlayerAttackReport(data, hasTarget: false, out command, out consumed);
+            case (byte)'D':
+                return TryReadPlayerAttackReport(data, hasTarget: true, out command, out consumed);
+            case (byte)'C':
+                return TryReadPlayerSpellReport(data, out command, out consumed);
+            case (byte)'=':
+                return TryReadSpriteEffect(data, out command, out consumed);
+            case (byte)'S':
+                return TryReadTileEffect(data, out command, out consumed);
+            case (byte)'s':
+                return TryReadPlayerStatusEffect(data, out command, out consumed);
+            case (byte)'h':
+                return TryReadSpriteChat(data, out command, out consumed, out error);
+            case (byte)'H':
+                return TryReadSpriteNotification(data, out command, out consumed);
+            case (byte)'i':
+                return TryReadServerInfoMessage(data, out command, out consumed);
             case 0xFF:
                 return TryReadPlayerHealth(data, out command, out consumed);
             case 0xFE:
@@ -481,6 +549,192 @@ public sealed class ServerCommandDecoder
         var spellId = data[3];
         var attackerId = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(4, 2));
         command = new PlayerDamageFromSpellCommand(hp, spellId, attackerId);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadPlayerAttackReport(
+        ReadOnlySpan<byte> data,
+        bool hasTarget,
+        out IServerCommand? command,
+        out int consumed)
+    {
+        command = default;
+        consumed = 0;
+        var required = hasTarget ? 7 : 5;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var damage = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(1, 2));
+        var remaining = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(3, 2));
+        ushort? target = null;
+        if (hasTarget)
+        {
+            target = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(5, 2));
+        }
+
+        command = new PlayerAttackReportCommand(damage, remaining, target);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadPlayerSpellReport(
+        ReadOnlySpan<byte> data,
+        out IServerCommand? command,
+        out int consumed)
+    {
+        command = default;
+        consumed = 0;
+        const int required = 4;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var spellId = data[1];
+        var caster = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(2, 2));
+        command = new PlayerSpellCastReportCommand(spellId, caster);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadSpriteEffect(
+        ReadOnlySpan<byte> data,
+        out IServerCommand? command,
+        out int consumed)
+    {
+        command = default;
+        consumed = 0;
+        const int required = 4;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var spriteId = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(1, 2));
+        var effect = data[3];
+        command = new SpriteEffectCommand(spriteId, effect);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadTileEffect(
+        ReadOnlySpan<byte> data,
+        out IServerCommand? command,
+        out int consumed)
+    {
+        command = default;
+        consumed = 0;
+        const int required = 4;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var x = data[1];
+        var y = data[2];
+        var effect = data[3];
+        command = new TileEffectCommand(x, y, effect);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadPlayerStatusEffect(
+        ReadOnlySpan<byte> data,
+        out IServerCommand? command,
+        out int consumed)
+    {
+        command = default;
+        consumed = 0;
+        const int required = 2;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var code = data[1];
+        command = new PlayerStatusEffectCommand(code);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadSpriteChat(
+        ReadOnlySpan<byte> data,
+        out IServerCommand? command,
+        out int consumed,
+        out string? error)
+    {
+        command = default;
+        consumed = 0;
+        error = null;
+        const int header = 4;
+        if (data.Length < header)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var spriteId = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(1, 2));
+        var length = data[3];
+        var required = header + length;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        string message;
+        try
+        {
+            message = length > 0 ? Latin1Encoding.GetString(data.Slice(4, length)) : string.Empty;
+        }
+        catch (Exception ex)
+        {
+            error = $"Error decodificando mensaje de sprite {spriteId}: {ex.Message}";
+            consumed = required;
+            return CommandParseStatus.Error;
+        }
+
+        command = new SpriteChatCommand(spriteId, message);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadSpriteNotification(
+        ReadOnlySpan<byte> data,
+        out IServerCommand? command,
+        out int consumed)
+    {
+        command = default;
+        consumed = 0;
+        const int required = 4;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var spriteId = BinaryPrimitives.ReadUInt16LittleEndian(data.Slice(1, 2));
+        var code = data[3];
+        command = new SpriteNotificationCommand(spriteId, code);
+        consumed = required;
+        return CommandParseStatus.Success;
+    }
+
+    private static CommandParseStatus TryReadServerInfoMessage(
+        ReadOnlySpan<byte> data,
+        out IServerCommand? command,
+        out int consumed)
+    {
+        command = default;
+        consumed = 0;
+        const int required = 2;
+        if (data.Length < required)
+        {
+            return CommandParseStatus.NeedMoreData;
+        }
+
+        var code = data[1];
+        command = new ServerInfoMessageCommand(code);
         consumed = required;
         return CommandParseStatus.Success;
     }

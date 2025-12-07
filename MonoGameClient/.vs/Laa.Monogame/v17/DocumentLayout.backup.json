@@ -7,6 +7,14 @@
       "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\networking\\legacyloginconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\networking\\legacyloginconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\networking\\tcpnetworkclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\networking\\tcpnetworkclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\rendering\\debugtextrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\rendering\\debugtextrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -52,11 +60,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "LegacyLoginConfig.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Networking\\LegacyLoginConfig.cs",
+              "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Networking\\LegacyLoginConfig.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Networking\\LegacyLoginConfig.cs",
+              "RelativeToolTip": "src\\Laa.Monogame.Client\\Networking\\LegacyLoginConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T01:09:34.005Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TcpNetworkClient.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Networking\\TcpNetworkClient.cs",
+              "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Networking\\TcpNetworkClient.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Networking\\TcpNetworkClient.cs",
+              "RelativeToolTip": "src\\Laa.Monogame.Client\\Networking\\TcpNetworkClient.cs",
+              "ViewState": "AgIAAJ0AAAAAAAAAAAAawLQAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T01:07:48.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "DebugTextRenderer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\DebugTextRenderer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\DebugTextRenderer.cs",
@@ -64,12 +98,11 @@
               "RelativeToolTip": "src\\Laa.Monogame.Client\\Rendering\\DebugTextRenderer.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAAAB0AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-06T19:18:05.792Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-06T19:18:05.792Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "HudPaperDollWidget.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\UI\\HudPaperDollWidget.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\UI\\HudPaperDollWidget.cs",
@@ -77,12 +110,11 @@
               "RelativeToolTip": "src\\Laa.Monogame.Client\\UI\\HudPaperDollWidget.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAAACUAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-06T18:02:09.46Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-06T18:02:09.46Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "MapTransformer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Content.Json\\Internal\\MapTransformer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Content.Json\\Internal\\MapTransformer.cs",
@@ -94,7 +126,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "ServerCommandDecoder.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Networking\\ServerCommandDecoder.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Networking\\ServerCommandDecoder.cs",
@@ -112,14 +144,14 @@
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Game1.cs",
               "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Game1.cs",
               "RelativeToolTip": "src\\Laa.Monogame.Client\\Game1.cs",
-              "ViewState": "AgIAABwEAAAAAAAAAAAnwCMEAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAmwDEAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-06T01:57:57.668Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Tools\\AtlasBuilder\\Program.cs",
               "RelativeDocumentMoniker": "..\\Tools\\AtlasBuilder\\Program.cs",
@@ -131,7 +163,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "TerrainRenderer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\TerrainRenderer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\TerrainRenderer.cs",
@@ -143,7 +175,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "JsonTerrainTileSetRepository.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
               "RelativeDocumentMoniker": "src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
@@ -155,7 +187,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "GraphicTextureProvider.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\GraphicTextureProvider.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\GraphicTextureProvider.cs",
@@ -167,7 +199,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "StaticGraphicRenderer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
@@ -179,7 +211,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "MonoGame.Content.Builder.Task.targets",
               "DocumentMoniker": "C:\\Users\\Pablo\\.nuget\\packages\\monogame.content.builder.task\\3.8.4.1\\build\\MonoGame.Content.Builder.Task.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\.nuget\\packages\\monogame.content.builder.task\\3.8.4.1\\build\\MonoGame.Content.Builder.Task.targets",

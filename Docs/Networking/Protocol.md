@@ -18,7 +18,8 @@ This document captures how the original Delphi 6 client communicates with the se
    - `Command` section:
      - **Login** (`'!'`): `! + PasswordAStr(hash(password, login)) + chr(len(login)) + login` (`Original Pascal/Laa/Juego.pas:4204`).
      - **Character creation** (`'*'`): `* + B2aStr(skills) + class/race byte + B4aStr(attribute bundle) + chr(len(name)) + name + PasswordAStr(hash(password,name))` (`Original Pascal/Laa/Juego.pas:4177`). The attribute bundle stores sex bit + INT/FRZ/CON/DES/SAB scores packed into a 32-bit integer.
-3. Additional administrative commands (password changes, logout, account flags) reuse the same socket connection and each send ASCII prefixes such as `XC`, `XS`, `KT`, `K?`, etc. See [Client → Server commands](#client--server-commands).
+3. The server actually drives the handshake: right after `TClientSocket` connects it pushes the meta-command `'|'` with 6 payload bytes — `CodigoCNXJugador (2B)` followed by `NroAleatorioServidor (4B)` — and only after receiving that challenge does the Delphi client call `TratarIniciarSesion`. The MonoGame port mirrors this via `ReadBootstrapChallengeAsync`, consuming the `'|'` packet before streaming anything else.
+4. Additional administrative commands (password changes, logout, account flags) reuse the same socket connection and each send ASCII prefixes such as `XC`, `XS`, `KT`, `K?`, etc. See [Client → Server commands](#client--server-commands).
 
 ## Server → Client commands
 
@@ -63,13 +64,19 @@ The MonoGame client now includes `Networking/ServerCommandDecoder`, a streaming 
 | --- | --- | --- | --- |
 | `S` | `X, Y, EffectCode` | Spawns positional FX + sound (combat hits, crafting, spells). Many mappings exist for codes `0..255`. | `Original Pascal/Laa/Juego.pas:4529`
 | `=` | `SpriteId (2B), SubOp (1B)` | Applies special effect to a sprite (currently resurrection). | `Original Pascal/Laa/Juego.pas:4510`
-| `d`/`D` | `Damage (2B) + Descriptor` | Chat log entry describing inflicted damage to monsters (`d`) or avatars (`D`). | `Original Pascal/Laa/Juego.pas:4559`
+| `d`/`D` | `HPDelta (2B), HPLeft (2B), [SpriteId (2B)]` | Chat log entry describing inflicted damage to monsters (`d`) or avatars (`D`). | `Original Pascal/Laa/Juego.pas:4559`
 | `C` | `SpellId (1B) + Target (2B)` | Reports spells cast on avatars. | `Original Pascal/Laa/Juego.pas:4567`
+| `h` | `SpriteId (2B) + Length (1B) + Text` | Free-form chat balloon tied to a sprite. The MonoGame decoder emits `SpriteChatCommand` and the HUD log prints the text. | `Original Pascal/Laa/Juego.pas:4500`
+| `H` | `SpriteId (2B) + Code (1B)` | Sends a canned `MensajeResultado` for that sprite (“Tus manos están ocupadas…”). `ServerMessageCatalog` translates the numeric code. | `Original Pascal/Laa/Juego.pas:4506`
+| `i` | `Code (1B)` | Global informational message (crafting status, clan changes, cooldown warnings). Mapped to `ServerInfoMessageCommand`. | `Original Pascal/Laa/Juego.pas:4572`
+| `s` | `SubOp (1B)` | Player-only status updates such as resurrections, poison, buffs, paralyses. The MonoGame client logs the same strings that Delphi displayed (“Tienes la fuerza de los gigantes”, “Ya no estás congelado”, etc.). | `Original Pascal/Laa/Juego.pas:4515`
+
+MonoGame now surfaces `d`/`D`/`C` as HUD messages describing outgoing hits or spells cast on the player, and logs the positional FX opcodes (`S`, `=`) so QA can track when the legacy server would have played a particle/sound even before the rendering pipeline replays them.
 
 ### Messaging, UI, and admin notifications
 
-- `h`/`H`: free-form chat balloon strings or canned combat results tied to a sprite (`Original Pascal/Laa/Juego.pas:4500`).
-- `i`: numeric server info codes mapped to localized strings/sounds (`Original Pascal/Laa/Juego.pas:4572`).
+- `h`/`H`: free-form chat balloon strings or canned combat results tied to a sprite (`Original Pascal/Laa/Juego.pas:4500`). MonoGame translates them into HUD messages with localized text via `ServerMessageCatalog`.
+- `i`: numeric server info codes mapped to localized strings/sounds (`Original Pascal/Laa/Juego.pas:4572`). The new catalog covers the legacy codes and falls back to a neutral placeholder for unknown entries.
 - `I` with subcommands `M/K/Q/N/( /P/k/…): clan changes, timers, shop offers, world saves, etc. Each branch references clan arrays in `Original Pascal/Laa/Juego.pas:4595` onwards.
 - `*` + `SubOp`: reserved namespace currently used for direct sprite teleport with `tmDirectoConEfecto` blending (`Original Pascal/Laa/Juego.pas:4521`).
 
