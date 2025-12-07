@@ -3,7 +3,7 @@ using ArtesArcanas.Server.Core.Legacy;
 
 namespace ArtesArcanas.Server.Core.World;
 
-internal sealed class LegacyMonsterInstance
+public sealed class LegacyMonsterInstance
 {
     private int _moveCooldown;
 

@@ -34,7 +34,7 @@ internal sealed class LegacyWeatherTicker : ILegacyWorldTicker
         _universalTick = _random.Next(2) == 0 ? 32 : NightStartTick - 32;
     }
 
-    public async Task TickAsync(LegacyWorldState world, CancellationToken cancellationToken)
+    public async ValueTask TickAsync(LegacyWorldState world, CancellationToken cancellationToken)
     {
         await AdvanceCycleAsync().ConfigureAwait(false);
     }

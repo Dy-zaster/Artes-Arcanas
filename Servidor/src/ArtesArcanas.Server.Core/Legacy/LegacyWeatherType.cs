@@ -1,6 +1,6 @@
 namespace ArtesArcanas.Server.Core.Legacy;
 
-internal enum LegacyWeatherType : byte
+public enum LegacyWeatherType : byte
 {
     Normal = 0,
     Rain = 1,

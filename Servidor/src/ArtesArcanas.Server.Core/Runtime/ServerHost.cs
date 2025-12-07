@@ -68,6 +68,7 @@ public sealed class ServerHost : IAsyncDisposable
         LogMaps();
         LogItems();
         LogMonsters();
+        LogAnimationMap();
 
         _commandDispatcher.Start();
         _worldLoop.Start();
@@ -180,6 +181,17 @@ public sealed class ServerHost : IAsyncDisposable
         }
 
         _logger.Info($"Catálogo de monstruos cargado: {monsters.Count} entradas (std.mon).");
+    }
+
+    private void LogAnimationMap()
+    {
+        if (_gameData.AnimationMap.IsEmpty)
+        {
+            _logger.Warning("No se encontró el mapa de animaciones (mp_anim.b).");
+            return;
+        }
+
+        _logger.Info("Mapa de animaciones cargado (mp_anim.b).");
     }
 
     public async ValueTask DisposeAsync()

@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "ArtesArcanas.Server.Core/1.0.0": {
+        "dependencies": {
+          "Laa.Content.Core": "1.0.0"
+        },
+        "runtime": {
+          "ArtesArcanas.Server.Core.dll": {}
+        }
+      },
+      "Laa.Content.Core/1.0.0": {
+        "runtime": {
+          "Laa.Content.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ArtesArcanas.Server.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Laa.Content.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

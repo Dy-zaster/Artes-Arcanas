@@ -137,9 +137,13 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
                     }
                     break;
                 case LegacyPlayerActionType.SensorClick:
-                    if (await HandleSensorClickAsync(player, ref snapshot, action, cancellationToken).ConfigureAwait(false))
                     {
-                        snapshotChanged = true;
+                        var clickResult = await HandleSensorClickAsync(player, snapshot, action, cancellationToken).ConfigureAwait(false);
+                        snapshot = clickResult.Snapshot;
+                        if (clickResult.SnapshotChanged)
+                        {
+                            snapshotChanged = true;
+                        }
                     }
                     break;
                 default:
@@ -148,7 +152,8 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
             }
         }
 
-        var sensorResult = await HandleSensorTriggerAsync(player, ref snapshot, cancellationToken).ConfigureAwait(false);
+        var sensorResult = await HandleSensorTriggerAsync(player, snapshot, cancellationToken).ConfigureAwait(false);
+        snapshot = sensorResult.Snapshot;
         if (sensorResult.SnapshotChanged)
         {
             snapshotChanged = true;
@@ -185,13 +190,13 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         }
     }
 
-    private async ValueTask<SensorTriggerOutcome> HandleSensorTriggerAsync(LegacyPlayerContext player, ref LegacyPlayerSnapshot snapshot, CancellationToken cancellationToken)
+    private async ValueTask<SensorTriggerOutcome> HandleSensorTriggerAsync(LegacyPlayerContext player, LegacyPlayerSnapshot snapshot, CancellationToken cancellationToken)
     {
         var mapId = snapshot.CodigoMapa;
         if (!_mapSurface.TryGetSensor(mapId, snapshot.CoordenadaX, snapshot.CoordenadaY, out var sensor) ||
             sensor is null)
         {
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (!IsSensorAccessible(snapshot, sensor, out var denialReason))
@@ -201,7 +206,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
                 await SendInfoAsync(player.Code, denialReason).ConfigureAwait(false);
             }
 
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (!TryValidateSensorKey(player, ref snapshot, sensor, mapId, out var keyContext, out var keyError))
@@ -211,37 +216,35 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
                 await SendInfoAsync(player.Code, keyError).ConfigureAwait(false);
             }
 
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         var requiresConsumption = (sensor.Flags & LegacySensorFlags.ConsumeKey) != 0;
 
-        SensorTriggerOutcome result;
+        var result = new SensorTriggerOutcome(snapshot, false, false, false);
         switch (sensor.Type)
         {
             case LegacySensorType.PhysicalRegeneration:
-                result = await HandlePhysicalRegenSensorAsync(player, ref snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+                result = await HandlePhysicalRegenSensorAsync(player, snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
                 break;
             case LegacySensorType.ManaRegeneration:
-                result = await HandleManaRegenSensorAsync(player, ref snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+                result = await HandleManaRegenSensorAsync(player, snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
                 break;
             case LegacySensorType.Portal:
-                result = await HandlePortalSensorAsync(player, ref snapshot, sensor, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+                result = await HandlePortalSensorAsync(player, snapshot, sensor, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
                 break;
             case LegacySensorType.SetFlag:
-                result = await HandleFlagSensorAsync(player, ref snapshot, mapId, sensor, keyContext, setFlags: true, requiresConsumption).ConfigureAwait(false);
+                result = await HandleFlagSensorAsync(player, snapshot, mapId, sensor, keyContext, setFlags: true, requiresConsumption).ConfigureAwait(false);
                 break;
             case LegacySensorType.ClearFlag:
-                result = await HandleFlagSensorAsync(player, ref snapshot, mapId, sensor, keyContext, setFlags: false, requiresConsumption).ConfigureAwait(false);
+                result = await HandleFlagSensorAsync(player, snapshot, mapId, sensor, keyContext, setFlags: false, requiresConsumption).ConfigureAwait(false);
                 break;
             case LegacySensorType.FoundClan:
-                result = await HandleFoundClanSensorAsync(player, ref snapshot, sensor, mapId, keyContext, requiresConsumption, cancellationToken).ConfigureAwait(false);
-                break;
-            case LegacySensorType.ClanBanner:
-                result = default;
+                result = await HandleFoundClanSensorAsync(player, snapshot, sensor, mapId, keyContext, requiresConsumption, cancellationToken).ConfigureAwait(false);
                 break;
             default:
-                return default;
+                _logger.Warning($"[{player.Code}] Sensor desconocido {sensor.Type} en mapa {mapId}.");
+                return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (result.FlagsChanged)
@@ -252,22 +255,28 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         return result;
     }
 
-    private bool IsSensorAccessible(LegacyPlayerSnapshot snapshot, LegacyMapSensorDefinition sensor, out string? reason)
+    private static bool IsSensorAccessible(
+        LegacyPlayerSnapshot snapshot,
+        LegacyMapSensorDefinition sensor,
+        out string? reason)
     {
         reason = null;
+
         if ((sensor.Flags & LegacySensorFlags.SoloGhost) != 0 && snapshot.Hp > 0)
         {
             reason = "Solo los espíritus pueden usar este portal.";
             return false;
         }
 
-        if ((sensor.Flags & LegacySensorFlags.SoloApprentice) != 0 && snapshot.Nivel > LegacyConstants.MaxNewbieLevel)
+        if ((sensor.Flags & LegacySensorFlags.SoloApprentice) != 0 &&
+            snapshot.Nivel > LegacyConstants.MaxNewbieLevel)
         {
             reason = "Solo aprendices pueden usar este portal.";
             return false;
         }
 
-        if ((sensor.Flags & LegacySensorFlags.SoloClan) != 0 && snapshot.Clan == 0)
+        if ((sensor.Flags & LegacySensorFlags.SoloClan) != 0 &&
+            snapshot.Clan > LegacyConstants.MaxClans)
         {
             reason = "Debes pertenecer a un clan para acceder a este sensor.";
             return false;
@@ -278,7 +287,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
 
     private async ValueTask<SensorTriggerOutcome> HandlePhysicalRegenSensorAsync(
         LegacyPlayerContext player,
-        ref LegacyPlayerSnapshot snapshot,
+        LegacyPlayerSnapshot snapshot,
         byte mapId,
         SensorKeyContext keyContext,
         bool requiresConsumption)
@@ -286,18 +295,18 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         if (snapshot.Hp == 0)
         {
             await SendInfoAsync(player.Code, "No puedes regenerarte estando muerto.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (snapshot.Hp >= snapshot.MaxHp)
         {
             await SendInfoAsync(player.Code, "Ya tienes la salud completa.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (!TryEnterSensorCooldown(player.Code, LegacySensorType.PhysicalRegeneration, RegenSensorCooldown))
         {
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         var heal = (snapshot.MaxHp >> 3) + 1;
@@ -309,13 +318,13 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
 
         snapshot.Hp = (ushort)updated;
         await SendHpUpdateAsync(player.Code, snapshot.Hp).ConfigureAwait(false);
-        var consumption = await ConsumeSensorKeyAsync(player, ref snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
-        return new SensorTriggerOutcome(true, false, consumption.FlagsChanged);
+        var consumption = await ConsumeSensorKeyAsync(player, snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+        snapshot = consumption.Snapshot;
+        return new SensorTriggerOutcome(snapshot, true, false, consumption.FlagsChanged);
     }
-
     private async ValueTask<SensorTriggerOutcome> HandleManaRegenSensorAsync(
         LegacyPlayerContext player,
-        ref LegacyPlayerSnapshot snapshot,
+        LegacyPlayerSnapshot snapshot,
         byte mapId,
         SensorKeyContext keyContext,
         bool requiresConsumption)
@@ -323,18 +332,18 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         if (snapshot.Hp == 0)
         {
             await SendInfoAsync(player.Code, "No puedes regenerar maná mientras estás muerto.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (snapshot.MaxMana == 0 || snapshot.Mana >= snapshot.MaxMana)
         {
             await SendInfoAsync(player.Code, "Tu maná ya está al máximo.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (!TryEnterSensorCooldown(player.Code, LegacySensorType.ManaRegeneration, RegenSensorCooldown))
         {
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         var regen = (snapshot.MaxMana >> 3) + 1;
@@ -346,13 +355,13 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
 
         snapshot.Mana = (byte)updated;
         await SendManaUpdateAsync(player.Code, snapshot.Mana).ConfigureAwait(false);
-        var consumption = await ConsumeSensorKeyAsync(player, ref snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
-        return new SensorTriggerOutcome(true, false, consumption.FlagsChanged);
+        var consumption = await ConsumeSensorKeyAsync(player, snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+        snapshot = consumption.Snapshot;
+        return new SensorTriggerOutcome(snapshot, true, false, consumption.FlagsChanged);
     }
-
     private async ValueTask<SensorTriggerOutcome> HandlePortalSensorAsync(
         LegacyPlayerContext player,
-        ref LegacyPlayerSnapshot snapshot,
+        LegacyPlayerSnapshot snapshot,
         LegacyMapSensorDefinition sensor,
         byte mapId,
         SensorKeyContext keyContext,
@@ -366,13 +375,13 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         if (!_mapSurface.IsWalkable(destinationMap, destinationX, destinationY))
         {
             await SendInfoAsync(player.Code, "El portal está inestable y no puede abrirse.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (!_world.TryMovePlayer(player.Code, snapshot.CodigoMapa, snapshot.CoordenadaX, snapshot.CoordenadaY, destinationMap, destinationX, destinationY))
         {
             await SendInfoAsync(player.Code, "El destino del portal está ocupado.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         snapshot.CodigoMapa = destinationMap;
@@ -382,13 +391,13 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         snapshot.DestinoY = destinationY;
         snapshot.Direccion = 0;
         var movedWithinMap = destinationMap == originalMap;
-        var consumption = await ConsumeSensorKeyAsync(player, ref snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
-        return new SensorTriggerOutcome(true, movedWithinMap, consumption.FlagsChanged);
+        var consumption = await ConsumeSensorKeyAsync(player, snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+        snapshot = consumption.Snapshot;
+        return new SensorTriggerOutcome(snapshot, true, movedWithinMap, consumption.FlagsChanged);
     }
-
     private async ValueTask<SensorTriggerOutcome> HandleFlagSensorAsync(
         LegacyPlayerContext player,
-        ref LegacyPlayerSnapshot snapshot,
+        LegacyPlayerSnapshot snapshot,
         byte mapId,
         LegacyMapSensorDefinition sensor,
         SensorKeyContext keyContext,
@@ -405,13 +414,13 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
             _logger.Info($"[Mapa {mapId}] Flags actualizados ({(setFlags ? "set" : "clear")} {mask:X8}).");
         }
 
-        var consumption = await ConsumeSensorKeyAsync(player, ref snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
-        return new SensorTriggerOutcome(consumption.SnapshotChanged, false, changed || consumption.FlagsChanged);
+        var consumption = await ConsumeSensorKeyAsync(player, snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+        snapshot = consumption.Snapshot;
+        return new SensorTriggerOutcome(snapshot, consumption.SnapshotChanged, false, changed || consumption.FlagsChanged);
     }
-
     private async ValueTask<SensorTriggerOutcome> HandleFoundClanSensorAsync(
         LegacyPlayerContext player,
-        ref LegacyPlayerSnapshot snapshot,
+        LegacyPlayerSnapshot snapshot,
         LegacyMapSensorDefinition sensor,
         byte mapId,
         SensorKeyContext keyContext,
@@ -421,19 +430,19 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         if ((snapshot.Pericias & LegacyConstants.SkillElocution) == 0)
         {
             await SendInfoAsync(player.Code, "Necesitas la pericia de Elocuencia para fundar un clan.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (snapshot.Nivel <= LegacyConstants.MaxLevelWithBonus)
         {
             await SendInfoAsync(player.Code, "Tu nivel aún es bajo para fundar un clan.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         if (snapshot.Clan <= LegacyConstants.MaxClans)
         {
             await SendInfoAsync(player.Code, "Debes abandonar tu clan actual antes de fundar otro.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         var leaderName = string.IsNullOrWhiteSpace(player.AvatarName)
@@ -443,7 +452,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         if (!_gameData.Clans.TryCreateClan(leaderName, null, out var clan, out var error) || clan is null)
         {
             await SendInfoAsync(player.Code, error ?? "No se pudo crear el clan.").ConfigureAwait(false);
-            return default;
+            return new SensorTriggerOutcome(snapshot, false, false, false);
         }
 
         snapshot.Clan = clan.Id;
@@ -451,26 +460,28 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         await AnnounceClanCreationAsync(player, snapshot, clan, token).ConfigureAwait(false);
         _logger.Info($"[{player.Code}] Fundó el clan #{clan.Id} ({clan.Name}).");
 
-        var portalOutcome = default(SensorTriggerOutcome);
+        var portalOutcome = new SensorTriggerOutcome(snapshot, false, false, false);
         if (sensor.Data1 != 0 || sensor.Data2 != 0 || sensor.Data3 != 0)
         {
             portalOutcome = await HandlePortalSensorAsync(
                     player,
-                    ref snapshot,
+                    snapshot,
                     sensor,
                     mapId,
                     SensorKeyContext.None,
                     requiresConsumption: false)
                 .ConfigureAwait(false);
+            snapshot = portalOutcome.Snapshot;
         }
 
-        var consumption = await ConsumeSensorKeyAsync(player, ref snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+        var consumption = await ConsumeSensorKeyAsync(player, snapshot, mapId, keyContext, requiresConsumption).ConfigureAwait(false);
+        snapshot = consumption.Snapshot;
         return new SensorTriggerOutcome(
+            snapshot,
             SnapshotChanged: true,
             PositionChanged: portalOutcome.PositionChanged,
             FlagsChanged: portalOutcome.FlagsChanged || consumption.FlagsChanged);
     }
-
     private async Task SendHpUpdateAsync(ushort code, ushort hp)
     {
         var payload = new[]
@@ -512,7 +523,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         (sensor.Data3 << 16) |
         (sensor.Data4 << 24);
 
-    private readonly record struct SensorTriggerOutcome(bool SnapshotChanged, bool PositionChanged, bool FlagsChanged);
+    private readonly record struct SensorTriggerOutcome(LegacyPlayerSnapshot Snapshot, bool SnapshotChanged, bool PositionChanged, bool FlagsChanged);
 
     private enum SensorKeyType
     {
@@ -530,18 +541,20 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         public static SensorKeyContext ForHonor(byte cost) => new(SensorKeyType.Honor, 0, 0, cost);
     }
 
-    private readonly record struct SensorKeyOutcome(bool SnapshotChanged, bool FlagsChanged);
+    private readonly record struct SensorKeyOutcome(LegacyPlayerSnapshot Snapshot, bool SnapshotChanged, bool FlagsChanged);
+
+    private readonly record struct SnapshotMutationResult(LegacyPlayerSnapshot Snapshot, bool SnapshotChanged);
 
     private async ValueTask<SensorKeyOutcome> ConsumeSensorKeyAsync(
         LegacyPlayerContext player,
-        ref LegacyPlayerSnapshot snapshot,
+        LegacyPlayerSnapshot snapshot,
         byte mapId,
         SensorKeyContext context,
         bool requiresConsumption)
     {
         if (!requiresConsumption || context.Type == SensorKeyType.None)
         {
-            return default;
+            return new SensorKeyOutcome(snapshot, false, false);
         }
 
         var snapshotChanged = false;
@@ -563,16 +576,19 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
                 }
                 break;
             case SensorKeyType.Equipment:
-                if (await ConsumeEquipmentAsync(player, ref snapshot, context.EquipmentSlot).ConfigureAwait(false))
                 {
-                    snapshotChanged = true;
+                    var (updatedSnapshot, consumed) = await ConsumeEquipmentAsync(player, snapshot, context.EquipmentSlot).ConfigureAwait(false);
+                    if (consumed)
+                    {
+                        snapshot = updatedSnapshot;
+                        snapshotChanged = true;
+                    }
                 }
                 break;
         }
 
-        return new SensorKeyOutcome(snapshotChanged, flagsChanged);
+        return new SensorKeyOutcome(snapshot, snapshotChanged, flagsChanged);
     }
-
     private static bool TryApplyHonorCost(ref LegacyPlayerSnapshot snapshot, byte cost)
     {
         if (cost == 0)
@@ -591,7 +607,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         return true;
     }
 
-    private async ValueTask<bool> ConsumeEquipmentAsync(LegacyPlayerContext player, ref LegacyPlayerSnapshot snapshot, byte slot)
+    private async ValueTask<(LegacyPlayerSnapshot Snapshot, bool Consumed)> ConsumeEquipmentAsync(LegacyPlayerContext player, LegacyPlayerSnapshot snapshot, byte slot)
     {
         var replacement = slot switch
         {
@@ -602,18 +618,17 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
 
         if (replacement.IsEmpty)
         {
-            return false;
+            return (snapshot, false);
         }
 
         if (!snapshot.TryWriteEquipmentSlot(slot, replacement))
         {
-            return false;
+            return (snapshot, false);
         }
 
         await SendEquipmentSlotAsync(player, slot, replacement).ConfigureAwait(false);
-        return true;
+        return (snapshot, true);
     }
-
     private async Task BroadcastHonorChangeAsync(byte mapId, ushort playerCode, sbyte behavior)
     {
         var payload = new[]
@@ -1200,9 +1215,9 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         await _sessions.SendToSessionAsync(code, payload).ConfigureAwait(false);
     }
 
-    private async ValueTask<bool> HandleSensorClickAsync(
+    private async ValueTask<SnapshotMutationResult> HandleSensorClickAsync(
         LegacyPlayerContext player,
-        ref LegacyPlayerSnapshot snapshot,
+        LegacyPlayerSnapshot snapshot,
         LegacyPlayerAction action,
         CancellationToken cancellationToken)
     {
@@ -1214,12 +1229,12 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
             sensor is null ||
             sensor.Type != LegacySensorType.ClanBanner)
         {
-            return false;
+            return new SnapshotMutationResult(snapshot, false);
         }
 
         if (snapshot.Hp == 0 && snapshot.Comportamiento <= LegacyConstants.HeroBehaviorThreshold)
         {
-            return false;
+            return new SnapshotMutationResult(snapshot, false);
         }
 
         if (!TryValidateSensorKey(player, ref snapshot, sensor, mapId, out var keyContext, out var keyError))
@@ -1229,7 +1244,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
                 await SendInfoAsync(player.Code, keyError).ConfigureAwait(false);
             }
 
-            return false;
+            return new SnapshotMutationResult(snapshot, false);
         }
 
         var dx = snapshot.CoordenadaX - sensorX;
@@ -1240,7 +1255,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
         if (distanceSquared > 8 || (!hasExtendedRange && !withinCloseRange))
         {
             await SendInfoAsync(player.Code, "Estás demasiado lejos para accionar esta bandera.").ConfigureAwait(false);
-            return false;
+            return new SnapshotMutationResult(snapshot, false);
         }
 
         if ((sensor.Flags & LegacySensorFlags.SoloClan) != 0)
@@ -1251,7 +1266,7 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
                 castle.ClanId != snapshot.Clan)
             {
                 await SendInfoAsync(player.Code, "Solo el clan dueño del castillo puede usar esta bandera.").ConfigureAwait(false);
-                return false;
+                return new SnapshotMutationResult(snapshot, false);
             }
         }
 
@@ -1263,26 +1278,26 @@ public sealed class LegacyWorldActionSink : ILegacyWorldActionHandler
             if ((flags & mask) == mask)
             {
                 await SendInfoAsync(player.Code, "La bandera ya está activa.").ConfigureAwait(false);
-                return false;
+                return new SnapshotMutationResult(snapshot, false);
             }
         }
 
         var toggled = _world.TryToggleMapFlags(mapId, mask, out _);
         if (!toggled)
         {
-            return false;
+            return new SnapshotMutationResult(snapshot, false);
         }
 
-        var consumption = await ConsumeSensorKeyAsync(player, ref snapshot, mapId, keyContext, requiresKey).ConfigureAwait(false);
+        var consumption = await ConsumeSensorKeyAsync(player, snapshot, mapId, keyContext, requiresKey).ConfigureAwait(false);
+        snapshot = consumption.Snapshot;
         var flagsChanged = toggled || consumption.FlagsChanged;
         if (flagsChanged)
         {
             await BroadcastMapFlagsAsync(mapId).ConfigureAwait(false);
         }
 
-        return consumption.SnapshotChanged;
+        return new SnapshotMutationResult(snapshot, consumption.SnapshotChanged);
     }
-
     private ValueTask SendMovementUpdatesAsync(LegacyPlayerContext player, LegacyPlayerSnapshot snapshot, CancellationToken cancellationToken)
     {
         return ExecuteAsync();

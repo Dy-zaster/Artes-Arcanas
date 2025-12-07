@@ -3,12 +3,40 @@
   "WorkspaceRootPath": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\legacyworldstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacyworldstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\legacy\\legacycharactercreator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\legacy\\legacycharactercreator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\legacy\\legacyplayersnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\legacy\\legacyplayersnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\legacymonsterticker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacymonsterticker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\networking\\legacyconnectioncontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\networking\\legacyconnectioncontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\legacyworldactionsink.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacyworldactionsink.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\legacyweatherticker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacyweatherticker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\maps\\legacymapdefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\maps\\legacymapdefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\maps\\legacymaploader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\maps\\legacymaploader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\legacyworldstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacyworldstate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\legacyworldpacketfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,10 +51,6 @@
       "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacygrounditemstore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\networking\\legacyconnectioncontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\networking\\legacyconnectioncontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\maps\\legacymapsurface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\maps\\legacymapsurface.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -35,16 +59,8 @@
       "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacyidletimeoutticker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\legacyworldactionsink.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\legacyworldactionsink.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\runtime\\serverbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\runtime\\serverbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\servidor\\src\\artesarcanas.server.core\\world\\maps\\legacymaploader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{19E864F2-B81D-4C5D-A046-D764634AC588}|src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj|solutionrelative:src\\artesarcanas.server.core\\world\\maps\\legacymaploader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\Artes-Arcanas.Server.Core\\Runtime\\ServerHost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -78,37 +94,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "LegacyMapDefinition.cs",
-              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
-              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
-              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
-              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAawGcAAAAAAAAAAAAAAA==",
+              "Title": "LegacyPlayerSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Legacy\\LegacyPlayerSnapshot.cs",
+              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Legacy\\LegacyPlayerSnapshot.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Legacy\\LegacyPlayerSnapshot.cs",
+              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\Legacy\\LegacyPlayerSnapshot.cs",
+              "ViewState": "AgIAAFgAAAAAAAAAAAAawHAAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T16:15:17.362Z",
+              "WhenOpened": "2025-12-07T21:59:51.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LegacyCharacterCreator.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Legacy\\LegacyCharacterCreator.cs",
+              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Legacy\\LegacyCharacterCreator.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Legacy\\LegacyCharacterCreator.cs",
+              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\Legacy\\LegacyCharacterCreator.cs",
+              "ViewState": "AgIAAHwCAAAAAAAAAAAnwJACAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T21:56:56.834Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "LegacyWorldPacketFactory.cs",
-              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
-              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
-              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
-              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAawGoAAAA6AAAAAAAAAA==",
+              "Title": "LegacyMonsterTicker.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyMonsterTicker.cs",
+              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyMonsterTicker.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyMonsterTicker.cs",
+              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\LegacyMonsterTicker.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T07:01:55.586Z",
+              "WhenOpened": "2025-12-07T21:12:01.661Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
+              "Title": "LegacyWeatherTicker.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWeatherTicker.cs",
+              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyWeatherTicker.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWeatherTicker.cs",
+              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\LegacyWeatherTicker.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T21:03:16.217Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "LegacyInventoryExtensions.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyInventoryExtensions.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyInventoryExtensions.cs",
@@ -120,20 +162,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 8,
               "Title": "LegacyWorldState.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldState.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldState.cs",
               "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldState.cs",
               "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldState.cs",
-              "ViewState": "AgIAAN0AAAAAAAAAAIA4wPMAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAAcBAAAAAAAAAAAnwB0BAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-07T06:46:09.32Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 11,
               "Title": "LegacyGroundItemStore.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyGroundItemStore.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyGroundItemStore.cs",
@@ -145,7 +187,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 13,
               "Title": "LegacyIdleTimeoutTicker.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyIdleTimeoutTicker.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyIdleTimeoutTicker.cs",
@@ -157,7 +199,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 14,
               "Title": "ServerBuilder.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Runtime\\ServerBuilder.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Runtime\\ServerBuilder.cs",
@@ -169,19 +211,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 7,
               "Title": "LegacyMapLoader.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapLoader.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapLoader.cs",
               "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapLoader.cs",
               "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapLoader.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAcBAAAAAAAAAAAvwB4BAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T05:50:05.924Z"
+              "WhenOpened": "2025-12-07T05:50:05.924Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 12,
               "Title": "LegacyMapSurface.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapSurface.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapSurface.cs",
@@ -193,7 +236,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 17,
               "Title": "LegacyAdministratorRegistry.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Legacy\\LegacyAdministratorRegistry.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Legacy\\LegacyAdministratorRegistry.cs",
@@ -205,19 +248,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "LegacyConnectionContext.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Networking\\LegacyConnectionContext.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Networking\\LegacyConnectionContext.cs",
               "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Networking\\LegacyConnectionContext.cs",
               "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\Networking\\LegacyConnectionContext.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAawCkAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAHQGAAAAAAAAAAAnwIoGAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T04:50:56.586Z"
+              "WhenOpened": "2025-12-07T04:50:56.586Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 16,
               "Title": "ServerHost.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Runtime\\ServerHost.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Runtime\\ServerHost.cs",
@@ -229,7 +273,45 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 4,
+              "Title": "LegacyWorldActionSink.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
+              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
+              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
+              "ViewState": "AgIAALIAAAAAAAAAAAAEwMkAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T04:41:04.621Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "LegacyMapDefinition.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
+              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
+              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\Maps\\LegacyMapDefinition.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAawIwAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T16:15:17.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "LegacyWorldPacketFactory.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
+              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
+              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldPacketFactory.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAawGoAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-07T07:01:55.586Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
               "Title": "LegacySecurity.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Legacy\\LegacySecurity.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Legacy\\LegacySecurity.cs",
@@ -241,19 +323,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "LegacyWorldActionSink.cs",
-              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
-              "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
-              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
-              "RelativeToolTip": "src\\ArtesArcanas.Server.Core\\World\\LegacyWorldActionSink.cs",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAawGwAAABPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-07T04:41:04.621Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 19,
               "Title": "LegacyNetworkServer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\Networking\\LegacyNetworkServer.cs",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\Networking\\LegacyNetworkServer.cs",
@@ -265,7 +335,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "ServerHost.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\Artes-Arcanas.Server.Core\\Runtime\\ServerHost.cs",
               "RelativeDocumentMoniker": "src\\Artes-Arcanas.Server.Core\\Runtime\\ServerHost.cs",
@@ -277,7 +347,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 20,
               "Title": "ArtesArcanas.Server.Core.csproj",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Servidor\\src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj",
               "RelativeDocumentMoniker": "src\\ArtesArcanas.Server.Core\\ArtesArcanas.Server.Core.csproj",

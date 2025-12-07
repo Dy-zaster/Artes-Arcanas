@@ -4,3 +4,13 @@ C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Cor
 C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\ArtesArcanas.Server.Core.AssemblyInfo.cs
 C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\ArtesArcanas.Server.Core.csproj.CoreCompileInputs.cache
 C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\ArtesArcanas.Server.Core.sourcelink.json
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\bin\Debug\net8.0\ArtesArcanas.Server.Core.deps.json
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\bin\Debug\net8.0\ArtesArcanas.Server.Core.dll
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\bin\Debug\net8.0\ArtesArcanas.Server.Core.pdb
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\bin\Debug\net8.0\Laa.Content.Core.dll
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\bin\Debug\net8.0\Laa.Content.Core.pdb
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\ArtesArc.5E67CC17.Up2Date
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\ArtesArcanas.Server.Core.dll
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\refint\ArtesArcanas.Server.Core.dll
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\ArtesArcanas.Server.Core.pdb
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\Servidor\src\ArtesArcanas.Server.Core\obj\Debug\net8.0\ref\ArtesArcanas.Server.Core.dll
