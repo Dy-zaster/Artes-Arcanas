@@ -53,14 +53,7 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 
 ### 4. Networking
 - Document packet formats from the Pascal client (`Docs/Networking/Protocol.md`). **Status:** ✅ initial opcodes captured; keep expanding as we port features.
-- Implement a .NET socket client with pluggable encryption/compression so it can talk to the existing server before any server rewrite.  
-  **Progress:** `ServerCommandDecoder` now understands the sprite chat opcodes (`h`/`H`), the global info packets (`i`), los reportes de combate (`d`/`D`/`C`) y los efectos (`S`/`=`/`s`). `Game1` enruta todo al HUD a través del nuevo `ServerMessageCatalog` (respetando los mismos textos en español) y dispara destellos en el mapa con `WorldEffectSystem` para visualizar los FX que antes sólo existían en el cliente Delphi.  
-  **Networking progress:**  
-  1. **Handshake + login envelope – ✅** `TcpNetworkClient` ahora espera el desafío de 4 bytes del servidor y envía exactamente los mismos bloques que `TratarIniciarSesion` (handshake, `VersionLA`, login/creación con `EmpaquetarPassword`), así que el servidor recibe un paquete válido apenas se abre el socket. Las credenciales se leen de `LegacyLoginConfig.json`, que se genera automáticamente junto al ejecutable si no existe.  
-  2. **Outbound command writers – ⏳** Serialize keyboard/mouse actions (`m/M`, `A/B`, `Y/y`, `j`, `KG/KS/Ki`, etc.) with little-endian helpers so every gameplay input can be forwarded.  
-  3. **Equipment/inventory sync – ⏳** Decode opcodes `#208..#245`, `#0..#7`, `b`, `#192..#207` to keep the HUD slots aligned with the authoritative server state.  
-  4. **Local avatar controller – ⏳** Translate MonoGame input into outgoing packets and update the predicted player position (currently we only log `LocalPlayerPositionCommand`).  
-  5. **Session lifecycle – ⏳** Handle disconnects/timeouts, `/agr` mode toggles, error opcodes (`i/#8`, `I/#0..#24`) and multi-session guardrails so the client recovers gracefully.
+- Implement a .NET socket client with pluggable encryption/compression so it can talk to the existing server before any server rewrite.
 - Abstract serialization/deserialization to isolate endianness and versioning concerns.
 
 ### 5. Tooling + QA

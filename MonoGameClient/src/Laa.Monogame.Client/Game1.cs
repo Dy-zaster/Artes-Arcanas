@@ -33,9 +33,6 @@ public class Game1 : Game
     private const float HudContentOffsetY = 16f;
     private const int PortraitTileSize = 40;
     private const string HudControlsHelpText = "[F1] UI  [F5] Animaciones  [PgUp/PgDn] Mapas  [F2] Panel Mundial";
-    private const bool UseLiveServer = true;
-    private const string LiveServerHost = "127.0.0.1";
-    private const int LiveServerPort = 15715;
 
     private readonly GraphicsDeviceManager _graphics;
     private SpriteBatch? _spriteBatch;
@@ -52,7 +49,6 @@ public class Game1 : Game
     private MonsterRenderer? _monsterRenderer;
     private MonsterSimulation? _monsterSimulation;
     private MapOverlayRenderer? _overlayRenderer;
-    private WorldEffectSystem? _worldEffectSystem;
     private DebugTextRenderer? _debugTextRenderer;
     private TilePalette? _tilePalette;
     private Camera2D? _camera;
@@ -135,7 +131,6 @@ public class Game1 : Game
     private string _hudQuickAttackLabel = "Sin seleccionar";
     private string _hudQuickSpellLabel = "Ninguno";
     private readonly PlayerState _playerState = PlayerState.CreateSample();
-    private readonly PlayerCommandQueue _commandQueue = new();
 
     private static readonly string[] PlayerClassNames =
     {
@@ -382,7 +377,6 @@ public class Game1 : Game
 
         _overlayRenderer = new MapOverlayRenderer(GraphicsDevice, TileWidth, TileHeight);
         _overlayRenderer.LoadContent();
-        _worldEffectSystem = new WorldEffectSystem(GraphicsDevice);
         _tilePalette = new TilePalette();
         _debugTextRenderer = new DebugTextRenderer(GraphicsDevice);
         _hudBackgroundTexture = new Texture2D(GraphicsDevice, 1, 1);
@@ -531,25 +525,12 @@ public class Game1 : Game
 
         try
         {
-            INetworkClient client;
-            if (UseLiveServer)
-            {
-                client = new TcpNetworkClient();
-                Console.WriteLine($"Connecting to live server {LiveServerHost}:{LiveServerPort}...");
-                client.MessageReceived += OnNetworkMessageReceived;
-                client.ConnectAsync(LiveServerHost, LiveServerPort).GetAwaiter().GetResult();
-                Console.WriteLine("Live server connection established (handshake/login pending).");
-            }
-            else
-            {
-                client = new MockNetworkClient();
-                client.MessageReceived += OnNetworkMessageReceived;
-                client.ConnectAsync("mock", 0).GetAwaiter().GetResult();
-                Console.WriteLine("Mock network client connected (scripted monster updates).");
-            }
-
+            var client = new MockNetworkClient();
+            client.MessageReceived += OnNetworkMessageReceived;
+            client.ConnectAsync("mock", 0).GetAwaiter().GetResult();
             _networkClient = client;
-            _networkFeedActive = !UseLiveServer ? true : true;
+            _networkFeedActive = true;
+            Console.WriteLine("Mock network client connected (scripted monster updates).");
         }
         catch (Exception ex)
         {
@@ -579,16 +560,11 @@ public class Game1 : Game
         var mouse = Mouse.GetState();
         HandleOverlayInput(keyboard);
         HandleMapInput(keyboard);
-        HandlePlayerMovementInput(keyboard, _previousKeyboard);
         HandleHudInput(keyboard);
         HandleInfoPanelInput(keyboard);
         HandleAnimationPreviewInput(keyboard);
         HandleMonsterDebugInput(keyboard);
         HandleUiInput(keyboard);
-        if (UseLiveServer)
-        {
-            _commandQueue.FlushAsync(_networkClient).GetAwaiter().GetResult();
-        }
         ProcessNetworkEvents();
         var hudCapturedScroll = HandleHudScroll(mouse, _previousMouse);
         _cameraController?.Update(gameTime, keyboard, mouse, !hudCapturedScroll);
@@ -597,7 +573,6 @@ public class Game1 : Game
         {
             _monsterSimulation?.Update(gameTime);
         }
-        _worldEffectSystem?.Update(gameTime);
         _uiManager?.Update(gameTime, mouse, _previousMouse);
         // Selection labels now updated via event handler.
         UpdateHudText();
@@ -630,10 +605,6 @@ public class Game1 : Game
         _staticGraphicRenderer?.Draw(_spriteBatch, _sortedStaticGraphics, _camera);
         DrawAnimationPreview();
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
-        if (_spriteBatch is not null)
-        {
-            _worldEffectSystem?.Draw(_spriteBatch, _camera);
-        }
         DrawResourceBars();
         DrawWelcomeMessage();
         DrawHud();
@@ -656,7 +627,6 @@ public class Game1 : Game
             _staticGraphicRenderer?.Dispose();
             _animationTextureProvider?.Dispose();
             _overlayRenderer?.Dispose();
-            _worldEffectSystem?.Dispose();
             _debugTextRenderer?.Dispose();
             _hudBackgroundTexture?.Dispose();
             _uiMinimapWidget?.Dispose();
@@ -1028,30 +998,6 @@ public class Game1 : Game
             case PlayerDamageFromSpellCommand dmgSpell:
                 ApplyPlayerDamageFromSpell(dmgSpell);
                 break;
-            case PlayerAttackReportCommand attackReport:
-                ApplyPlayerAttackReport(attackReport);
-                break;
-            case PlayerSpellCastReportCommand spellReport:
-                ApplyPlayerSpellCastReport(spellReport);
-                break;
-            case SpriteEffectCommand spriteFx:
-                ApplySpriteEffect(spriteFx);
-                break;
-            case TileEffectCommand tileFx:
-                ApplyTileEffect(tileFx);
-                break;
-            case PlayerStatusEffectCommand status:
-                ApplyPlayerStatusEffect(status);
-                break;
-            case SpriteChatCommand chat:
-                ApplySpriteChat(chat);
-                break;
-            case SpriteNotificationCommand notification:
-                ApplySpriteNotification(notification);
-                break;
-            case ServerInfoMessageCommand info:
-                ApplyServerInfoMessage(info);
-                break;
             default:
                 Console.WriteLine($"[NET] Unhandled command {command.Type}.");
                 break;
@@ -1149,130 +1095,6 @@ public class Game1 : Game
         ApplyPlayerHealth(command.NewHealth);
         var spellName = ResolveSpellName(command.SpellId);
         AddHudMessage($"El hechizo {spellName} te alcanza (avatar #{command.AttackerId}). Salud {_playerState.Health}/{_playerState.MaxHealth}.");
-    }
-
-    private void ApplyPlayerAttackReport(PlayerAttackReportCommand command)
-    {
-        var total = command.Damage + command.RemainingHealth;
-        var targetLabel = command.TargetSpriteId.HasValue ? FormatSpriteDisplayName(command.TargetSpriteId.Value) : "al objetivo";
-        var line = $"Atacas {targetLabel} por {command.Damage} de {total} puntos de salud.";
-        AddHudMessage(line);
-        Console.WriteLine($"[NET] {line}");
-    }
-
-    private void ApplyPlayerSpellCastReport(PlayerSpellCastReportCommand command)
-    {
-        var caster = FormatSpriteDisplayName(command.CasterSpriteId);
-        var spell = ResolveSpellName(command.SpellId);
-        var line = $"{caster} te lanzó el hechizo {spell}.";
-        AddHudMessage(line);
-        Console.WriteLine($"[NET] {line}");
-    }
-
-    private void ApplySpriteEffect(SpriteEffectCommand command)
-    {
-        var target = FormatSpriteDisplayName(command.SpriteId);
-        var code = FormatEffectCode(command.EffectCode);
-        var line = $"Efecto {code} sobre {target}.";
-        AddHudMessage(line);
-        Console.WriteLine($"[FX] {line}");
-        if (TryGetSpritePosition(command.SpriteId, out var position))
-        {
-            _worldEffectSystem?.AddEffect(
-                position,
-                ResolveEffectColor(command.EffectCode),
-                ResolveEffectRadius(command.EffectCode),
-                0.85f);
-        }
-    }
-
-    private void ApplyTileEffect(TileEffectCommand command)
-    {
-        var code = FormatEffectCode(command.EffectCode);
-        var line = $"Efecto {code} en casilla ({command.X},{command.Y}).";
-        AddHudMessage(line);
-        Console.WriteLine($"[FX] {line}");
-        var position = TileToWorldPosition(command.X, command.Y);
-        _worldEffectSystem?.AddEffect(
-            position,
-            ResolveEffectColor(command.EffectCode),
-            ResolveEffectRadius(command.EffectCode),
-            0.85f);
-    }
-    private void ApplyPlayerStatusEffect(PlayerStatusEffectCommand command)
-    {
-        var code = (char)command.Code;
-        var message = code switch
-        {
-            'r' => "+Has sido resucitado.",
-            'F' => "*Tienes la fuerza de los gigantes.",
-            'f' => "·Perdiste la fuerza de los gigantes.",
-            '+' => "*Los hechizos que te afectaban fueron disipados.",
-            'S' => "+¡Te sientes mucho más saludable!",
-            '@' => "-¡Estás envenenado!",
-            's' => "+¡Ya no estás envenenado!",
-            'A' => "*Tu velocidad de ataque se ha duplicado.",
-            'a' => "·Tu velocidad de ataque se normalizó.",
-            'D' => "*Te rodea una armadura mágica.",
-            'd' => "·La armadura mágica se desvaneció.",
-            'P' => "*Te rodea una aura de protección divina.",
-            'p' => "·El aura de protección divina se desvaneció.",
-            'I' => "*Te has vuelto invisible.",
-            'O' => "*Te has ocultado.",
-            'i' => "·Vuelves a ser visible.",
-            'W' => "*Estás bajo el efecto de la visión verdadera.",
-            'w' => "·El hechizo visión verdadera ha terminado.",
-            'X' => "*Ira Berserker, haces el doble de daño.",
-            'x' => "·Ira Berserker ha terminado.",
-            'v' => "·Te quitas los vendajes.",
-            'V' => "·Tus heridas están vendadas.",
-            'C' => "-¡Te han congelado, el frío hace lentos tus movimientos!",
-            'c' => "·Ya no estás congelado.",
-            'Z' => "*Cambias de forma.",
-            'z' => "·Recuperaste tu forma normal.",
-            'T' => "-¡Te han aturdido!",
-            't' => "!¡Ya no estás aturdido!",
-            '(' => "-Estás paralizado.",
-            ')' => "·Ya no estás paralizado.",
-            _ => $"Efecto de estado desconocido (0x{command.Code:X2})."
-        };
-
-        if (code is 'r' or 'S')
-        {
-            ApplyPlayerHealth((ushort)_playerState.MaxHealth);
-            _playerState.Mana = _playerState.MaxMana;
-        }
-
-        AddHudMessage(message);
-        Console.WriteLine($"[STATUS] {message}");
-    }
-
-    private void ApplySpriteChat(SpriteChatCommand command)
-    {
-        var speaker = ResolveSpriteName(command.SpriteId);
-        var prefix = string.IsNullOrWhiteSpace(speaker)
-            ? $"Avatar #{command.SpriteId:D3}"
-            : speaker!;
-        var message = string.IsNullOrWhiteSpace(command.Message) ? "(silencio)" : command.Message;
-        var line = $"{prefix}: {message}";
-        Console.WriteLine($"[CHAT] {line}");
-        AddHudMessage(line);
-    }
-
-    private void ApplySpriteNotification(SpriteNotificationCommand command)
-    {
-        var speaker = ResolveSpriteName(command.SpriteId);
-        var body = ServerMessageCatalog.Resolve(command.Code);
-        var line = string.IsNullOrWhiteSpace(speaker) ? body : $"{speaker}: {body}";
-        Console.WriteLine($"[INFO] {line}");
-        AddHudMessage(line);
-    }
-
-    private void ApplyServerInfoMessage(ServerInfoMessageCommand command)
-    {
-        var text = ServerMessageCatalog.Resolve(command.Code);
-        Console.WriteLine($"[SRV] {text}");
-        AddHudMessage($"· {text}");
     }
 
     private void HandleMonsterSpawn(in MonsterNetworkPayload payload)
@@ -1498,22 +1320,6 @@ public class Game1 : Game
         else if (IsKeyPressed(keyboardState, Keys.End))
         {
             ScrollHudMessages(1);
-        }
-    }
-
-    private void HandlePlayerMovementInput(KeyboardState current, KeyboardState previous)
-    {
-        if (!UseLiveServer)
-        {
-            return;
-        }
-
-        if (TryGetMovementDirection(current, out var direction))
-        {
-            if (!TryGetMovementDirection(previous, out _))
-            {
-                _commandQueue.Enqueue(OutboundCommandWriter.BuildMoveCommand(direction));
-            }
         }
     }
 
@@ -3157,142 +2963,6 @@ public class Game1 : Game
         }
 
         return $"Monstruo #{monsterIndex:D3}";
-    }
-
-    private string? ResolveSpriteName(int spriteId)
-    {
-        var monster = _worldState.FindMonster(spriteId);
-        if (monster?.Descriptor?.Name is { Length: > 0 } name)
-        {
-            return name;
-        }
-
-        return null;
-    }
-
-    private string FormatSpriteDisplayName(ushort spriteId)
-    {
-        return ResolveSpriteName(spriteId) ?? $"Avatar #{spriteId:D3}";
-    }
-
-    private bool TryGetSpritePosition(ushort spriteId, out Vector2 position)
-    {
-        var monster = _worldState.FindMonster(spriteId);
-        if (monster is not null)
-        {
-            position = monster.Position;
-            return true;
-        }
-
-        position = Vector2.Zero;
-        return false;
-    }
-
-    private static string FormatEffectCode(byte code)
-    {
-        if (code >= 32 && code <= 126)
-        {
-            return $"'{(char)code}' (0x{code:X2})";
-        }
-
-        return $"0x{code:X2}";
-    }
-
-    private static bool TryGetMovementDirection(KeyboardState keyboardState, out byte direction)
-    {
-        direction = 0;
-        var north = keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W);
-        var south = keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S);
-        var east = keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D);
-        var west = keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A);
-
-        if (north && east)
-        {
-            direction = 1;
-            return true;
-        }
-
-        if (east && south)
-        {
-            direction = 3;
-            return true;
-        }
-
-        if (south && west)
-        {
-            direction = 5;
-            return true;
-        }
-
-        if (west && north)
-        {
-            direction = 7;
-            return true;
-        }
-
-        if (north)
-        {
-            direction = 0;
-            return true;
-        }
-
-        if (east)
-        {
-            direction = 2;
-            return true;
-        }
-
-        if (south)
-        {
-            direction = 4;
-            return true;
-        }
-
-        if (west)
-        {
-            direction = 6;
-            return true;
-        }
-
-        return false;
-    }
-
-    private static float ResolveEffectRadius(byte code)
-    {
-        if (code == '*')
-        {
-            return TileWidth * 2f;
-        }
-
-        if (code >= 200 && code <= 229)
-        {
-            return TileWidth * 1.5f;
-        }
-
-        return TileWidth;
-    }
-
-    private static Color ResolveEffectColor(byte code)
-    {
-        var ch = (char)code;
-        return ch switch
-        {
-            'A' or 'R' or 'E' or 'e' => Color.OrangeRed,
-            'G' or 'g' or 'C' => Color.Red,
-            'F' or 'f' => Color.Gold,
-            'm' => Color.LightGray,
-            'h' => Color.PeachPuff,
-            't' => Color.Sienna,
-            'n' => Color.Gray,
-            'p' => Color.CornflowerBlue,
-            'u' => Color.LimeGreen,
-            'c' => Color.Orange,
-            'b' => Color.DeepSkyBlue,
-            '*' => Color.Yellow,
-            'r' => Color.LightGoldenrodYellow,
-            _ when code >= 200 && code <= 229 => Color.MediumPurple,
-            _ => Color.White
-        };
     }
 
     private static string ResolveAttackName(int attackIndex)
