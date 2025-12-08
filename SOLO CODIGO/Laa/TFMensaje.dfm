@@ -1,0 +1,2 @@
+object FMensaje: TFMensaje
+end

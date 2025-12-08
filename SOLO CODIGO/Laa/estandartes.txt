@@ -1,0 +1,31 @@
+León dorado en fondo rojo: 7CF38E3C D0410438
+León dorado en fondo rojo y coronas: 7DF68A3D D043D428
+León esmeralda en fondo negro y coronas: 4C30820C C0018008
+Unicornio blanco en fondo azul: 5B041FFF C1FC16DB
+Unicornio rojo en fondo negro y coronas: 60000C30 C0C3D820
+Unicornio esmeralda en fondo negro: 4900038E C038E249
+Coronas doradas en fondo azul: 42082082 C20BC082
+
+Calavera y huesos: 40FBE000 7EF80000
+Calavera y huesos con flor de lis: 7FFBE000 7EF8003F
+Calavera con flor de lis en fondo rojo: 7CD30410 74C1043C
+Yelmo dorado en azul: 41041041 7DF7DF41
+Yelmo negro en rojo con flor de lis: 7D820820 4000003D
+Calavera con yelmo púrpura en fondo negro: 40F3C000 634A3480
+Calavera con yelmo con flor de lis: 7CFBE820 4040043C
+Araña verde en fondo negro: 40300300 4C00C00C
+Araña negra con yelmo en fondo rojo: 50010010 78E38E00
+Araña roja con calavera en fondo negro: 40FBE800 7EFA0020
+Araña azul con flor de lis: 7F0C10C1 4304307F
+Flor de lis verde en fondo negro: 6C000000 4000002C
+
+Sol en fondo rojo oscuro: 7CF3CF3C BC93CF10
+Cobra verde en fondo negro y verde: 40000B6D 8012DB48
+Cobra dorada en fondo rojo: 60820E38 A0838E10
+Águila dorada en fondo rojo: 40F7D03D 80440F50
+Águila negra en fondo dorado: 7D000F40 BDE3D03D
+Lobo rojo en fondo dorado: 70C10430 90E3043D
+Lobo negro en fondo esmeralda: 40008200 88100204
+
+Dragón dorado en fondo azul: 6907EA41 01FA907E
+Cthulhu en fondo negro: 48200000 0030C308

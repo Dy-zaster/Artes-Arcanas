@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "qybLWH+eawc=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Server\\Laa.Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Pablo\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
+    "C:\\Users\\Pablo\\.nuget\\packages\\system.text.json\\8.0.4\\system.text.json.8.0.4.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "El paquete \"System.Text.Json\" 8.0.4 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-8g4q-xg66-9fp4",
+      "projectPath": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Server\\Laa.Server.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Server\\Laa.Server.csproj",
+      "libraryId": "System.Text.Json",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
+}

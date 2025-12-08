@@ -10,6 +10,7 @@
         "dependencies": {
           "Laa.Content.Core": "1.0.0",
           "Laa.Content.Json": "1.0.0",
+          "Laa.Protocol": "1.0.0",
           "MonoGame.Framework.DesktopGL": "3.8.4.1"
         },
         "runtime": {
@@ -133,6 +134,14 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "Laa.Protocol/1.0.0": {
+        "runtime": {
+          "Laa.Protocol.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -176,6 +185,11 @@
       "sha512": ""
     },
     "Laa.Content.Json/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Laa.Protocol/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

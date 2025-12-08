@@ -1,0 +1,12 @@
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\bin\Debug\net8.0\Laa.Protocol.deps.json
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\bin\Debug\net8.0\Laa.Protocol.dll
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\bin\Debug\net8.0\Laa.Protocol.pdb
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\Laa.Protocol.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\Laa.Protocol.AssemblyInfoInputs.cache
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\Laa.Protocol.AssemblyInfo.cs
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\Laa.Protocol.csproj.CoreCompileInputs.cache
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\Laa.Protocol.sourcelink.json
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\Laa.Protocol.dll
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\refint\Laa.Protocol.dll
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\Laa.Protocol.pdb
+C:\Users\Pablo\Desktop\GitHub\Artes-Arcanas\MonoGameClient\src\Laa.Protocol\obj\Debug\net8.0\ref\Laa.Protocol.dll

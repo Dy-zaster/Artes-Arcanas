@@ -1,0 +1,2 @@
+object FEsperar:TFEsperar
+end

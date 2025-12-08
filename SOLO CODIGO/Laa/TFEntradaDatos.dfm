@@ -1,0 +1,2 @@
+object FEntradaDatos: TFEntradaDatos
+end

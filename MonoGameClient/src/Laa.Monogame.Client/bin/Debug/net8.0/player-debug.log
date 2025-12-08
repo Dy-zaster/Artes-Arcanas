@@ -1,0 +1,30 @@
+[2025-12-08T00:04:29.6218678-03:00] Player log started
+[2025-12-08T00:05:06.7211465-03:00] Anim m33 dirs=5 | dir 0: frames 20 nonEmpty 20, dir 1: frames 20 nonEmpty 20, dir 2: frames 20 nonEmpty 20, dir 3: frames 20 nonEmpty 20, dir 4: frames 20 nonEmpty 20
+[2025-12-08T00:05:07.1136209-03:00] AnimState anim=m33 dir=0 mirror=False action=Idle seqIndex=0 frame=4 src=446,203,24,48 pos=3084.0,2064.0
+[2025-12-08T00:05:08.3530533-03:00] KeyDown Down
+[2025-12-08T00:05:08.3535347-03:00] AnimState anim=m33 dir=1 mirror=False action=Moving seqIndex=0 frame=0 src=486,0,23,49 pos=3084.0,2065.5
+[2025-12-08T00:05:08.4258671-03:00] AnimState anim=m33 dir=1 mirror=False action=Moving seqIndex=1 frame=1 src=486,49,23,46 pos=3084.0,2071.5
+[2025-12-08T00:05:08.5650672-03:00] AnimState anim=m33 dir=1 mirror=False action=Moving seqIndex=2 frame=2 src=486,95,23,49 pos=3084.0,2083.5
+[2025-12-08T00:05:08.6633287-03:00] AnimState anim=m33 dir=1 mirror=False action=Moving seqIndex=3 frame=3 src=486,144,23,46 pos=3084.0,2094.0
+[2025-12-08T00:05:08.7321833-03:00] KeyDown Right
+[2025-12-08T00:05:08.7322410-03:00] AnimState anim=m33 dir=4 mirror=True action=Moving seqIndex=3 frame=3 src=614,144,20,48 pos=3085.1,2099.6
+[2025-12-08T00:05:08.7761905-03:00] AnimState anim=m33 dir=4 mirror=True action=Moving seqIndex=0 frame=0 src=614,0,21,47 pos=3088.2,2102.7
+[2025-12-08T00:05:08.9087021-03:00] AnimState anim=m33 dir=4 mirror=True action=Moving seqIndex=1 frame=1 src=614,47,20,47 pos=3095.7,2110.2
+[2025-12-08T00:05:09.0221929-03:00] AnimState anim=m33 dir=4 mirror=True action=Moving seqIndex=2 frame=2 src=614,94,23,50 pos=3103.1,2117.6
+[2025-12-08T00:05:09.1593687-03:00] AnimState anim=m33 dir=4 mirror=True action=Moving seqIndex=3 frame=3 src=614,144,20,48 pos=3111.6,2126.1
+[2025-12-08T00:05:09.2613599-03:00] AnimState anim=m33 dir=4 mirror=True action=Moving seqIndex=0 frame=0 src=614,0,21,47 pos=3119.0,2133.5
+[2025-12-08T00:05:09.3690708-03:00] KeyDown Left
+[2025-12-08T00:05:09.3691323-03:00] AnimState anim=m33 dir=1 mirror=False action=Moving seqIndex=0 frame=0 src=486,0,23,49 pos=3124.3,2140.3
+[2025-12-08T00:05:09.3914550-03:00] AnimState anim=m33 dir=1 mirror=False action=Moving seqIndex=1 frame=1 src=486,49,23,46 pos=3124.3,2141.8
+[2025-12-08T00:05:09.4347798-03:00] KeyUp Right
+[2025-12-08T00:05:09.4348313-03:00] AnimState anim=m33 dir=4 mirror=False action=Moving seqIndex=1 frame=1 src=614,47,20,47 pos=3123.2,2145.9
+[2025-12-08T00:05:09.5049148-03:00] AnimState anim=m33 dir=4 mirror=False action=Moving seqIndex=2 frame=2 src=614,94,23,50 pos=3119.0,2150.1
+[2025-12-08T00:05:09.6141632-03:00] AnimState anim=m33 dir=4 mirror=False action=Moving seqIndex=3 frame=3 src=614,144,20,48 pos=3111.6,2157.5
+[2025-12-08T00:05:09.7621677-03:00] AnimState anim=m33 dir=4 mirror=False action=Moving seqIndex=0 frame=0 src=614,0,21,47 pos=3103.1,2166.0
+[2025-12-08T00:05:09.8747008-03:00] AnimState anim=m33 dir=4 mirror=False action=Moving seqIndex=1 frame=1 src=614,47,20,47 pos=3095.7,2173.4
+[2025-12-08T00:05:09.9827945-03:00] AnimState anim=m33 dir=4 mirror=False action=Moving seqIndex=2 frame=2 src=614,94,23,50 pos=3088.2,2180.9
+[2025-12-08T00:05:10.1088206-03:00] AnimState anim=m33 dir=4 mirror=False action=Moving seqIndex=3 frame=3 src=614,144,20,48 pos=3080.8,2188.3
+[2025-12-08T00:05:10.1819628-03:00] KeyUp Left
+[2025-12-08T00:05:10.1820226-03:00] AnimState anim=m33 dir=1 mirror=False action=Moving seqIndex=3 frame=3 src=486,144,23,46 pos=3076.6,2194.0
+[2025-12-08T00:05:10.2298435-03:00] KeyUp Down
+[2025-12-08T00:05:10.2299239-03:00] AnimState anim=m33 dir=1 mirror=False action=Idle seqIndex=0 frame=4 src=486,190,23,46 pos=3076.6,2195.5

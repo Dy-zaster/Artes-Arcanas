@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AtlasBuilder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3cfc5150a4a02660e7f952d9ef5227b02416d272")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae7e8f5c534569fffe7c9d49aefeb69944aadf47")]
 [assembly: System.Reflection.AssemblyProductAttribute("AtlasBuilder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AtlasBuilder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

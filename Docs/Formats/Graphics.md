@@ -187,7 +187,7 @@ The command produces:
 - `atlas_manifest.json` – describes every sprite’s atlas/rectangle coordinates.
 - `atlas_00.png`, `atlas_01.png`, … – the packed textures.
 
-Drop the generated folder under `MonoGameClient/content/graphics/atlases` (already part of the fallback search roots). When absent, the client continues to stream the original BMPs directly from `Original Pascal/Laa/grf`.
+Drop the generated folder under `MonoGameClient/content/graphics/atlases` (the runtime reads from there). The client no longer streams from `grf` at runtime; those files are only used as sources for the atlas builders.
 
 ## Animation preview inside the MonoGame client
 

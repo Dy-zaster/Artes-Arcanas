@@ -775,6 +775,7 @@ public sealed class TerrainRenderer : IDisposable
 
     private PseudoMosaicMaskSet? LoadPseudoMosaicMasks()
     {
+        // Prefer raw mask if present.
         foreach (var root in _searchRoots)
         {
             var fullRoot = Path.GetFullPath(root);
@@ -787,6 +788,25 @@ public sealed class TerrainRenderer : IDisposable
             if (File.Exists(primary))
             {
                 var mask = PseudoMosaicMaskSet.Load(primary, SheetTileWidth, SheetTileHeight);
+                if (mask is not null)
+                {
+                    return mask;
+                }
+            }
+        }
+
+        // Fallback: extract from atlas entry "ti".
+        var atlasEntries = AtlasContentLoader.Load(_searchRoots);
+        if (atlasEntries.TryGetValue("ti", out var entry))
+        {
+            var atlasPath = Path.Combine(entry.Root, entry.Atlas);
+            if (File.Exists(atlasPath))
+            {
+                using var texture = LoadTexture(atlasPath);
+                var region = new Rectangle(entry.X, entry.Y, entry.Width, entry.Height);
+                var data = new Color[region.Width * region.Height];
+                texture.GetData(0, region, data, 0, data.Length);
+                var mask = PseudoMosaicMaskSet.FromRegion(data, region.Width, region.Height, SheetTileWidth, SheetTileHeight);
                 if (mask is not null)
                 {
                     return mask;
@@ -949,6 +969,59 @@ public sealed class TerrainRenderer : IDisposable
             {
                 return null;
             }
+        }
+
+        public static PseudoMosaicMaskSet? FromRegion(Color[] pixels, int width, int height, int tileWidth, int tileHeight)
+        {
+            if (pixels is null || pixels.Length == 0 || width <= 0 || height <= 0)
+            {
+                return null;
+            }
+
+            var blockCount = height / tileHeight;
+            var patterns = Enum.GetValues<PseudoMosaicPattern>();
+            var weights = new[]
+            {
+                1f,
+                0.875f,
+                0.75f,
+                0.625f,
+                0.5f,
+                0.375f,
+                0.25f,
+                0.125f,
+                0f
+            };
+
+            float ToWeight(Color color)
+            {
+                // Use luminance to approximate the original 0-8 mask palette.
+                var luminance = (int)(0.2126f * color.R + 0.7152f * color.G + 0.0722f * color.B);
+                var index = Math.Clamp((int)MathF.Round(luminance / 32f), 0, weights.Length - 1);
+                return weights[index];
+            }
+
+            var masks = new Dictionary<PseudoMosaicPattern, float[]>();
+            var totalBlocks = Math.Min(blockCount, patterns.Length);
+            for (var block = 0; block < totalBlocks; block++)
+            {
+                var mask = new float[tileWidth * tileHeight];
+                for (var y = 0; y < tileHeight; y++)
+                {
+                    for (var x = 0; x < tileWidth; x++)
+                    {
+                        var srcIndex = (block * tileHeight + y) * width + x;
+                        var weight = srcIndex >= 0 && srcIndex < pixels.Length
+                            ? ToWeight(pixels[srcIndex])
+                            : 0f;
+                        mask[y * tileWidth + x] = weight;
+                    }
+                }
+
+                masks[patterns[block]] = mask;
+            }
+
+            return masks.Count > 0 ? new PseudoMosaicMaskSet(masks) : null;
         }
     }
 

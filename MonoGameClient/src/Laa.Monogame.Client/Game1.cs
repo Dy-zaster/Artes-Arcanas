@@ -12,9 +12,11 @@ using Laa.Content.Core.Maps;
 using Laa.Content.Core.Monsters;
 using Laa.Content.Core.Spells;
 using Laa.Monogame.Client.Content;
+using Laa.Monogame.Client.Networking;
 using Laa.Monogame.Client.Rendering;
 using Laa.Monogame.Client.UI;
 using Laa.Monogame.Client.World;
+using Laa.Protocol;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -70,6 +72,11 @@ public class Game1 : Game
     private UiLabel? _uiMerchantInfoLabel;
     private UiSpriteLibrary? _uiSpriteLibrary;
     private UiMinimapWidget? _uiMinimapWidget;
+    private UiPanel? _uiLoginPanel;
+    private UiTextInputWidget? _uiLoginUserInput;
+    private UiTextInputWidget? _uiLoginPassInput;
+    private UiTextInputWidget? _uiCreateNameInput;
+    private UiLabel? _uiLoginStatusLabel;
     private HudPaperDollWidget? _hudPaperDollWidget;
     private HudPortraitWidget? _hudPortraitWidget;
     private HudQuickActionWidget? _hudQuickActionWidget;
@@ -124,6 +131,74 @@ public class Game1 : Game
     private string _hudQuickAttackLabel = "Sin seleccionar";
     private string _hudQuickSpellLabel = "Ninguno";
     private readonly PlayerState _playerState = PlayerState.CreateSample();
+    private PlayerEntity? _playerEntity;
+    private Vector2 _playerVelocity = Vector2.Zero;
+    private AnimationTexture? _playerAnimation;
+    private int _playerDirection;
+    private MonsterAction _playerAction = MonsterAction.Idle;
+    private float _playerAnimTimer;
+    private int _playerFrameIndex;
+    private bool _loggedPlayerAnimInfo;
+    private bool _playerMirror;
+    private bool _isLoggedIn;
+
+    private UiPanel? _uiCharacterPanel;
+    private UiPanel? _uiCharacterCreatePanel;
+    private UiSelectableListWidget? _uiCharacterList;
+    private UiButtonWidget? _uiEnterCharacterButton;
+    private UiLabel? _uiCharacterStatusLabel;
+    private UiLabel? _uiCreateStatusLabel;
+    private UiLabel? _uiCreateRaceLabel;
+    private UiLabel? _uiCreateClassLabel;
+    private UiSelectableListWidget? _uiCreatePerkList;
+    private UiButtonWidget? _uiRollStatsButton;
+    private UiLabel? _uiCreateStatsLabel;
+    private readonly List<CharacterInfo> _accountCharacters = new();
+    private int _selectedCharacterIndex = -1;
+    private int _createRaceIndex;
+    private int _createClassIndex;
+    private readonly HashSet<int> _createSelectedPerks = new();
+    private readonly Random _random = new();
+    private ClientStage _stage = ClientStage.Login;
+    private List<StatEntry> _creationStats = new();
+    private TcpGameClient? _tcpClient;
+    private string _accountUsername = string.Empty;
+    private string _accountPassword = string.Empty;
+
+    private enum ClientStage
+    {
+        Login,
+        CharacterSelect,
+        CharacterCreate,
+        InGame
+    }
+
+    private sealed record CharacterInfo(
+        string Name,
+        byte Race,
+        byte Class,
+        uint Perks,
+        byte StatStrength,
+        byte StatConstitution,
+        byte StatIntelligence,
+        byte StatWisdom,
+        byte StatDexterity,
+        byte Evasion,
+        ushort Level,
+        uint Experience,
+        byte MapId,
+        byte PosX,
+        byte PosY,
+        ushort MaxMana,
+        ushort Mana,
+        ushort MaxHealth,
+        ushort Health,
+        uint Gold,
+        uint Silver,
+        byte FoodPercent,
+        byte Honor,
+        ushort Armor,
+        ushort MagicResist);
 
     private static readonly string[] PlayerClassNames =
     {
@@ -147,6 +222,26 @@ public class Game1 : Game
         "Orco",
         "Drow",
         "Deva"
+    };
+
+    private static readonly string[] PerkNames =
+    {
+        "Alquimia",
+        "Escribir magia",
+        "Herbalismo",
+        "Joyeria",
+        "Herreria",
+        "Carpinteria",
+        "Sastreria",
+        "Holgazaneria",
+        "Mineria",
+        "Elocuencia",
+        "Regeneracion",
+        "Ambidextria",
+        "Apuñalar",
+        "Ocultarse",
+        "Ira Berserker",
+        "Zoomorfismo"
     };
 
     private static readonly string[] EquipmentSlotNames =
@@ -253,16 +348,16 @@ public class Game1 : Game
 
     private sealed class PlayerState
     {
-        public string AvatarName { get; init; } = "Testin";
-        public int Level { get; init; } = 1;
-        public int ClassIndex { get; init; } = 6;
-        public int RaceIndex { get; init; } = 0;
-        public bool IsMale { get; init; } = true;
-        public int ExperienceNeeded { get; set; } = 200;
-        public string HonorTitle { get; init; } = "Plebeyo";
-        public IReadOnlyList<StatEntry> CoreStats { get; init; } = Array.Empty<StatEntry>();
-        public IReadOnlyList<string> SkillLines { get; init; } = Array.Empty<string>();
-        public IReadOnlyList<string> CombatLines { get; init; } = Array.Empty<string>();
+        public string AvatarName { get; set; } = "Testin";
+        public int Level { get; set; } = 1;
+        public int ClassIndex { get; set; } = 6;
+        public int RaceIndex { get; set; } = 0;
+        public bool IsMale { get; set; } = true;
+        public uint Experience { get; set; } = 0;
+        public byte Honor { get; set; } = 1;
+        public IReadOnlyList<StatEntry> CoreStats { get; set; } = Array.Empty<StatEntry>();
+        public IReadOnlyList<string> SkillLines { get; set; } = Array.Empty<string>();
+        public IReadOnlyList<string> CombatLines { get; set; } = Array.Empty<string>();
         public int Health { get; set; } = 9;
         public int MaxHealth { get; set; } = 9;
         public int Mana { get; set; } = 3;
@@ -270,6 +365,9 @@ public class Game1 : Game
         public int FoodPercent { get; set; } = 48;
         public int Gold { get; set; } = 50;
         public int Silver { get; set; } = 1;
+        public int Armor { get; set; }
+        public int MagicResist { get; set; }
+        public int Evasion { get; set; }
 
         public static PlayerState CreateSample()
         {
@@ -279,8 +377,8 @@ public class Game1 : Game
                 Level = 1,
                 ClassIndex = 6,
                 RaceIndex = 0,
-                ExperienceNeeded = 200,
-                HonorTitle = "Plebeyo",
+                Experience = 0,
+                Honor = 1,
                 CoreStats = new[]
                 {
                     new StatEntry("Fuerza", "40%"),
@@ -297,10 +395,9 @@ public class Game1 : Game
                 },
                 CombatLines = new[]
                 {
-                    "Daño: 100%",
-                    "Evasión: 19% [+15%]",
-                    "Armadura: 20% 20% 20%",
-                    "HO% FO% RO% VO%"
+                    "Armadura: 0",
+                    "Res. Mágica: 0",
+                    "Evasión: 0"
                 },
                 Health = 9,
                 MaxHealth = 9,
@@ -308,7 +405,10 @@ public class Game1 : Game
                 MaxMana = 3,
                 FoodPercent = 48,
                 Gold = 50,
-                Silver = 1
+                Silver = 1,
+                Armor = 0,
+                MagicResist = 0,
+                Evasion = 0
             };
         }
     }
@@ -391,118 +491,21 @@ public class Game1 : Game
         _uiSpriteLibrary = new UiSpriteLibrary(GraphicsDevice, _textureRoots);
         _uiManager = new UiManager(GraphicsDevice, _debugTextRenderer);
         var viewport = GraphicsDevice.Viewport;
+        BuildLoginPanel(viewport);
         BuildHudPanel(viewport);
         if (_uiHudPanel is not null)
         {
             _uiManager.AddWindow(_uiHudPanel);
         }
+        BuildCharacterPanel(viewport);
+        BuildCharacterCreatePanel(viewport);
+        SetStage(ClientStage.Login);
         var roadmapBounds = new Rectangle(
             viewport.Width - 360,
             64,
             320,
             200);
-        _uiRoadmapWindow = new UiPanel("UI ROADMAP", roadmapBounds)
-        {
-            Draggable = true
-        };
-        _uiRoadmapWindow.AddWidget(new UiLabel(
-            "1. OVERLAY FRAMEWORK (ACTIVE)\n2. INVENTORY WINDOW\n3. SPELLBOOK & MERCHANT UI",
-            new Vector2(12f, 12f),
-            Color.White));
-        _uiManager.AddWindow(_uiRoadmapWindow);
-
-        var inventoryBounds = new Rectangle(40, 64, 360, 220);
-        _uiInventoryWindow = new UiPanel("INVENTORY PREVIEW", inventoryBounds)
-        {
-            Draggable = true,
-            Visible = false,
-            UseDefaultChrome = false,
-            HeaderHeight = 0,
-            ContentPadding = 0,
-            DragAnywhere = true
-        };
-        if (_uiSpriteLibrary is not null)
-        {
-            _uiInventoryWindow.AddWidget(new UiSpriteWidget(_uiSpriteLibrary, "cjr")
-            {
-                FillContentBounds = true
-            });
-        }
-        _uiInventoryWidget = new UiInventoryWidget
-        {
-            EquipmentColor = Color.Black,
-            ItemColor = Color.Black,
-            EquipmentOrigin = new Vector2(12f, 32f),
-            BackpackOrigin = new Vector2(180f, 32f)
-        };
-        _uiInventoryWidget.SelectionChanged += OnInventorySelectionChanged;
-        _uiInventoryWindow.AddWidget(new UiLabel(
-            "EQUIPO / MOCHILA",
-            new Vector2(12f, 8f),
-            Color.Yellow));
-        _uiInventoryWindow.AddWidget(_uiInventoryWidget);
-        _uiInventorySelectionLabel = new UiLabel("SELECCION: NINGUNO", new Vector2(12f, inventoryBounds.Height - 42f), Color.Black);
-        _uiInventoryWindow.AddWidget(_uiInventorySelectionLabel);
-        _uiItemDetailLabel = new UiLabel("DETALLE: --", new Vector2(12f, inventoryBounds.Height - 22f), Color.Black);
-        _uiInventoryWindow.AddWidget(_uiItemDetailLabel);
-        _uiManager.AddWindow(_uiInventoryWindow);
-        PopulateInventoryPreview();
-
-        var spellBounds = new Rectangle(viewport.Width - 420, 300, 380, 260);
-        _uiSpellWindow = new UiPanel("SPELLBOOK", spellBounds)
-        {
-            Draggable = true,
-            Visible = false,
-            UseDefaultChrome = false,
-            HeaderHeight = 0,
-            ContentPadding = 0,
-            DragAnywhere = true
-        };
-        if (_uiSpriteLibrary is not null)
-        {
-            _uiSpellWindow.AddWidget(new UiSpriteWidget(_uiSpriteLibrary, "ros")
-            {
-                FillContentBounds = true
-            });
-        }
-        _uiSpellWindow.AddWidget(new UiLabel(
-            "AGRUPADO POR ESCUELA",
-            new Vector2(16f, 8f),
-            Color.Yellow));
-        _uiSpellWidget = new UiSpellListWidget
-        {
-            LineHeight = 18f
-        };
-        _uiSpellWidget.SetGroups(BuildSpellGroups());
-        _uiSpellWindow.AddWidget(_uiSpellWidget);
-        _uiManager.AddWindow(_uiSpellWindow);
-
-        var merchantBounds = new Rectangle(420, 64, 360, 220);
-        _uiMerchantWindow = new UiPanel("MERCHANT PREVIEW", merchantBounds)
-        {
-            Draggable = true,
-            Visible = false,
-            UseDefaultChrome = false,
-            HeaderHeight = 0,
-            ContentPadding = 0,
-            DragAnywhere = true
-        };
-        if (_uiSpriteLibrary is not null)
-        {
-            _uiMerchantWindow.AddWidget(new UiSpriteWidget(_uiSpriteLibrary, "bmenu")
-            {
-                FillContentBounds = true
-            });
-        }
-        _uiMerchantInfoLabel = new UiLabel(string.Empty, new Vector2(16f, 8f), Color.Yellow);
-        _uiMerchantWindow.AddWidget(_uiMerchantInfoLabel);
-        _uiMerchantWidget = new UiListWidget(columns: 1, cellSize: new Vector2(320f, 22f), color: Color.Black)
-        {
-            Offset = new Vector2(12f, 32f)
-        };
-        RefreshMerchantPreview();
-        _uiMerchantWindow.AddWidget(_uiMerchantWidget);
-        _uiManager.AddWindow(_uiMerchantWindow);
+        SetWorldUiVisibility(visible: false);
     }
 
     protected override void Update(GameTime gameTime)
@@ -510,11 +513,32 @@ public class Game1 : Game
         var keyboard = Keyboard.GetState();
         if (keyboard.IsKeyDown(Keys.Escape))
         {
-            Exit();
+            if (_stage == ClientStage.Login)
+            {
+                Exit();
+            }
+            else if (_stage == ClientStage.CharacterSelect || _stage == ClientStage.CharacterCreate)
+            {
+                SetStage(ClientStage.Login);
+            }
+            else
+            {
+                Exit();
+            }
             return;
         }
 
         var mouse = Mouse.GetState();
+        _uiManager?.Update(gameTime, mouse, _previousMouse);
+        if (_stage != ClientStage.InGame)
+        {
+            PumpNetwork();
+            base.Update(gameTime);
+            _previousKeyboard = keyboard;
+            _previousMouse = mouse;
+            return;
+        }
+
         HandleOverlayInput(keyboard);
         HandleMapInput(keyboard);
         HandleHudInput(keyboard);
@@ -524,12 +548,13 @@ public class Game1 : Game
         HandleUiInput(keyboard);
         var hudCapturedScroll = HandleHudScroll(mouse, _previousMouse);
         _cameraController?.Update(gameTime, keyboard, mouse, !hudCapturedScroll);
+        UpdatePlayerMovement(gameTime, keyboard);
         _animationPreview?.Update(gameTime);
         _monsterSimulation?.Update(gameTime);
-        _uiManager?.Update(gameTime, mouse, _previousMouse);
         // Selection labels now updated via event handler.
         UpdateHudText();
         UpdateMonsterRenderer(gameTime);
+        PumpNetwork();
 
         if (!_loggedContent)
         {
@@ -545,9 +570,23 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
+        if (_spriteBatch is null)
+        {
+            base.Draw(gameTime);
+            return;
+        }
+
+        if (!_isLoggedIn)
+        {
+            GraphicsDevice.Clear(Color.Black);
+            _uiManager?.Draw(_spriteBatch);
+            base.Draw(gameTime);
+            return;
+        }
+
         GraphicsDevice.Clear(GetBackgroundColor());
 
-        if (_spriteBatch is null || _terrainRenderer is null || _camera is null || _tilePalette is null)
+        if (_terrainRenderer is null || _camera is null || _tilePalette is null)
         {
             base.Draw(gameTime);
             return;
@@ -767,10 +806,7 @@ public class Game1 : Game
         var baseDir = AppContext.BaseDirectory;
         var candidates = new[]
         {
-            Path.Combine(baseDir, "content", "graphics"),
-            Path.Combine(baseDir, "..", "..", "..", "..", "..", "..", "Original Pascal", "Laa", "grf"),
-            Path.Combine(baseDir, "..", "..", "..", "Original Pascal", "Laa", "grf"),
-            Path.Combine(baseDir, "..", "..", "..", "..", "..", "Original Pascal", "Laa", "grf")
+            Path.Combine(baseDir, "content", "graphics")
         };
 
         var roots = candidates
@@ -781,7 +817,7 @@ public class Game1 : Game
 
         if (roots.Length == 0)
         {
-            Console.Error.WriteLine("Warning: no graphic directories were found. Place BMP/PNG exports under 'content/graphics' or keep the legacy 'Original Pascal/Laa/grf' folder nearby.");
+            Console.Error.WriteLine("Warning: no graphic directories were found. Place atlases/exports under 'content/graphics'.");
         }
 
         return roots;
@@ -915,14 +951,7 @@ public class Game1 : Game
 
     private void HandleMapInput(KeyboardState keyboardState)
     {
-        if (IsKeyPressed(keyboardState, Keys.OemOpenBrackets) || IsKeyPressed(keyboardState, Keys.PageDown))
-        {
-            LoadMapByIndex(_currentMapIndex - 1);
-        }
-        else if (IsKeyPressed(keyboardState, Keys.OemCloseBrackets) || IsKeyPressed(keyboardState, Keys.PageUp))
-        {
-            LoadMapByIndex(_currentMapIndex + 1);
-        }
+        // Map cycling disabled while player-controlled movement is active.
     }
 
     private void HandleHudInput(KeyboardState keyboardState)
@@ -1065,33 +1094,24 @@ public class Game1 : Game
         {
             _uiRoadmapWindow.Visible = !_uiRoadmapWindow.Visible;
         }
+    }
 
-        if (IsKeyPressed(keyboardState, Keys.F4) && _uiInventoryWindow is not null)
+    private void LoadMapById(byte mapId)
+    {
+        if (_mapIds.Length == 0)
         {
-            _uiInventoryWindow.Visible = !_uiInventoryWindow.Visible;
+            InitializeMapList();
         }
 
-        if (IsKeyPressed(keyboardState, Keys.B) && _uiSpellWindow is not null)
+        var targetId = $"map_{mapId}";
+        var index = Array.FindIndex(_mapIds, id => string.Equals(id, targetId, StringComparison.OrdinalIgnoreCase));
+        if (index < 0)
         {
-            _uiSpellWindow.Visible = !_uiSpellWindow.Visible;
+            LoadMapByIndex(0);
+            return;
         }
 
-        if (IsKeyPressed(keyboardState, Keys.V) && _uiMerchantWindow is not null)
-        {
-            _uiMerchantWindow.Visible = !_uiMerchantWindow.Visible;
-        }
-
-        if (_commerceDocument is not null && _commerceDocument.Inventories.Count > 0)
-        {
-            if (IsKeyPressed(keyboardState, Keys.OemComma))
-            {
-                CycleMerchantPreview(-1);
-            }
-            else if (IsKeyPressed(keyboardState, Keys.OemPeriod))
-            {
-                CycleMerchantPreview(1);
-            }
-        }
+        LoadMapByIndex(index);
     }
 
     private void HandleMonsterDebugInput(KeyboardState keyboardState)
@@ -1177,8 +1197,8 @@ public class Game1 : Game
             builder.AppendLine($"{stat.Label}: {stat.Value}");
         }
 
-        builder.AppendLine($"Exp. necesaria: {_playerState.ExperienceNeeded}");
-        builder.AppendLine($"Honor: {_playerState.HonorTitle}");
+        builder.AppendLine($"Experiencia: {_playerState.Experience}");
+        builder.AppendLine($"Honor: {_playerState.Honor}");
         return builder.ToString();
     }
 
@@ -1670,80 +1690,6 @@ public class Game1 : Game
         };
     }
 
-    private void CycleMerchantPreview(int delta)
-    {
-        if (_commerceDocument is null || _commerceDocument.Inventories.Count == 0)
-        {
-            return;
-        }
-
-        _merchantPreviewIndex = WrapValue(_merchantPreviewIndex, delta, _commerceDocument.Inventories.Count);
-        RefreshMerchantPreview();
-    }
-
-    private void RefreshMerchantPreview()
-    {
-        if (_uiMerchantInfoLabel is null || _uiMerchantWidget is null)
-        {
-            return;
-        }
-
-        if (_commerceDocument is null || _commerceDocument.Inventories.Count == 0)
-        {
-            _uiMerchantInfoLabel.Text = "SIN DATOS DE COMERCIO";
-            _uiMerchantWidget.SetItems(Array.Empty<string>());
-            return;
-        }
-
-        var clampedIndex = Math.Clamp(_merchantPreviewIndex, 0, _commerceDocument.Inventories.Count - 1);
-        _merchantPreviewIndex = clampedIndex;
-        var total = _commerceDocument.Inventories.Count;
-        var title = $"MOSTRANDO INVENTARIO {clampedIndex + 1}/{total}";
-        _uiMerchantInfoLabel.Text = title;
-        _uiMerchantWidget.SetItems(BuildMerchantPreviewItems(clampedIndex));
-    }
-
-    private IReadOnlyList<string> BuildMerchantPreviewItems(int inventoryIndex)
-    {
-        if (_commerceDocument is null || _commerceDocument.Inventories.Count == 0)
-        {
-            return new[] { "SIN DATOS DE COMERCIO" };
-        }
-
-        var clamped = Math.Clamp(inventoryIndex, 0, _commerceDocument.Inventories.Count - 1);
-        var inventory = _commerceDocument.Inventories[clamped];
-        if (inventory.Items.Count == 0)
-        {
-            return new[] { "EL INVENTARIO ESTA VACIO" };
-        }
-
-        var items = new List<string>();
-        foreach (var slot in inventory.Items)
-        {
-            if (items.Count >= 12)
-            {
-                break;
-            }
-
-            var name = ResolveItemName(slot.Id);
-            var cost = ResolveItemCost(slot.Id);
-            var modifier = slot.Modifier > 0 ? $" MOD {slot.Modifier}" : string.Empty;
-            items.Add($"{name} ${cost}{modifier}");
-        }
-
-        return items;
-    }
-
-    private int ResolveItemCost(int itemId)
-    {
-        if (_itemDocument is null || itemId < 0 || itemId >= _itemDocument.Items.Count)
-        {
-            return 0;
-        }
-
-        return _itemDocument.Items[itemId].Cost;
-    }
-
     private void CycleOverlayMode()
     {
         var next = _overlayLayers switch
@@ -1781,6 +1727,36 @@ public class Game1 : Game
         {
             AddHudMessage($"Panel de información: {_infoPanel}");
         }
+    }
+
+    private void BuildLoginPanel(Viewport viewport)
+    {
+        var width = 440;
+        var height = 240;
+        var x = (viewport.Width - width) / 2;
+        var y = (viewport.Height - height) / 2;
+        _uiLoginPanel = new UiPanel("INICIO DE SESIÓN", new Rectangle(x, y, width, height))
+        {
+            Draggable = false,
+            DragAnywhere = false
+        };
+
+        _uiLoginPanel.AddWidget(new UiLabel("Usuario", new Vector2(12f, 12f), Color.LightGreen));
+        _uiLoginUserInput = new UiTextInputWidget(new Vector2(12f, 32f), new Point(180, 28), "nombre de cuenta");
+        _uiLoginPanel.AddWidget(_uiLoginUserInput);
+
+        _uiLoginPanel.AddWidget(new UiLabel("Clave", new Vector2(12f, 70f), Color.LightGreen));
+        _uiLoginPassInput = new UiTextInputWidget(new Vector2(12f, 90f), new Point(180, 28), "contraseña", isPassword: true);
+        _uiLoginPanel.AddWidget(_uiLoginPassInput);
+
+        var loginButton = new UiButtonWidget("Ingresar", new Vector2(12f, 130f), new Point(180, 28), textColor: Color.LightYellow);
+        loginButton.Clicked += OnLoginSubmit;
+        _uiLoginPanel.AddWidget(loginButton);
+
+        _uiLoginStatusLabel = new UiLabel(string.Empty, new Vector2(12f, 180f), Color.White);
+        _uiLoginPanel.AddWidget(_uiLoginStatusLabel);
+
+        _uiManager?.AddWindow(_uiLoginPanel);
     }
 
     private void BuildHudPanel(Viewport viewport)
@@ -1871,8 +1847,8 @@ public class Game1 : Game
                 PortraitIndex = _hudPortraitIndex,
                 Offset = HudPoint(432f, 86f)
             };
-            _hudPortraitWidget.PortraitClicked += HandlePortraitClicked;
-            hudPanel.AddWidget(_hudPortraitWidget);
+        _hudPortraitWidget.PortraitClicked += HandlePortraitClicked;
+        hudPanel.AddWidget(_hudPortraitWidget);
 
             _hudPaperDollWidget = new HudPaperDollWidget(_uiSpriteLibrary);
             _hudPaperDollWidget.GridModeChanged += mode => UpdateHudTabLabels();
@@ -1881,11 +1857,6 @@ public class Game1 : Game
             _hudPaperDollWidget.InventorySlotActivated += HandleHudInventorySlotActivated;
             _hudPaperDollWidget.AdditionalOffset = new Vector2(0f, HudContentOffsetY);
             hudPanel.AddWidget(_hudPaperDollWidget);
-
-            _hudQuickActionWidget = new HudQuickActionWidget(_uiSpriteLibrary);
-            _hudQuickActionWidget.Offset = HudPoint(640f, 94f);
-            _hudQuickActionWidget.ActionInvoked += HandleQuickActionInvoked;
-            hudPanel.AddWidget(_hudQuickActionWidget);
         }
         _hudMessageLog.StickToBottom(_uiHudMessageLabels.Length);
         _uiHudPanel = hudPanel;
@@ -1894,6 +1865,1016 @@ public class Game1 : Game
         PopulateInventoryPreview();
         UpdateHudTabLabels();
         UpdateHudPortrait();
+    }
+
+    private void BuildCharacterPanel(Viewport viewport)
+    {
+        var bounds = new Rectangle(
+            (viewport.Width - 640) / 2,
+            (viewport.Height - 260) / 2,
+            640,
+            260);
+
+        _uiCharacterPanel = new UiPanel("PERSONAJES", bounds)
+        {
+            Draggable = false
+        };
+
+        _uiCharacterPanel.AddWidget(new UiLabel("Personajes de la cuenta", new Vector2(12f, 12f), Color.LightGreen));
+        _uiCharacterList = new UiSelectableListWidget(columns: 1, cellSize: new Vector2(280f, 26f), color: Color.White)
+        {
+            Offset = new Vector2(12f, 32f)
+        };
+        _uiCharacterList.SelectionChanged += indices =>
+        {
+            _selectedCharacterIndex = indices.Any() ? indices.First() : -1;
+            UpdateCharacterStatus();
+        };
+        _uiCharacterList.ItemActivated += _ => EnterGameWithSelection();
+        _uiCharacterPanel.AddWidget(_uiCharacterList);
+
+        _uiCharacterStatusLabel = new UiLabel(string.Empty, new Vector2(12f, 200f), Color.White);
+        _uiCharacterPanel.AddWidget(_uiCharacterStatusLabel);
+
+        var createBtn = new UiButtonWidget("Crear personaje", new Vector2(340f, 32f), new Point(200, 28), textColor: Color.LightYellow);
+        createBtn.Clicked += () => SetStage(ClientStage.CharacterCreate);
+        _uiCharacterPanel.AddWidget(createBtn);
+
+        _uiEnterCharacterButton = new UiButtonWidget("Ingresar", new Vector2(340f, 72f), new Point(200, 28), textColor: Color.LightYellow)
+        {
+            IsEnabled = false
+        };
+        _uiEnterCharacterButton.Clicked += EnterGameWithSelection;
+        _uiCharacterPanel.AddWidget(_uiEnterCharacterButton);
+
+        var backBtn = new UiButtonWidget("Volver", new Vector2(340f, 112f), new Point(200, 28));
+        backBtn.Clicked += () => SetStage(ClientStage.Login);
+        _uiCharacterPanel.AddWidget(backBtn);
+
+        var exitBtn = new UiButtonWidget("Salir al escritorio", new Vector2(340f, 152f), new Point(200, 28), textColor: Color.OrangeRed);
+        exitBtn.Clicked += Exit;
+        _uiCharacterPanel.AddWidget(exitBtn);
+
+        _uiManager?.AddWindow(_uiCharacterPanel);
+        RefreshCharacterList();
+        UpdateCharacterStatus();
+        _uiCharacterPanel.Visible = false;
+    }
+
+    private void BuildCharacterCreatePanel(Viewport viewport)
+    {
+        var bounds = new Rectangle(
+            (viewport.Width - 720) / 2,
+            (viewport.Height - 320) / 2,
+            720,
+            320);
+
+        _uiCharacterCreatePanel = new UiPanel("CREAR PERSONAJE", bounds)
+        {
+            Draggable = false
+        };
+
+        _uiCharacterCreatePanel.AddWidget(new UiLabel("Nombre", new Vector2(12f, 12f), Color.LightGreen));
+        _uiCreateNameInput = new UiTextInputWidget(new Vector2(12f, 32f), new Point(240, 28), "nombre del personaje");
+        _uiCharacterCreatePanel.AddWidget(_uiCreateNameInput);
+
+        _uiCharacterCreatePanel.AddWidget(new UiLabel("Raza", new Vector2(12f, 70f), Color.LightGreen));
+        _uiCreateRaceLabel = new UiLabel(string.Empty, new Vector2(80f, 70f), Color.White);
+        _uiCharacterCreatePanel.AddWidget(_uiCreateRaceLabel);
+        var racePrev = new UiButtonWidget("<", new Vector2(12f, 90f), new Point(32, 24));
+        racePrev.Clicked += () => CycleRace(-1);
+        _uiCharacterCreatePanel.AddWidget(racePrev);
+        var raceNext = new UiButtonWidget(">", new Vector2(52f, 90f), new Point(32, 24));
+        raceNext.Clicked += () => CycleRace(1);
+        _uiCharacterCreatePanel.AddWidget(raceNext);
+
+        _uiCharacterCreatePanel.AddWidget(new UiLabel("Clase", new Vector2(120f, 70f), Color.LightGreen));
+        _uiCreateClassLabel = new UiLabel(string.Empty, new Vector2(180f, 70f), Color.White);
+        _uiCharacterCreatePanel.AddWidget(_uiCreateClassLabel);
+        var classPrev = new UiButtonWidget("<", new Vector2(120f, 90f), new Point(32, 24));
+        classPrev.Clicked += () => CycleClass(-1);
+        _uiCharacterCreatePanel.AddWidget(classPrev);
+        var classNext = new UiButtonWidget(">", new Vector2(160f, 90f), new Point(32, 24));
+        classNext.Clicked += () => CycleClass(1);
+        _uiCharacterCreatePanel.AddWidget(classNext);
+
+        _uiCharacterCreatePanel.AddWidget(new UiLabel("Pericias (máx 3)", new Vector2(320f, 12f), Color.LightGreen));
+        _uiCreatePerkList = new UiSelectableListWidget(columns: 2, cellSize: new Vector2(180f, 20f), color: Color.White, multiSelect: true, maxSelection: 3)
+        {
+            Offset = new Vector2(320f, 32f)
+        };
+        _uiCreatePerkList.SelectionChanged += indices =>
+        {
+            _createSelectedPerks.Clear();
+            foreach (var i in indices)
+            {
+                _createSelectedPerks.Add(i);
+            }
+            UpdateCreateStatus($"Pericias seleccionadas: {_createSelectedPerks.Count}/3", Color.White);
+        };
+        _uiCreatePerkList.SetItems(PerkNames);
+        _uiCharacterCreatePanel.AddWidget(_uiCreatePerkList);
+
+        _uiCharacterCreatePanel.AddWidget(new UiLabel("Estadísticas", new Vector2(12f, 130f), Color.LightGreen));
+        _uiCreateStatsLabel = new UiLabel(string.Empty, new Vector2(12f, 150f), Color.White);
+        _uiCharacterCreatePanel.AddWidget(_uiCreateStatsLabel);
+        _uiRollStatsButton = new UiButtonWidget("Tirar dados", new Vector2(12f, 220f), new Point(120, 28), textColor: Color.LightYellow);
+        _uiRollStatsButton.Clicked += RollCreationStats;
+        _uiCharacterCreatePanel.AddWidget(_uiRollStatsButton);
+
+        var createBtn = new UiButtonWidget("Crear personaje", new Vector2(320f, 240f), new Point(180, 28), textColor: Color.LightYellow);
+        createBtn.Clicked += OnCreateCharacterConfirm;
+        _uiCharacterCreatePanel.AddWidget(createBtn);
+
+        var cancelBtn = new UiButtonWidget("Cancelar", new Vector2(520f, 240f), new Point(140, 28));
+        cancelBtn.Clicked += () => SetStage(ClientStage.CharacterSelect);
+        _uiCharacterCreatePanel.AddWidget(cancelBtn);
+
+        _uiCreateStatusLabel = new UiLabel(string.Empty, new Vector2(12f, 260f), Color.White);
+        _uiCharacterCreatePanel.AddWidget(_uiCreateStatusLabel);
+
+        _uiManager?.AddWindow(_uiCharacterCreatePanel);
+        _uiCharacterCreatePanel.Visible = false;
+
+        ResetCreationForm();
+    }
+
+    private void OnLoginSubmit()
+    {
+        var username = _uiLoginUserInput?.Text.Trim() ?? string.Empty;
+        var password = _uiLoginPassInput?.Text.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            SetLoginStatus("Ingresa usuario y clave.", Color.Yellow);
+            return;
+        }
+
+        _accountUsername = username;
+        _accountPassword = password;
+        _ = Task.Run(async () =>
+        {
+            var ok = await EnsureConnectedAsync();
+            if (!ok)
+            {
+                SetLoginStatus("No se pudo conectar al servidor.", Color.OrangeRed);
+                return;
+            }
+
+            var payload = TcpGameClient.BuildLoginPayload(username, password);
+            try
+            {
+                await _tcpClient!.SendAsync(MessageId.LoginRequest, payload);
+                SetLoginStatus("Login enviado...", Color.LightGreen);
+            }
+            catch (Exception ex)
+            {
+                SetLoginStatus($"Error enviando login: {ex.Message}", Color.OrangeRed);
+            }
+        });
+    }
+
+    private void SetLoginStatus(string message, Color color)
+    {
+        if (_uiLoginStatusLabel is null)
+        {
+            return;
+        }
+
+        _uiLoginStatusLabel.Text = message;
+        _uiLoginStatusLabel.Color = color;
+    }
+
+    private void SetWorldUiVisibility(bool visible)
+    {
+        _showHud = visible;
+        if (_uiHudPanel is not null)
+        {
+            _uiHudPanel.Visible = visible;
+        }
+        if (_uiRoadmapWindow is not null)
+        {
+            _uiRoadmapWindow.Visible = visible;
+        }
+        // Floating debug panels removed; nothing else to toggle here.
+    }
+
+    private void SetStage(ClientStage stage)
+    {
+        _stage = stage;
+        _isLoggedIn = stage == ClientStage.InGame;
+
+        if (_uiLoginPanel is not null)
+        {
+            _uiLoginPanel.Visible = stage == ClientStage.Login;
+        }
+
+        if (_uiCharacterPanel is not null)
+        {
+            _uiCharacterPanel.Visible = stage == ClientStage.CharacterSelect;
+        }
+
+        if (_uiCharacterCreatePanel is not null)
+        {
+            _uiCharacterCreatePanel.Visible = stage == ClientStage.CharacterCreate;
+        }
+
+        var worldVisible = stage == ClientStage.InGame;
+        SetWorldUiVisibility(worldVisible);
+
+        if (stage == ClientStage.CharacterSelect)
+        {
+            RefreshCharacterList();
+            UpdateCharacterStatus();
+        }
+
+        if (stage == ClientStage.CharacterCreate)
+        {
+            ResetCreationForm();
+        }
+    }
+
+    private void RefreshCharacterList()
+    {
+        _accountCharacters.RemoveAll(c => string.IsNullOrWhiteSpace(c.Name));
+        if (_accountCharacters.Count > 5)
+        {
+            _accountCharacters.RemoveRange(5, _accountCharacters.Count - 5);
+        }
+
+        var entries = new List<string>();
+        for (var i = 0; i < _accountCharacters.Count; i++)
+        {
+            entries.Add($"{i + 1}. {_accountCharacters[i].Name}");
+        }
+
+        if (_uiCharacterList is not null)
+        {
+            _uiCharacterList.SetItems(entries);
+        }
+
+        if (_accountCharacters.Count == 0)
+        {
+            _selectedCharacterIndex = -1;
+        }
+        else
+        {
+            _selectedCharacterIndex = Math.Clamp(_selectedCharacterIndex, 0, _accountCharacters.Count - 1);
+        }
+    }
+
+    private void UpdateCharacterStatus()
+    {
+        if (_uiCharacterStatusLabel is null)
+        {
+            return;
+        }
+
+        if (_accountCharacters.Count == 0)
+        {
+            _uiCharacterStatusLabel.Text = "No hay personajes. Crea uno nuevo.";
+            _uiCharacterStatusLabel.Color = Color.Yellow;
+            if (_uiEnterCharacterButton is not null)
+            {
+                _uiEnterCharacterButton.IsEnabled = false;
+            }
+            return;
+        }
+
+        if (_selectedCharacterIndex < 0 || _selectedCharacterIndex >= _accountCharacters.Count)
+        {
+            _uiCharacterStatusLabel.Text = "Selecciona un personaje para entrar.";
+            _uiCharacterStatusLabel.Color = Color.White;
+            if (_uiEnterCharacterButton is not null)
+            {
+                _uiEnterCharacterButton.IsEnabled = false;
+            }
+            return;
+        }
+
+        var name = _accountCharacters[_selectedCharacterIndex].Name;
+        _uiCharacterStatusLabel.Text = $"Listo para entrar: {name}";
+        _uiCharacterStatusLabel.Color = Color.LightGreen;
+        if (_uiEnterCharacterButton is not null)
+        {
+            _uiEnterCharacterButton.IsEnabled = true;
+        }
+    }
+
+    private void EnterGameWithSelection()
+    {
+        if (_selectedCharacterIndex < 0 || _selectedCharacterIndex >= _accountCharacters.Count)
+        {
+            UpdateCharacterStatus();
+            return;
+        }
+
+        var name = _accountCharacters[_selectedCharacterIndex];
+        AddHudMessage($"Entrando con {name.Name}...");
+        _ = Task.Run(async () =>
+        {
+            var ok = await EnsureConnectedAsync();
+            if (!ok)
+            {
+                UpdateCharacterStatus();
+                return;
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(name.Name);
+            await _tcpClient!.SendAsync(MessageId.EnterWorldRequest, bytes);
+        });
+    }
+
+    private void ResetCreationForm()
+    {
+        _createRaceIndex = 0;
+        _createClassIndex = 0;
+        _createSelectedPerks.Clear();
+        if (_uiCreateNameInput is not null)
+        {
+            _uiCreateNameInput.Text = string.Empty;
+        }
+        if (_uiCreatePerkList is not null)
+        {
+            _uiCreatePerkList.SetItems(PerkNames);
+        }
+
+        RollCreationStats();
+        UpdateRaceClassLabels();
+        UpdateCreateStatus("Configura tu personaje y presiona Crear.", Color.White);
+    }
+
+    private void CycleRace(int delta)
+    {
+        _createRaceIndex = WrapValue(_createRaceIndex, delta, PlayerRaceNames.Length);
+        UpdateRaceClassLabels();
+    }
+
+    private void CycleClass(int delta)
+    {
+        _createClassIndex = WrapValue(_createClassIndex, delta, PlayerClassNames.Length);
+        UpdateRaceClassLabels();
+    }
+
+    private void UpdateRaceClassLabels()
+    {
+        if (_uiCreateRaceLabel is not null)
+        {
+            _uiCreateRaceLabel.Text = PlayerRaceNames[_createRaceIndex];
+        }
+
+        if (_uiCreateClassLabel is not null)
+        {
+            _uiCreateClassLabel.Text = PlayerClassNames[_createClassIndex];
+        }
+    }
+
+    private void RollCreationStats()
+    {
+        var stats = new List<StatEntry>();
+        int total;
+        do
+        {
+            stats.Clear();
+            total = 0;
+            foreach (var name in new[] { "Fuerza", "Constitución", "Inteligencia", "Sabiduría", "Destreza" })
+            {
+                var value = (_random.Next(0, 10) + 1) * 5;
+                total += value;
+                stats.Add(new StatEntry(name, $"{value}%"));
+            }
+        } while (total >= 100);
+
+        _creationStats = stats;
+        UpdateCreationStatsLabel();
+    }
+
+    private void UpdateCreationStatsLabel()
+    {
+        if (_uiCreateStatsLabel is null)
+        {
+            return;
+        }
+
+        var builder = new StringBuilder();
+        foreach (var stat in _creationStats)
+        {
+            builder.AppendLine($"{stat.Label}: {stat.Value}");
+        }
+
+        _uiCreateStatsLabel.Text = builder.ToString().TrimEnd();
+    }
+
+    private void OnCreateCharacterConfirm()
+    {
+        var name = _uiCreateNameInput?.Text.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            UpdateCreateStatus("El nombre es obligatorio.", Color.Yellow);
+            return;
+        }
+
+        if (_createSelectedPerks.Count > 3)
+        {
+            UpdateCreateStatus("Máximo 3 pericias.", Color.OrangeRed);
+            return;
+        }
+
+        var payload = new CharacterCreationPayload(
+            Name: name,
+            Race: (byte)_createRaceIndex,
+            Class: (byte)_createClassIndex,
+            PerkMask: BuildPerkMask(),
+            Strength: ParseStatValue("Fuerza"),
+            Constitution: ParseStatValue("Constitución"),
+            Intelligence: ParseStatValue("Inteligencia"),
+            Wisdom: ParseStatValue("Sabiduría"),
+            Dexterity: ParseStatValue("Destreza"));
+
+        _ = Task.Run(async () =>
+        {
+            var ok = await EnsureConnectedAsync();
+            if (!ok)
+            {
+                UpdateCreateStatus("No conectado al servidor.", Color.OrangeRed);
+                return;
+            }
+
+            var bytes = TcpGameClient.BuildCharacterCreatePayload(_accountUsername, payload);
+            await _tcpClient!.SendAsync(MessageId.CharacterCreateRequest, bytes);
+            UpdateCreateStatus("Creación enviada...", Color.LightGreen);
+        });
+    }
+
+    private void UpdateCreateStatus(string message, Color color)
+    {
+        if (_uiCreateStatusLabel is null)
+        {
+            return;
+        }
+
+        _uiCreateStatusLabel.Text = message;
+        _uiCreateStatusLabel.Color = color;
+    }
+
+    private uint BuildPerkMask()
+    {
+        uint mask = 0;
+        foreach (var index in _createSelectedPerks)
+        {
+            if (index >= 0 && index < 32)
+            {
+                mask |= (uint)(1 << index);
+            }
+        }
+        return mask;
+    }
+
+    private byte ParseStatValue(string name)
+    {
+        var stat = _creationStats.FirstOrDefault(s => s.Label == name);
+        if (stat is null)
+        {
+            return 5;
+        }
+
+        if (stat.Value.EndsWith("%") && byte.TryParse(stat.Value.TrimEnd('%'), out var value))
+        {
+            return value;
+        }
+
+        return 5;
+    }
+
+    private async Task<bool> EnsureConnectedAsync()
+    {
+        if (_tcpClient is null)
+        {
+            _tcpClient = new TcpGameClient();
+        }
+
+        if (_tcpClient is not null && _tcpClientConnected)
+        {
+            return true;
+        }
+
+        try
+        {
+            var ok = await _tcpClient.ConnectAsync("127.0.0.1", 7667, CancellationToken.None);
+            _tcpClientConnected = ok;
+            return ok;
+        }
+        catch
+        {
+            _tcpClientConnected = false;
+            return false;
+        }
+    }
+
+    private bool _tcpClientConnected;
+
+    private void PumpNetwork()
+    {
+        if (_tcpClient is null || !_tcpClientConnected)
+        {
+            return;
+        }
+
+        try
+        {
+            var packets = _tcpClient.ReceiveAsync(CancellationToken.None).GetAwaiter().GetResult();
+            foreach (var packet in packets)
+            {
+                HandlePacket(packet);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[NET] Error: {ex.Message}");
+            _tcpClientConnected = false;
+        }
+    }
+
+    private void HandlePacket(Packet packet)
+    {
+        switch (packet.MessageId)
+        {
+            case MessageId.LoginResponse:
+                HandleLoginResponse(packet.Payload.Span);
+                break;
+            case MessageId.CharacterListResponse:
+                HandleCharacterListResponse(packet.Payload.Span);
+                break;
+            case MessageId.CharacterCreateResponse:
+                HandleCharacterCreateResponse(packet.Payload.Span);
+                break;
+            case MessageId.EnterWorldResponse:
+                HandleEnterWorldResponse();
+                break;
+            case MessageId.ErrorResponse:
+                HandleErrorResponse(packet.Payload.Span);
+                break;
+        }
+    }
+
+    private void HandleLoginResponse(ReadOnlySpan<byte> payload)
+    {
+        if (payload.Length < 2)
+        {
+            SetLoginStatus("Respuesta de login inválida.", Color.OrangeRed);
+            return;
+        }
+
+        var result = payload[0];
+        if (result != 0)
+        {
+            SetLoginStatus($"Login rechazado (código {result}).", Color.OrangeRed);
+            return;
+        }
+
+        SetLoginStatus("Login OK.", Color.LightGreen);
+        RequestCharacterList();
+    }
+
+    private void RequestCharacterList()
+    {
+        if (string.IsNullOrWhiteSpace(_accountUsername) || _tcpClient is null)
+        {
+            return;
+        }
+
+        var bytes = TcpGameClient.BuildCharacterListPayload(_accountUsername);
+        _ = _tcpClient.SendAsync(MessageId.CharacterListRequest, bytes);
+    }
+
+    private void HandleCharacterListResponse(ReadOnlySpan<byte> payload)
+    {
+        _accountCharacters.Clear();
+        if (payload.IsEmpty)
+        {
+            SetStage(ClientStage.CharacterSelect);
+            return;
+        }
+
+        var reader = new SpanReader(payload);
+        if (!reader.TryReadByte(out var count))
+        {
+            return;
+        }
+
+        for (var i = 0; i < count; i++)
+        {
+            if (!reader.TryReadString(out var name))
+            {
+                break;
+            }
+
+            if (!reader.TryReadByte(out var race) ||
+                !reader.TryReadByte(out var cls) ||
+                !reader.TryReadUInt(out var perks) ||
+                !reader.TryReadByte(out var str) ||
+                !reader.TryReadByte(out var con) ||
+                !reader.TryReadByte(out var intel) ||
+                !reader.TryReadByte(out var wis) ||
+                !reader.TryReadByte(out var dex) ||
+                !reader.TryReadByte(out var evasion) ||
+                !reader.TryReadUInt16(out var level) ||
+                !reader.TryReadUInt(out var xp) ||
+                !reader.TryReadByte(out var mapId) ||
+                !reader.TryReadByte(out var posX) ||
+                !reader.TryReadByte(out var posY) ||
+                !reader.TryReadUInt16(out var maxMana) ||
+                !reader.TryReadUInt16(out var mana) ||
+                !reader.TryReadUInt16(out var maxHp) ||
+                !reader.TryReadUInt16(out var hp) ||
+                !reader.TryReadUInt(out var gold) ||
+                !reader.TryReadUInt(out var silver) ||
+                !reader.TryReadByte(out var food) ||
+                !reader.TryReadByte(out var honor) ||
+                !reader.TryReadUInt16(out var armor) ||
+                !reader.TryReadUInt16(out var magicResist))
+            {
+                break;
+            }
+
+            var invCount = reader.TryReadByte(out var inv) ? inv : (byte)0;
+            for (var invIdx = 0; invIdx < invCount; invIdx++)
+            {
+                reader.TryReadUInt(out _);
+                reader.TryReadUInt16(out _);
+                reader.TryReadByte(out _);
+            }
+
+            var spellCount = reader.TryReadByte(out var spells) ? spells : (byte)0;
+            for (var s = 0; s < spellCount; s++)
+            {
+                reader.TryReadUInt16(out _);
+            }
+
+            _accountCharacters.Add(new CharacterInfo(
+                name,
+                race,
+                cls,
+                perks,
+                str,
+                con,
+                intel,
+                wis,
+                dex,
+                evasion,
+                level,
+                xp,
+                mapId,
+                posX,
+                posY,
+                maxMana,
+                mana,
+                maxHp,
+                hp,
+                gold,
+                silver,
+                food,
+                honor,
+                armor,
+                magicResist));
+        }
+
+        _selectedCharacterIndex = _accountCharacters.Count > 0 ? 0 : -1;
+        SetStage(ClientStage.CharacterSelect);
+    }
+
+    private void HandleCharacterCreateResponse(ReadOnlySpan<byte> payload)
+    {
+        if (payload.Length == 0 || payload[0] != 0)
+        {
+            UpdateCreateStatus("Creación rechazada.", Color.OrangeRed);
+            return;
+        }
+
+        UpdateCreateStatus("Personaje creado.", Color.LightGreen);
+        RequestCharacterList();
+        SetStage(ClientStage.CharacterSelect);
+    }
+
+    private void HandleEnterWorldResponse()
+    {
+        if (_selectedCharacterIndex < 0 || _selectedCharacterIndex >= _accountCharacters.Count)
+        {
+            return;
+        }
+
+        var info = _accountCharacters[_selectedCharacterIndex];
+        ApplyCharacterToWorld(info);
+        SetStage(ClientStage.InGame);
+    }
+
+    private void UpdatePlayerMovement(GameTime gameTime, KeyboardState keyboard)
+    {
+        if (_playerEntity is null || _camera is null || gameTime is null)
+        {
+            return;
+        }
+
+        var move = Vector2.Zero;
+        if (keyboard.IsKeyDown(Keys.Left) || keyboard.IsKeyDown(Keys.A))
+        {
+            move.X -= 1f;
+        }
+        if (keyboard.IsKeyDown(Keys.Right) || keyboard.IsKeyDown(Keys.D))
+        {
+            move.X += 1f;
+        }
+        if (keyboard.IsKeyDown(Keys.Up) || keyboard.IsKeyDown(Keys.W))
+        {
+            move.Y -= 1f;
+        }
+        if (keyboard.IsKeyDown(Keys.Down) || keyboard.IsKeyDown(Keys.S))
+        {
+            move.Y += 1f;
+        }
+
+        if (move != Vector2.Zero)
+        {
+            move.Normalize();
+            _playerDirection = VectorToDirection(move, out _playerMirror);
+            _playerAction = MonsterAction.Moving;
+        }
+        else
+        {
+            _playerAction = MonsterAction.Idle;
+        }
+
+        const float speed = 90f; // pixels per second
+        var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        var displacement = move * speed * delta;
+        var next = _playerEntity.Position + displacement;
+
+        // Clamp to map bounds
+        if (_activeMap is not null)
+        {
+            var width = _activeMap.Terrain.FirstOrDefault()?.Count ?? 0;
+            var height = _activeMap.Terrain.Count;
+            var maxX = width * TileWidth;
+            var maxY = height * TileHeight;
+            next.X = Math.Clamp(next.X, 0f, maxX);
+            next.Y = Math.Clamp(next.Y, 0f, maxY);
+        }
+
+        _playerEntity.SetPosition(next);
+        _camera.CenterOn(next);
+        UpdatePlayerAnimation(gameTime);
+    }
+
+    private void UpdatePlayerAnimation(GameTime gameTime)
+    {
+        if (_playerAnimation is null)
+        {
+            return;
+        }
+
+        var directionSlice = _playerAnimation.Directions[Math.Clamp(_playerDirection, 0, _playerAnimation.Directions.Count - 1)];
+        var sequence = _playerAction == MonsterAction.Moving
+            ? MonsterSpriteSequences.Move
+            : MonsterSpriteSequences.Idle;
+
+        _playerAnimTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        const float frameDuration = 0.12f;
+        while (_playerAnimTimer >= frameDuration)
+        {
+            _playerAnimTimer -= frameDuration;
+            _playerFrameIndex = (_playerFrameIndex + 1) % sequence.Length;
+        }
+    }
+
+    private static class MonsterSpriteSequences
+    {
+        public static readonly int[] Idle = { 4 };
+        public static readonly int[] Move = { 0, 1, 2, 3 };
+    }
+
+    private AnimationFrameSlice GetPlayerFrame(AnimationDirectionSlice direction)
+    {
+        var sequence = _playerAction == MonsterAction.Moving
+            ? MonsterSpriteSequences.Move
+            : MonsterSpriteSequences.Idle;
+        if (sequence.Length == 0)
+        {
+            return default;
+        }
+
+        var idx = Math.Abs(_playerFrameIndex) % sequence.Length;
+        var frameIndex = sequence[idx];
+        if (frameIndex < 0 || frameIndex >= direction.Frames.Count)
+        {
+            return default;
+        }
+
+        return direction.Frames[frameIndex];
+    }
+
+
+    private int VectorToDirection(Vector2 move, out bool mirror)
+    {
+        mirror = false;
+        if (move == Vector2.Zero) return _playerDirection;
+        var dirCount = _playerAnimation?.Directions.Count ?? 8;
+
+        if (dirCount == 5)
+        {
+            // Legacy 5-direction set using MC_DirAnimacion mapping from Pascal:
+            // 8-way input order: 0=N,1=S,2=W,3=E,4=NE,5=SW,6=NW,7=SE
+            // maps to:           0,1,2,2,3,4,3,4
+            int dir8;
+            var ax = Math.Abs(move.X);
+            var ay = Math.Abs(move.Y);
+            if (ax < 0.01f && ay < 0.01f)
+            {
+                dir8 = 0;
+            }
+            else if (ay >= ax && ay > 0f && ax < 0.01f)
+            {
+                dir8 = move.Y > 0 ? 1 : 0; // S or N
+            }
+            else if (ax > ay && ay < 0.01f)
+            {
+                dir8 = move.X > 0 ? 3 : 2; // E or W
+            }
+            else
+            {
+                if (move.X > 0 && move.Y < 0) dir8 = 4;       // NE
+                else if (move.X < 0 && move.Y > 0) dir8 = 5;  // SW
+                else if (move.X < 0 && move.Y < 0) dir8 = 6;  // NW
+                else dir8 = 7;                                // SE
+            }
+
+            int[] mcDirAnim = { 0, 1, 2, 2, 3, 4, 3, 4 };
+            int[] mcMirror = { 0, 0, 0, 1, 1, 0, 0, 1 }; // MC_espejo from Pascal (true for E, NE, SE)
+            mirror = mcMirror[Math.Clamp(dir8, 0, 7)] != 0;
+            return mcDirAnim[Math.Clamp(dir8, 0, 7)];
+        }
+
+        if (dirCount == 4)
+        {
+            // Assume order: 0=N,1=S,2=W,3=E
+            if (Math.Abs(move.X) > Math.Abs(move.Y))
+            {
+                return move.X > 0 ? 3 : 2; // E or W
+            }
+
+            return move.Y < 0 ? 0 : 1; // N or S (Y- up)
+        }
+
+        var angle = MathF.Atan2(-move.Y, move.X); // invert Y to match screen coords
+        var octant = (int)MathF.Round(8 * angle / (2 * MathF.PI)) % 8;
+        if (octant < 0) octant += 8;
+        return MapDirectionIndex(dirCount, octant);
+    }
+
+    private static int MapDirectionIndex(int directionCount, int octant)
+    {
+        if (directionCount >= 8)
+        {
+            // Asset order from MC_avanceX/MC_avanceY (Demonios.pas):
+            // 0=N (0,-1),1=S (0,1),2=W (-1,0),3=E (1,0),
+            // 4=NE (1,-1),5=SW (-1,1),6=NW (-1,-1),7=SE (1,1)
+            // Movement octants: 0=E,1=NE,2=N,3=NW,4=W,5=SW,6=S,7=SE
+            int[] map = { 3, 4, 0, 6, 2, 5, 1, 7 };
+            return map[Math.Clamp(octant, 0, 7)];
+        }
+
+        return Math.Clamp(octant, 0, Math.Max(0, directionCount - 1));
+    }
+
+    private void HandleErrorResponse(ReadOnlySpan<byte> payload)
+    {
+        if (payload.Length == 0)
+        {
+            return;
+        }
+
+        var code = payload[0];
+        var message = payload.Length > 1 ? Encoding.UTF8.GetString(payload[1..]) : $"Error {code}";
+        if (_stage == ClientStage.Login)
+        {
+            SetLoginStatus(message, Color.OrangeRed);
+        }
+        else
+        {
+            UpdateCreateStatus(message, Color.OrangeRed);
+        }
+    }
+
+    private void ApplyCharacterToWorld(CharacterInfo info)
+    {
+        LoadMapById(info.MapId);
+        var stats = new[]
+        {
+            new StatEntry("Fuerza", $"{info.StatStrength}%"),
+            new StatEntry("Constitución", $"{info.StatConstitution}%"),
+            new StatEntry("Inteligencia", $"{info.StatIntelligence}%"),
+            new StatEntry("Sabiduría", $"{info.StatWisdom}%"),
+            new StatEntry("Destreza", $"{info.StatDexterity}%")
+        };
+
+        _playerState.AvatarName = info.Name;
+        _playerState.Level = info.Level;
+        _playerState.ClassIndex = info.Class;
+        _playerState.RaceIndex = info.Race;
+        _playerState.Experience = info.Experience;
+        _playerState.Honor = info.Honor;
+        _playerState.CoreStats = stats;
+        _playerState.SkillLines = BuildPerkLines(info.Perks);
+        _playerState.CombatLines = new[]
+        {
+            $"Armadura: {info.Armor}",
+            $"Res. Mágica: {info.MagicResist}",
+            $"Evasión: {info.Evasion}"
+        };
+        _playerState.Health = info.Health;
+        _playerState.MaxHealth = info.MaxHealth;
+        _playerState.Mana = info.Mana;
+        _playerState.MaxMana = info.MaxMana;
+        _playerState.FoodPercent = info.FoodPercent;
+        _playerState.Gold = (int)info.Gold;
+        _playerState.Silver = (int)info.Silver;
+        _playerState.Armor = info.Armor;
+        _playerState.MagicResist = info.MagicResist;
+        _playerState.Evasion = info.Evasion;
+
+        var spawn = new Vector2(
+            (info.PosX + 0.5f) * TileWidth,
+            (info.PosY + 1f) * TileHeight);
+        _playerEntity = new PlayerEntity(id: -1, position: spawn);
+        _camera?.CenterOn(spawn);
+        _welcomeMessage = $"Bienvenido, {info.Name}";
+        BuildPlayerAnimation(info);
+    }
+
+    private void BuildPlayerAnimation(CharacterInfo info)
+    {
+        if (_animationMapping is null || _animationTextureProvider is null)
+        {
+            _playerAnimation = null;
+            return;
+        }
+
+        var genderMask = 0; // 0 = male (bit 11 set would be female)
+        var armorIndex = 0;
+        var classIndex = info.Class & 0x7;
+        var raceIndex = info.Race & 0x7;
+        var index = (armorIndex & 0x1F) |
+                    ((classIndex & 0x7) << 5) |
+                    ((raceIndex & 0x7) << 8) |
+                    genderMask;
+
+        var ids = _animationMapping.AnimationIds;
+        if (index < 0 || index >= ids.Count)
+        {
+            Console.Error.WriteLine($"Player animation index {index} out of range.");
+            _playerAnimation = null;
+            return;
+        }
+
+        var animationId = ids[index];
+        var key = $"m{animationId}";
+        if (!_animationTextureProvider.TryGetAnimation(key, out var animation))
+        {
+            Console.Error.WriteLine($"Player animation '{key}' not found.");
+            _playerAnimation = null;
+            return;
+        }
+
+        _playerAnimation = animation;
+        _playerDirection = 0;
+        _playerAction = MonsterAction.Idle;
+        _playerFrameIndex = 0;
+        _playerAnimTimer = 0f;
+        if (!_loggedPlayerAnimInfo)
+        {
+            _loggedPlayerAnimInfo = true;
+            var dirInfo = string.Join(", ",
+                animation.Directions.Select((d, i) =>
+                    $"dir {i}: frames {d.Frames.Count} nonEmpty {d.Frames.Count(f => f.Source != Rectangle.Empty)}"));
+            Console.WriteLine($"Player animation {key} dirs={animation.Directions.Count} | {dirInfo}");
+        }
+    }
+
+    private static IReadOnlyList<string> BuildPerkLines(uint perkMask)
+    {
+        var perks = new List<string>();
+        for (var i = 0; i < PerkNames.Length; i++)
+        {
+            var bit = 1u << i;
+            if ((perkMask & bit) != 0)
+            {
+                perks.Add($"o {PerkNames[i]}");
+                if (perks.Count >= 3)
+                {
+                    break;
+                }
+            }
+        }
+
+        return perks;
     }
 
     private void UpdateHudPanelBounds(Viewport viewport)
@@ -1996,10 +2977,6 @@ public class Game1 : Game
         _activeQuickSpellIcon = null;
         _hudQuickAttackLabel = "Sin seleccionar";
         _hudQuickSpellLabel = "Ninguno";
-        if (_hudQuickActionWidget is not null)
-        {
-            _hudQuickActionWidget.ActiveIndex = -1;
-        }
         RefreshHudHintLabel();
     }
 
@@ -2010,8 +2987,7 @@ public class Game1 : Game
             return;
         }
 
-        _uiHudHintLabel.Text =
-            $"Ataque rápido: {_hudQuickAttackLabel}\nHechizo rápido: {_hudQuickSpellLabel}\n{HudControlsHelpText}";
+        _uiHudHintLabel.Text = string.Empty;
     }
 
     private void SetQuickActionHighlight(int slot)
@@ -2108,7 +3084,7 @@ public class Game1 : Game
         _hudHealthFill = healthRatio;
         if (_uiHudHealthLabel is not null)
         {
-            _uiHudHealthLabel.Text = $"Salud {_playerState.Health} / {_playerState.MaxHealth}";
+            _uiHudHealthLabel.Text = $"{_playerState.Health} / {_playerState.MaxHealth}";
         }
 
         var manaRatio = _playerState.MaxMana > 0
@@ -2117,22 +3093,22 @@ public class Game1 : Game
         _hudManaFill = manaRatio;
         if (_uiHudManaLabel is not null)
         {
-            _uiHudManaLabel.Text = $"Mana {_playerState.Mana} / {_playerState.MaxMana}";
+            _uiHudManaLabel.Text = $"{_playerState.Mana} / {_playerState.MaxMana}";
         }
 
         if (_uiHudFoodLabel is not null)
         {
-            _uiHudFoodLabel.Text = $"Comida {_playerState.FoodPercent}%";
+            _uiHudFoodLabel.Text = $"{_playerState.FoodPercent}%";
         }
 
         if (_uiHudGoldLabel is not null)
         {
-            _uiHudGoldLabel.Text = $"MO {_playerState.Gold}";
+            _uiHudGoldLabel.Text = $"{_playerState.Gold}";
         }
 
         if (_uiHudSilverLabel is not null)
         {
-            _uiHudSilverLabel.Text = $"MP {_playerState.Silver}";
+            _uiHudSilverLabel.Text = $"{_playerState.Silver}";
         }
 
         if (_uiHudMessageLabels is not null)
@@ -2334,6 +3310,53 @@ public class Game1 : Game
         }
 
         _monsterRenderer.Draw(_spriteBatch, _camera);
+
+        if (_playerEntity is not null && _animationTextureProvider is not null)
+        {
+            DrawPlayer(_spriteBatch, _camera, _playerEntity);
+        }
+    }
+
+    private void DrawPlayer(SpriteBatch spriteBatch, Camera2D camera, PlayerEntity player)
+    {
+        if (_debugTextRenderer is null)
+        {
+            return;
+        }
+
+        if (_playerAnimation is null)
+        {
+            var size = new Point(20, 28);
+            var position = player.Position - new Vector2(size.X / 2f, size.Y);
+            var rect = new Rectangle((int)position.X, (int)position.Y, size.X, size.Y);
+
+            spriteBatch.Begin(
+                samplerState: SamplerState.PointClamp,
+                blendState: BlendState.NonPremultiplied,
+                transformMatrix: camera.GetViewMatrix());
+
+            spriteBatch.Draw(_debugTextRenderer.PixelTexture, rect, Color.CornflowerBlue);
+            spriteBatch.End();
+            return;
+        }
+
+        var directionSlice = _playerAnimation.Directions[Math.Clamp(_playerDirection, 0, _playerAnimation.Directions.Count - 1)];
+        var frame = GetPlayerFrame(directionSlice);
+        if (frame.Source == Rectangle.Empty)
+        {
+            return;
+        }
+
+        var position2 = AnimationRenderHelper.CalculateDrawPosition(player.Position, directionSlice, frame, _playerMirror);
+
+        spriteBatch.Begin(
+            samplerState: SamplerState.PointClamp,
+            blendState: BlendState.NonPremultiplied,
+            transformMatrix: camera.GetViewMatrix());
+
+        var effects = _playerMirror ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        spriteBatch.Draw(_playerAnimation.Texture, position2, frame.Source, Color.White, 0f, Vector2.Zero, Vector2.One, effects, 0.7f);
+        spriteBatch.End();
     }
 
     private string BuildInfoPanelText()

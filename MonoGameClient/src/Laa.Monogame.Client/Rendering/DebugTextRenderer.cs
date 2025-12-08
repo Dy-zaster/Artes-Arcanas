@@ -21,6 +21,8 @@ public sealed class DebugTextRenderer : IDisposable
         _glyphs = BuildGlyphs();
     }
 
+    public Texture2D PixelTexture => _pixel;
+
     public Vector2 MeasureString(string text, float scale = 1f)
     {
         var width = 0f;

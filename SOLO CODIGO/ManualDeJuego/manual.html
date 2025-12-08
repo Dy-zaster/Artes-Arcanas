@@ -1,0 +1,1087 @@
+<html>
+<head><meta charset='utf-8'/><title>Manual de Juego</title>
+<link href="g/aa.css" rel="stylesheet" type="text/css">
+</head>
+<body marginwidth=0 marginheight=0 leftmargin=0 topmargin=0 scrolling=no
+bgcolor=#000>
+<div width=100% class="div_centered">
+<table border=0 cellpadding=0 cellspacing=0 hspace=0 vspace=0 style="table-layout: fixed;margin:auto;" width=832>
+<tr>
+<td class="img_bg0"></td>
+<td class="img_bg1"></td>
+<td class="img_bg1"></td>
+<td class="img_bg1"></td>
+<td class="img_bg1"></td>
+<td class="img_bg1"></td>
+<td class="img_bg1"></td>
+<td class="img_bg2"></td>
+</tr>
+<tr>
+<td class="img_bg3" ></td>
+<td colspan=6 style="border:0;background-image:url(g/f.gif)" >
+<div class="div_centered">
+
+
+<h1>Manual de Juego<br>ARTES ARCANAS</h1>
+<center><h4>Ver. 0.05</h4></center>
+<a name="Contenido"></a><hr>
+<h2>Contenido</h2>
+<ol type="I" class="indice_centrado">
+<li><a href="#Introducción">Introducción</a>
+<li><a href="#Creando">Creando un Avatar</a>
+<li><a href="#Pantalla">Pantalla de Juego</a>
+<li><a href="#Teclas">Teclas y Comandos del Juego</a>
+<li><a href="#Hechizos">Hechicería</a>
+<li><a href="#Combate">Sistema de Combate</a>
+<li><a href="#LaMuerte">Muerte y Resurrección</a>
+<li><a href="#Comercio">Comercio</a>
+<li><a href="#Clanes">Los clanes de avatares</a>
+<li><a href="#Configurando">Configuraciones</a>
+</ol>
+<hr>
+<a name="Introducción"></a>
+<h2>Introducción</h2>
+<p>Artes Arcanas es un juego de rol multiusuario ambientado en un mundo mitológico. El juego tiene mecanismos de supervivencia para personajes de niveles bajos, como creación de fogatas, pesca y cacería. Para personajes de nivel medio está implementado el combate contra monstruos mágicos, cacería con trampas mágicas, mecanismos de extracción de recursos, fabricación de herramientas, armas, armaduras y pócimas mágicas. Para personajes de alto nivel está implementado el combate contra otros jugadores, creación de amuletos y armamento mágico, creación de clanes y conquista castillos.</p>
+<h3>Iniciando el Juego</h3>
+<p>Para empezar a jugar montando tu propio servidor local basta usar el acceso directo "LAA Servidor Local", que activará un servidor en la misma máquina. Para acceder a un servidor en otra máquina es necesario indicar el nombre o el ip de la máquina del servidor remoto y el puerto de comunicaciones, ambos pueden ser modificados desde la pantalla inicial. Para modificar el servidor y puerto predefinidos vea <a href="#Configurando">Configurando el Juego</a>
+</p>
+<h3>Requerimientos Mínimos</h3>
+<p>Windows XP, resolución de pantalla de por lo menos 1280x720p, 512MB en RAM, ratón y tarjeta de sonido. Si es necesario es posible <a href="#ModoLento">reducir el consumo de CPU</a> cortando a la mitad los frames por segundo.
+</p>
+<p>El juego puede correr en pantalla completa presionando Alt + F4 o haciendo clic en el botón de maximizar. Para volver a modo ventana basta presionar nuevamente Alt + F4.
+</p>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Creando"></a>
+<h2>Creando un Avatar</h2>
+<p>En esta sección se describe el proceso de creación de un avatar, además de las clases, razas, pericias y habilidades disponibles.
+</p>
+<ul>
+<li><a href="#Habilidades">Habilidades</a>
+<li><a href="#Razas">Raza del Avatar</a>
+<li><a href="#Clases">Clases de Avatares</a>
+<li><a href="#Pericias">Pericias</a>
+</ul>
+<br><a name="Habilidades"></a>
+<h3>Habilidades</h3>
+<p>Las habilidades de los avatares son: Fuerza, Destreza, Constitución, Inteligencia y Sabiduría. Luego de definir la raza y clase es posible modificar los puntajes de habilidades al azar pinchando el botón del dado. Los niveles mínimos iniciales de los puntajes de cada habilidad dependen de la clase y la raza del avatar. La suma total inicial de puntajes de habilidades es igual para todos los avatares.
+</p>
+<p>Cuando el avatar sube de nivel se aumentan 5 puntos a la habilidad que está marcada con el signo "+" en el panel de "Puntajes" de la pantalla de juego. Cuando el avatar pasa al nivel 15 aparece el signo "-" en el panel de "Puntajes" para marcar la habilidad que será reducida para que otra aumente. La habilidad marcada con "-" baja 5% y la marcada con "+" sube 5%. Para evitar cambios en los niveles de habilidades hay que marcar la misma habilidad con los signos "+" y "-". El puntaje máximo por habilidad es de 100%, el mínimo es 5%.</p>
+<h4>Fuerza</h4>
+<p>Tiene acción directa en el nivel daño en el combate cuerpo a cuerpo (meleé) y con arcos. El daño base puede ser multiplicado hasta en un 250% con 100% en Fuerza. Con 40% en fuerza el daño es normal, si el puntaje es menor el daño hecho también es menor. No tiene efecto sobre ballestas y arcabuces que no estén hechizados.</p>
+<h4>Destreza</h4>
+<p>Actúa sobre las capacidades de evasión y ataque. Cada 5 puntos de destreza agrega un punto al nivel de evasión y dos si el avatar es Paladín, Pícaro o Bardo. Un puntaje bajo disminuye la efectividad de ataque del avatar. A partir de nivel 25 sólo existe bonificación en ataque si el avatar tiene por lo menos 90% en destreza.
+</p>
+<a name="Constitucion"></a><h4>Constitución</h4>
+<p>El puntaje de constitución, junto con la clase y nivel, determinan la cantidad de puntos de salud del personaje. Todo personaje que quiera basarse en el combate cuerpo a cuerpo necesitará un puntaje alto en constitución.
+</p>
+<h4>Inteligencia y Sabiduría</h4>
+<p>Actúan sobre la cantidad de maná que puede acumular el avatar. También determinan la facilidad con la que el avatar aprenderá nuevos hechizos. Para el Mago, Guerrero Mago y Bardo cada punto de Inteligencia vale por dos de Sabiduría. Para el Clérigo, Paladín y Montaraz cada punto de Sabiduría vale por dos de Inteligencia. A partir de nivel 25 los avatares sólo ganan puntos adicionales de maná si tienen por lo menos 90% en inteligencia o en sabiduría hasta un máximo de 6 puntos de maná por nivel si tiene 100% en inteligencia y en sabiduría. Los hechizos tiene un nivel mínimo de Inteligencia y Sabiduría, si el avatar no cumple con estos niveles mínimos puede fallar al intentar aprender el hechizo. Cumplir con los niveles mínimos es necesario para <a href="#EscribirMagia">escribir magia</a>.
+</p>
+<a href="#Creando">Volver a "Creando un Avatar"</a>
+<br><a name="Razas"></a>
+<h3>Raza del avatar</h3>
+<p>Es posible elegir entre Humano, Elfo, Enano, Gnomo, Semielfo, Orco y Drow. Las razas no humanas tienen puntajes mínimos de habilidades que corresponden con sus características típicas. Dependiendo de la raza estarán disponibles algunas o todas las clases de avatares. Todas las razas y clases comienzan con el mismo total de puntos en habilidades. Con cada nivel se gana 5% en la habilidad seleccionada. Después de nivel 25 es posible reducir una habilidad para aumentar otra. 
+</p>
+<a href="#Creando">Volver a "Creando un Avatar"</a>
+<br><a name="Clases"></a>
+<h3>Las clases de avatares</h3>
+<p>Las clases de avatares disponibles son: Guerrero, Pícaro, Clérigo, Mago, Paladín, Montaraz (Guardabosques), Bardo y Guerrero Mago. La clase elegida tendrá impacto directo sobre los puntajes de habilidades, de forma que no existan guerreros débiles, pícaros torpes, magos con inteligencia baja, etc. 
+<h5>Clases permitidas por raza:</h5>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Clase</th><th>Humano</th><th>Elfo</th><th>Semielfo</th><th>Enano</th><th>Gnomo</th><th>Orco</th><th>Drow</th></tr>
+<tr><td>Guerrero</td>
+<td><li></td><td><li></td><td><li></td><td><li></td><td><li></td><td><li></td><td><li></td></tr>
+<tr><td>Pícaro</td>
+<td><li></td><td>&nbsp;</td><td><li></td><td><li></td><td><li></td><td><li></td><td><li></td></tr>
+<tr><td>Clérigo</td>
+<td><li></td><td><li></td><td><li></td><td><li></td><td><li></td><td><li></td><td>&nbsp;</td></tr>
+<tr><td>Mago</td>
+<td><li></td><td><li></td><td><li></td><td>&nbsp;</td><td><li></td><td>&nbsp;</td><td><li></td></tr>
+<tr><td>Paladín</td>
+<td><li></td><td>&nbsp;</td><td><li></td><td><li></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Montaraz</td>
+<td><li></td><td><li></td><td><li></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Bardo</td>
+<td>&nbsp;</td><td><li></td><td><li></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Guerrero Mago</td>
+<td>&nbsp;</td><td><li></td><td><li></td><td>&nbsp;</td><td>&nbsp;</td><td><li></td><td><li></td></tr>
+</table></center>
+<h4>El Guerrero</h4>
+<p>La habilidad primaria del guerrero es la fuerza que le permite hacer más daño en el combate y tiene como mínimo 50 puntos. El guerrero puede utilizar todas las armas, armaduras, escudos y cascos que le permitan su raza. Los guerreros no pueden lanzar hechizos pero tienen bonificación en ataque y puntos de salud.
+</p>
+<a name="EspecialidadArmas"></a>
+<h6>Habilidad especial: Manejo de armas.</h6>
+<p>El guerrero y el pícaro pueden especializarse en el manejo de un arma y ganar hasta 64% de bono en ataque y 100% de daño adicional. El nivel de especialidad sube al dar el golpe final y derrotar a una criatura con el mismo tipo de arma que muestra el icono de especialidad. Al especializarse en una nueva arma el nivel de especialización es igual al nivel del avatar. A partir de nivel 25 el nivel de especialización sube al doble de velocidad.</p>
+<p>Para cambiar de especialidad hay que hacer clic en el icono de especialidad para ponerlo en modalidad de cambio de especialidad y dar el golpe final con el tipo de arma en la que se desea especializarse. Primero bajará el puntaje de especialización del arma actual hasta 0 y entonces la nueva especialidad corresponderá con el arma que dio el golpe final y su puntaje de especialidad empezará a subir.</p>
+<p>En la pantalla de juego a la derecha de las casillas de las manos está el icono de especialidad en armas. Al pasar el ratón encima aparece el bono de ataque y daño. Inicialmente el bono comienza en +1% de ataque. El bono de ataque sube 1% por cada 2 puntos de especialidad y el bono de daño sube +3.125% por cada 4 puntos de especialidad.</p>
+<h4>El Pícaro</h4>
+<p>La habilidad primaria del pícaro es la destreza y tiene como mínimo 50 puntos. El pícaro puede utilizar todas las armas, pero sólo las armaduras, escudos y cascos ligeros que le permitan su clase. El pícaro no puede lanzar hechizos pero su capacidad de ataque es igual a la del guerrero y tiene bonificación en evasión. Un pícaro puede y es recomendable que llegue a tener 100% en destreza. Al igual que el guerrero puede <a href="#EspecialidadArmas">especializarse en manejo de armas.</a></p>
+<h4>El Clérigo</h4>
+<p>La habilidad primaria del clérigo es la sabiduría y tiene como mínimo 50 puntos. El clérigo puede utilizar sólo las armas contundentes y las armaduras, escudos, cascos, túnicas y capas que le permitan su raza. Los clérigos pueden lanzar hechizos y su nivel de maná es afectado principalmente por su puntaje en sabiduría. Aunque no pueden especializarse en el manejo de armas sus capacidades curativas son valiosas en el campo de combate. Tiene el mismo nivel de puntos de vida que el pícaro, pero con menor puntuación de ataque.
+</p>
+<h4>El Mago</h4>
+<p>La habilidad primaria del mago es la inteligencia y tiene como mínimo 50 puntos. El mago sólo puede utilizar armas básicas y armaduras muy especiales, además de túnicas, capas y gorros de mago. Los magos pueden lanzar todo tipo de hechizos y su nivel de maná es afectado principalmente por su inteligencia. Los magos pueden incrementar enormemente el daño que hacen sus hechizos de combate llevando cayados y cetros mágicos. Tienen la más rápida y mayor capacidad de acumular maná y pueden aprender incluso los hechizos de clérigo, aunque con mayor dificultad que los hechizos de magos. Los magos tienen capacidad reducida de ataque y pocos puntos de vida, pero pueden hechizar sus túnicas y gorros para que les ayuden a esquivar los ataques del enemigo. 
+</p>
+<h4>El Paladín</h4>
+<p>El paladín tiene las ventajas del guerrero en uso de armas y casi el mismo nivel de puntos de salud. Tiene una bonificación en ataque igual a la del guerrero y el nivel de evasión del pícaro. Aunque no puede especializarse en el uso de armas puede lanzar hechizos de clérigo. Su sabiduría determina su nivel de maná, que aún siendo bajo, le es bastante útil para curar y recuperar puntos de salud. Los paladines deben conservar su puntuación de <a href="#Honor">honor</a> para no tener penalizaciones en evasión y ataque. Aunque pueden restaurar su honor las penalizaciones para los paladines sin honor son bastante severas perdiendo evasión por destreza y su capacidad de ataque se reduce a la de un clérigo.
+</p>
+<h4>El Montaraz</h4>
+<p>El montarás tiene el nivel de ataque del guerrero, el nivel de maná del paladín y el nivel de puntos de vida del clérigo. Puede utilizar todo tipo de armas, armaduras, escudos y cascos que le permita su raza. El Montaraz no puede especializarse en el uso de armas, pero puede lanzar hechizos de clérigo.
+</p>
+<a name="ElBardo"></a>
+<h4>El Bardo</h4>
+<p>El bardo tiene evasión y puntos de vida al nivel del pícaro, pero capacidad de ataque similar al clérigo. El bardo no utiliza armas pesadas. El bardo tiene el nivel de maná del paladín, pero su inteligencia influye más que su sabiduría en la cantidad de maná que puede acumular. El bardo puede usar instrumentos para mejorar temporalmente la capacidad de ataque de los avatares que le rodean. El bardo puede lanzar hechizos de mago, pero no puede utilizar cetros, cayados ni libros de magia.
+</p>
+<a name="Juglaria"></a>
+<h6>Habilidad especial: Juglaría</h6>
+<p>Todos los bardos pueden utilizar la Juglaría para elevar el puntaje de ataque de sus compañeros en 25%. El tiempo que dura el efecto depende del nivel del bardo y del instrumento. Para utilizar esta habilidad es necesario conseguir una flauta o un laúd y tener dos puntos de maná disponibles. La habilidad beneficia a todos los jugadores del mismo clan cercanos al bardo. Si el bardo no tiene clan afecta a todos los jugadores de su mismo estatus de honor/sin honor. El efecto del laúd dura el doble que el efecto de la flauta.</p>
+<a name="CuernoGuerra"></a>
+<h6>El cuerno de guerra</h6>
+<p>Este objeto produce efectos similares a la juglaría. Todas las clases de avatares pueden tocar el cuerno de guerra pero, a diferencia de los instrumentos, tiene número limitado de usos y el nivel del avatar no incrementa la duración del efecto.
+</p>
+<h4>El Guerrero Mago</h4>
+<p>El guerrero mago tiene el nivel de puntos de vida del pícaro y la capacidad de ataque del clérigo. El nivel de maná del guerrero mago depende de su inteligencia y puede lanzar hechizos de mago, además de poder utilizar gran variedad de artefactos, armas y armaduras.
+</p>
+<a href="#Creando">Volver a "Creando un Avatar"</a>
+<br><a name="Pericias"></a>
+<h3>Las pericias</h3>
+<p>Las pericias que se pueden elegir dependen de la clase del avatar, de esta forma los guerreros pueden elegir pericias que les ayuden en el combate y los magos pericias que potencien aún más sus capacidades para las artes arcanas. El efecto de las pericias aumenta en la medida que el avatar suba de nivel y aumente su puntaje en habilidades relacionadas con dicha pericia.
+</p>
+<a name="Alquimia"></a>
+<h4>Alquimia</h4>
+<p>Esta pericia permite fabricar objetos mágicos como cetros de magos, símbolos sagrados, amuletos, tinta mágica, oricalco y varitas para acumular maná. A medida que el avatar sube de nivel puede elaborar objetos más poderosos. Es necesario comprar un libro de alquimia, al usarlo aparecerá un menú para elegir lo que deseamos fabricar. Cada tipo de objeto necesita que el avatar disponga en su inventario de ciertos recursos (oro, plata, gemas) para elaborarlo.
+</p>
+<a name="EscribirMagia"></a>
+<h4>Escribir Magia</h4>
+<p>Permite crear pergaminos mágicos usando pergaminos en blanco y tinta mágica. Ambos recursos se pueden comprar y un <a href="#Alquimia">alquimista</a> puede fabricarlos. Es vital cumplir con los niveles mínimos de inteligencia, sabiduría y nivel para lograr escribir el hechizo en el pergamino. Si el avatar no cumple con los requisitos de inteligencia y sabiduría, su nivel tendrá que ser por lo menos el doble del mínimo necesario.
+</p>
+<a name="Pociones"></a>
+<h4>Herbalismo</h4>
+<p>Para preparar pociones mágicas es necesario comprar un caldero mágico y disponer de una buena variedad y cantidad de ingredientes. Al usar el caldero mágico aparece el menú de preparación de pócimas mágicas y brebajes. A medida que el avatar sube de nivel puede elaborar mayor variedad de pócimas.</p>
+<p>Esta pericia permite recoger ingredientes más rápidamente al usar las "herramientas de herbalista" y permite recibir experiencia por realizar esta actividad. </p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Poción</th>
+<th>Ingredientes</th></tr>
+<tr><td>Jugo de hierbas<br>Cura el <a href="#Veneno">envenenamiento</a></td>
+<td>Aceite de salamandra + Muérdago seco</td></tr>
+<tr><td>Jugo revitalizante (x15)<br>+3 puntos de Salud</td>
+<td>Muérdago seco + Capullos de mariposas</td></tr>
+<tr><td>Jugo de orquídeas (x12)<br>+3 puntos de Maná</td>
+<td>Pétalos de orquídea + Capullos de mariposas</td></tr>
+<tr><td>Regeneración física<br>+15 puntos de Salud</td>
+<td>Ojos de araña infernal + Muérdago seco</td></tr>
+<tr><td><a href="#FuerzaGigante">Fuerza de gigante</a></td>
+<td>Huesos de dragón en polvo + Capullos de mariposas + Aceite de salamandra</td></tr>
+<tr><td>Regeneración psítica<br>+15 puntos de Maná</td>
+<td>Baba de medusa + Capullos de mariposas</td></tr>
+<tr><td><a href="#DisiparMagia">Disipación de magia</a></td>
+<td>Lágrimas de unicornio + Capullos de mariposas + Muérdago seco</td></tr>
+<tr><td><a href="#Apresurar">Aceleración</a></td>
+<td>Huesos de dragón en polvo + Capullos de mariposas + Pétalos de orquídea</td></tr>
+<tr><td><a href="#SanarEnfermedad">Sanación</a></td>
+<td>Baba de medusa + Aceite de salamandra</td></tr>
+<tr><td><a href="#ArmaduraMagica">Armadura mágica</a></td>
+<td>Baba de medusa + Pétalos de orquídea</td></tr>
+<tr><td><a href="#Invisibilidad">Invisibilidad</a></td>
+<td>Lágrimas de unicornio + Aceite de salamandra + Ojos de araña infernal</td></tr>
+<tr><td><a href="#Paralizar">Brebaje paralizante</a></td>
+<td>Baba de medusa + Huesos de dragón en polvo + Lágrimas de unicornio</td></tr>
+<tr><td><a href="#ProteccionDivina">Protección divina</a></td>
+<td>Muérdago seco + Huesos de dragón en polvo + Lágrimas de unicornio</td></tr>
+
+</table></center>
+<h4>Tallar gemas</h4>
+<p>Esta pericia permite incrementar el valor de las gemas. Una gema bien tallada vale hasta 50 veces más que una gema no tallada. En el peor de los casos, si la gema no es tallada adecuadamente, puede perder hasta el 50% de su valor comercial. Es necesario adquirir un Bruñidor para tallar las gemas y ubicarse frente a un taller de joyería. Un puntaje alto en destreza y un nivel alto del avatar aseguran mejores resultados.
+</p>
+<a name="Herreria"></a>
+<h4>Herrería</h4>
+<p>Permite construir objetos de metal, armas y armaduras además permite fundir mineral. Para construir objetos es necesario tener las materias primas y disponer de un martillo de herrero y acceso a un yunque. Usando el martillo de herrero aparece el menú de fabricación. Para fundir mineral es necesario tener acceso a una fundición que generalmente se las encuentra en los poblados. A medida que el herrero incremente su nivel podrá construir más tipos de objetos.
+</p>
+<h4>Carpintería</h4>
+<p>Permite fabricar objetos de madera. Para trabajar con la madera es necesario tener las materias primas, un serrucho y estar ubicado frente a un taller de carpintería. Usando el serrucho aparece el menú de fabricación. A medida que el carpintero incremente su nivel podrá construir más tipos de objetos. Los carpinteros son más eficientes para extraer madera de los bosques.
+</p>
+<h4>Sastrería</h4>
+<p>Permite elaborar vestimentas de tela y armaduras de cuero. Para confeccionar vestimentas es necesario tener las materias primas además de tijeras y aguja. Usando las tijeras aparece el menú de fabricación. Las tijeras son vendidas por los herreros y vienen con una aguja de regalo. A medida que el sastre incremente su nivel podrá construir más tipos de objetos.
+</p>
+<p>Esta pericia también permite curtir pieles y convertirlas en cuero. Para curtir una piel sólo es necesario usar las pieles estando frente a una tina de curtido.
+</p>
+<h4>Minería</h4>
+<p>Esta pericia permite a un personaje extraer minerales rápidamente. Un avatar sin esta pericia no puede extraer más de una unidad y no gana experiencia al realizar esta actividad. El rendimiento mejora con la fuerza y el nivel del personaje. Esta pericia, al igual que <a href="#Herreria">herrería</a> permite fundir minerales.
+</p>
+<h4>Elocuencia</h4>
+<p>Con esta pericia se logran mejores precios de compra y venta con los comerciantes en la medida que el avatar aumente de nivel. Cuando un avatar compra un objeto su precio sube y cuando lo vende el precio baja.
+</p>
+<p>Esta pericia es necesaria para fundar y ser el líder de un <a href="#Clanes">clan</a>.</p>
+<h4>Regeneración</h4>
+<p>Permite a un avatar recuperar puntos de vida todo el tiempo, si el avatar tiene por lo menos 80% en constitución regenera el doble de puntos de vida.  El <a href="#Veneno">veneno</a> cancela el efecto de la regeneración. La cantidad de puntos de vida recuperados incrementa con un <a href="#AmuletoRegeneracion">amuleto de regeneración</a> y al <a href="#Descansar">descansar</a>.
+</p>
+<h4>Ambidextría</h4>
+<p>Normalmente sólo es posible utilizar armas ligeras en la mano izquierda. Con esta pericia es posible utilizar dos armas de peso medio en cada mano, por ejemplo dos espadas largas.
+</p>
+<h4>Apuñalar</h4>
+<p>Incrementa el daño hecho con armas ligeras punzantes al atacar por retaguardia. El daño aumenta en un punto por cada 5% de destreza. Los pícaros ganan un punto de daño adicional por cada 2 niveles. Ej: Un pícaro de nivel 40 con destreza al 100% apuñalará por 40 puntos de daño adicionales.
+</p>
+<a name="Ocultarse"></a>
+<h4>Ocultarse</h4>
+<p>Esta pericia es bastante útil para pasar desapercibido entre monstruos muy poderosos u otros avatares. Se complementa con la pericia apuñalar. El avatar quedará "Invisible" por cierta cantidad de tiempo pero cada vez que se mueva correrá el riesgo de volver a ser visible. El nivel de destreza es vital para esta pericia, un avatar con 100% en destreza puede moverse estando oculto. La pericia se activa con la tecla "o". Si el avatar no tiene suficiente destreza no podrá ocultarse rápidamente. Un pícaro tiene bonificación al intentar ocultarse y con 100% en destreza no fallará al intentar ocultarse. Usando el <a href="#AmuletoCamuflaje">amuleto de camuflaje</a> el avatar puede moverse sin correr el riesgo de quedar descubierto y cuando no se mueve contrarresta el hechizo <a href="#VisionVerdadera">visión verdadera</a> de otros avatares y no puede ser atacado con armas de rango ni hechizos de precisión.
+</p>
+<a name="Berserker"></a>
+<h4>Ira Berserker</h4>
+<p>Incrementa el daño del arma en 150%. El tiempo de duración de este efecto aumenta en 50% cuando el avatar deja de ser aprendiz y gana otro 50% de incremento de tiempo cuando llega a nivel 21. Al activar "Ira Berserker" el avatar pierde 20 puntos en evasión mientras esté activo el efecto y 20 puntos de salud. Es necesario tener más de 20 puntos de salud para usar esta pericia. Se activa con la tecla "I".
+</p>
+<a name="Zoomorfismo"></a>
+<h4>Zoomorfismo</h4>
+<p>Al activarse esta pericia incrementa el nivel de evasión del avatar en 2% por cada 5 puntos de destreza del avatar. También incrementa el nivel de ataque con el mismo efecto que causaría un incremento de 20% en destreza. El nivel de daño sube 1 punto por cada 2 niveles del avatar. Mientras esté activa esta pericia sólo se pueden usar anillos, brazaletes y armas mágicas conjuradas. Se activa con la tecla "Z" y es necesario no tener equipadas armas, armaduras, escudos ni cascos. Al equipar alguno de los objetos anteriores esta pericia es desactivada.
+</p>
+<a name="Pescar"></a>
+<h4>Pescar</h4>
+<p>Todos los avatares pueden usar una caña para pescar y ganan experiencia mientras sean aprendices. Al pescar existe una pequeña chance de obtener un ingrediente para pócimas mágicas y una chance aún más pequeña de encontrar un objeto ornamental valioso.</p>
+<a href="#Creando">Volver a "Creando un Avatar"</a>
+<br>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Pantalla"></a>
+<h2>Pantalla de Juego</h2>
+<p>Esta sección describe las áreas de información disponibles durante el juego.
+</p>
+<ul>
+<li><a href="#Informacion">Información del Avatar</a>
+<li><a href="#Paneles">Paneles de Información</a>
+<li><a href="#Inventario">El Inventario</a>
+<li><a href="#Casillas">Casillas para Equipar Objetos</a>
+<li><a href="#LibroHechizos">El Libro de Hechizos</a>
+</ul>
+<a name="Informacion"></a>
+<h3>Información del Avatar</h3>
+<p>En la parte central inferior de la pantalla aparece el rostro del avatar, los puntos de salud, los puntos de maná y la cantidad de comida que le queda antes de que el avatar empiece a perder puntos de salud por hambre. A la derecha están las casillas que indican que está usando el avatar en cada mano, algunos objetos sólo se pueden usar en una de estas casillas. Para los avatares que pueden lanzar hechizos aparece el icono del hechizo elegido, para los que no pueden lanzar hechizos ese icono muestra la especialidad en armas actual.</p>
+<h4>El rostro del avatar</h4>
+<p>Pinchando este icono aparece una pequeña descripción del avatar, y si el avatar está muerto es teletransportado cerca de una catedral para ser resucitado. El icono aparece en gris cuando el avatar está muerto, celeste cuando está <a href="#Hielo">congelado</a>, verde cuando está <a href="#Veneno">envenenado</a>, rojo si tiene una maldición o tiene activa la pericia Ira Berserker, dorado si tiene activa la pericia Zoomorfismo, o azul si está bajo el efecto de un hechizo.
+</p>
+<h4>Los puntos de salud del avatar</h4>
+<p>Al lado del rostro del avatar aparece el puntaje de salud actual y el número máximo de puntos de salud recuperables. El máximo de puntos de salud del avatar depende del nivel, clase y constitución del avatar. Si el número de puntos de salud es mayor a la mitad del total, aparecen en color verde y significa que se pueden recuperar <a href="#Descansar">descansando</a>. Si los puntos de salud aparecen en amarillo o en rojo usando vendas las heridas sanan más rápido.
+</p>
+<p>Cuando los puntos de salud llegan a 0 el avatar muere, pierde un porcentaje de experiencia, y sus objetos más valiosos caen al piso. El personajes puede resucitar en una catedral acercándose a la puerta. Es posible teletransportarse directamente a una catedral haciendo clic en el rostro del personaje, o con el comando <a href="#PalabraResucitar">/RESucitar</a>.
+</p>
+<h4>Los puntos de maná del avatar</h4>
+<p>El número máximo de puntos de maná dependen del nivel, clase, inteligencia y sabiduría del avatar. El número actual de puntos de maná aparece primero y luego el máximo acumulable. Si el puntaje de maná es mayor a la mitad del máximo, aparece en color verde, sino aparece en amarillo o en rojo si es menor o igual a un cuarto del total. Se pueden recuperar puntos de maná <a href="#Meditar">meditando</a>, con pociones de regeneración psítica o con el hechizo drenaje vampírico.
+</p>
+<h4>Icono del hechizo elegido</h4>
+<p>Muestra y describe el hechizo elegido si se pasa el ratón encima del icono. Haciendo clic izquierdo sobre este icono lanza el hechizo con preferencia a uno mismo en lugar del objetivo apuntando. Haciendo clic derecho lanza el hechizo con preferencia al objetivo apuntado. Si no apuntamos a un objetivo hechizos positivos caen sobre el mismo avatar, efectos negativos caen sobre el monstruo apuntado. Si este icono aparece oscurecido significa que el avatar no tiene suficiente maná para el hechizo.</p>
+<a href="#Pantalla">Volver a "Pantalla de Juego"</a>
+<br>
+<a name="Paneles"></a>
+<h3>Paneles de Información</h3>
+<p>El minimapa, puntajes, experiencia y pericias está ubicado en la parte inferior izquierda de la pantalla. A la derecha está ubicado el panel con información de los objetos equipados.
+</p>
+<h4>Puntajes de habilidades</h4>
+<p>En el panel están listadas las habilidades del personaje y resaltada con (+) la habilidad elegida para ser mejorada en el siguiente nivel. Hasta nivel 24 los jugadores pueden pinchar sobre una habilidad para que al momento de subir de nivel el avatar gane 5% en la habilidad elegida. A partir de nivel 25 se puede reducir una habilidad marcada con (-) para aumentar otra. En esta misma zona aparece el puntaje de experiencia necesario para subir de nivel. También figura el nivel de <a href="#Honor">honor</a> del avatar que inicialmente es plebeyo y puede subir a noble o héroe.
+</p>
+<h4>Experiencia necesaria</h4>
+<p>Si esta cantidad baja hasta 0 el avatar sube de nivel. La cantidad inicial de experiencia necesaria es el resultado de multiplicar 100 por el nivel actual y por el siguiente nivel, sin exceder 65000 puntos. Es decir que para pasar de nivel 3 a 4 se necesitarán 100x3x4=1200 puntos de experiencia. Si el avatar <a href="#LaMuerte">muere</a> la experiencia faltante para subir de nivel se incrementa, pero nunca supera la cantidad inicial. El avatar reduce el nivel de experiencia faltante por cada ataque y hechizo efectivo así como por cada monstruo que logre vencer.
+</p>
+<h4>Pericias</h4>
+<p>En el panel de información se listan las pericias del avatar, además del nivel de ataque, evasión y armadura actuales del avatar. El nivel de las armaduras muestra el porcentaje de daño que disminuyen de cada ataque.
+</p>
+<h4>Los niveles de armaduras</h4>
+<p>Existen siete niveles de armaduras indicados en el panel de pericias para los tipos de ataque: Punzante, Cortante, Contundente, Hielo, Rayo, Fuego y Veneno. El nivel de protección que brindan se puede apreciar en la <a href="#TablaArmaduras">tabla de niveles de armadura</a>.
+<h4>Evasión</h4>
+<p>Este puntaje depende de la clase, destreza y nivel del avatar. El nivel de evasión determina la probabilidad de que el avatar esquive los ataques del enemigo. Algunos objetos como los escudos y los brazaletes incrementan el nivel de defensa del avatar. Otros objetos reducen el nivel de defensa como las armaduras y cascos, que en cambio aumentan el nivel de armadura. Esto se debe a que las armaduras y cascos incomodan el movimiento y por lo tanto el avatar tiene menos chances de esquivar los golpes. El efecto negativo de las armaduras puede ser contrarrestado con escudos, brazaletes o un buen nivel de destreza.
+</p>
+<h4>Ataque</h4>
+<p>El nivel de ataque del jugador depende de la clase, destreza y nivel del avatar. El puntaje de ataque influye en la probabilidad de éxito de los ataques realizados. Algunas armas mágicas incrementan el nivel de ataque, en cambio las armas malditas por del encantamiento <a href="#MaldecirObjeto">"Maldecir objeto"</a> la disminuyen. 
+</p>
+<a name="Honor"></a>
+<h4>Honor</h4>
+<p>El sistema de honor para avatares está diseñado para penalizar a los que abusen de los avatares de menor nivel y premiar a aquellos que logren vencer a avatares de mayor nivel. Este sistema también garantiza que el avatar de alto nivel pueda defenderse si es agredido primero por avatares de menor nivel y hasta puede llegar a vencerlo sin tener penalización.</p>
+<p>Cuando un avatar vence a otro que le supera en nivel y tiene honor gana de 1 a 5 puntos de honor de acuerdo a la diferencia de niveles.</p>
+<p>Si un avatar es eliminado por otro de menor nivel pierde puntos de honor iguales a la diferencia de niveles, pero sin bajar al nivel "sin honor".</p>
+<p>Al atacar a un avatar con honor se activa un "estatus de agresividad" en el atacante por un minuto. Mientras el estatus de agresividad de un avatar esté activo podrá ser atacado y eliminado por cualquier jugador de mayor nivel sin que el agresor tenga penalizaciones en puntos de honor.</p>
+<p>Eliminar a un avatar con honor de menor nivel y sin "estatus de agresividad" causa la pérdida de 4 puntos de honor por cada nivel de diferencia entre avatares. En los mapas del tipo "Arena de combate" los avatares no pierden su honor por eliminar a un avatar de menor nivel.</p>
+<p>Inicialmente los avatares aparecen con el nombre en color verde, el color del nombre de los avatares con honor va cambiando hasta azul y el nombre de los avatares sin honor se torna cada vez más rojo a medida que pierdan puntos de honor. Para llegar a ser héroe es necesario acumular 100 puntos de honor.</p>
+<p>La principal ventaja de tener una alta puntuación de honor son rebajas en los precios de los comerciantes. Los jugadores sin honor tienen que pagar precios más altos en los comercios.</p>
+<p>Un avatar con honor en negativo es llevado al infierno si intenta teletransportarse a una catedral. En el infierno su honor retorna a nivel neutro.</p>
+<h4>El panel de equipo</h4>
+<p>En este panel aparecen las <a href="#Casillas">casillas</a> de los objetos que tiene equipado el avatar: Casco, Armadura, Brazaletes, Anillos, Amuletos y Munición. También aparece la cantidad de dinero del que dispone. Para obtener la descripción del objeto equipado basta pinchar sobre el.
+</p>
+<h4>Mapa de la región</h4>
+<p>En este panel aparece el nombre de la región donde se encuentra el personaje y su posición está marcada en el mapa. En zonas abiertas es posible mover al personaje a otra parte del mapa haciendo clic izquierdo. En laberintos esto es menos práctico puesto que el personaje avanzará hasta el primer obstáculo que no sea fácil de evitar.
+</p>
+<a href="#Pantalla">Volver a "Pantalla de Juego"</a>
+<br>
+<a name="Inventario"></a>
+<h3>El Inventario</h3>
+<p>El inventario de artefactos o bolsa de objetos está ubicado en la parte inferior derecha de la pantalla. El tamaño del inventario es de 30 casillas, para moverse por el inventario se disponen de dos botones a la izquierda. La cantidad de un objeto aparece en la parte inferior izquierda de la casilla. Objetos como la comida, recursos, gemas sin tallar, monedas, pociones e ingredientes tienen un límite de 250 objetos por casilla. Las municiones de armas de rango tienen un límite de 60 objetos por casilla. Las armas, armaduras, vestimentas, joyas, amuletos, gemas talladas, llaves y herramientas ocupan una casilla por objeto.
+</p>
+<a href="#Pantalla">Volver a "Pantalla de Juego"</a>
+<br>
+<a name="Casillas"></a>
+<h3>Casillas para Equipar Objetos</h3>
+<p>Para equipar un objeto del inventario basta seleccionarlo en el inventario con clic izquierdo y hacer clic derecho en la casilla correspondiente. También es posible equiparlo haciendo clic izquierdo para seleccionarlo en el inventario y clic derecho para equiparlo. Si no existe otro panel de objetos abierto, como el de comercio, bolsa, o baúl, es posible usar clic izquierdo para equiparlo.
+</p>
+<h4>Desequipando objetos</h4>
+<p>Para desequipar un objeto primero seleccionamos en el inventario una casilla vacía y luego hacemos clic derecho en la casilla que queremos desequipar. Si no existen casillas vacías se puede soltar un objeto del inventario seleccionándolo con clic izquierdo y apretando la tecla S.
+</p>
+<p>Si lo que deseamos es intercambiar dos objetos que se equipan en la misma casilla, por ejemplo usar un hacha de batalla en lugar de una espada, basta seleccionar en el inventario el objeto que deseamos equipar: El hacha de batalla y luego pinchar con el botón derecho en la casilla del objeto que deseamos desequipar: La espada.
+</p>
+<a href="#Pantalla">Volver a "Pantalla de Juego"</a>
+<br>
+<a name="LibroHechizos"></a>
+<h3>El Libro de Hechizos</h3>
+<p>El Libro de Hechizos está representado por varias runas de colores. Los iconos iluminados corresponden a los hechizos que conoce. Las runas del libro permiten elegir un hechizo para lanzarlo presionando la tecla "Shift" o haciendo clic en el icono del hechizo seleccionado. Para aprender nuevos hechizos es necesario comprar un pergamino con el hechizo que se desea aprender. Al tener en la mano derecha un libro sagrado o un libro arcano asegura a clérigos y magos aprender sus respectivos tipos de hechizos sin riesgo de fallar. Si el personaje no cumple con los requisitos mínimos en inteligencia y sabiduría puede fallar al intentar aprender un hechizo y tendrá que meditar hasta tener su maná al máximo para intentar nuevamente.
+</p>
+<a href="#Pantalla">Volver a "Pantalla de Juego"</a>
+<br>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Teclas"></a>
+<h2>Teclas y Comandos del Juego</h2>
+<p>Esta sección describe los comandos disponibles en el juego.
+</p>
+<ul>
+<li><a href="#CaminandoApuntando">Caminar, Seguir y Apuntar</a>
+<li><a href="#ZonaTexto">Enviando mensajes a otros jugadores</a>
+<li><a href="#TeclasJuego">Teclas usadas en el juego</a>
+<li><a href="#ComandosJugador">Comandos de jugador</a>
+<li><a href="#ComandosClan">Comandos de clan</a>
+<li><a href="#ComandosAdministrador">Comandos de administración</a>
+</ul>
+<br>
+<a name="CaminandoApuntando"></a>
+<h3>Caminar, Marcar y Seguir</h3>
+<h4>Caminar</h4>
+<p>Existen varias formas para indicar donde queremos mover a nuestro avatar. La primera forma es hacer clic izquierdo en el lugar donde queremos que vaya el avatar, ya sea en la pantalla o en el mapa. Usando los cursores o el teclado numérico con "Num lock" apagado podemos movernos paso a paso o sólo girar a otra dirección. Si "Num lock" está encendido el avatar continuará moviéndose en la dirección que hayamos indicado hasta encontrar algún obstáculo que detenga su movimiento.</p>
+<h4>Marcar</h4>
+<p>Para utilizar armas de rango o lanzar conjuros a monstruos y avatares es necesario apuntar a un objetivo. Haciendo clic derecho sobre el objetivo, sea monstruo o avatar, queda marcado para ser atacado. En el momento que ordenemos atacar nuestro avatar dejará de moverse para realizar el ataque al objetivo marcado. Para marcar y moverse al objetivo se tiene que usar clic izquierdo.</p>
+<h4>Seguir</h4>
+<p>Para seguir a un monstruo o seguir a un avatar es necesario marcarlo primero con clic derecho y luego hacer clic izquierdo para moverse a su posición. Esto es especialmente útil si usamos armas cuerpo a cuerpo.</p>
+<a name="ZonaTexto"></a>
+<h3>Enviando mensajes a otros jugadores</h3>
+<p>Para escribir un mensaje o comando de juego hay que presionar "Enter". Para enviar el mensaje escrito o el comando al servidor se presiona "Enter" nuevamente. Con F11 podemos ver y ocultar la lista de mensajes enviados y recibidos.
+</p>
+<h4>Comunicación con avatares cercanos</h4>
+<p>Para enviar un mensaje a nuestro alrededor basta presionar enter y escribir el texto sin comenzar por los caracteres: "/", "*", "&" ni "%". Para enviar el mensaje presionamos nuevamente Enter. El mensaje aparecerá encima de nuestro avatar. Si la opción "Ver mensajes" está activada los últimos mensajes enviados y recibidos aparecerán en lista.</p>
+<h4>Comunicación con los miembros del clan</h4>
+<p>Si eres miembro de un clan puedes enviar un mensaje a todo tu clan comenzando el texto con "*" (asterisco). Al presionar "*" del teclado numérico aparece la zona de texto con un "*" al inicio y lista para escribir el mensaje para el clan.</p>
+<h4>Comunicación con todos los jugadores</h4>
+<p>Se puede enviar un mensaje a TODOS los jugadores escribiendo "%" (porcentaje) antes del mensaje. Al presionar "-" del teclado numérico aparece la zona de texto con un "%" al inicio y lista para escribir el mensaje global. Es necesario aclarar que esta opción debe estar activada en el servidor: Menú/ Servidor/ Parámetros/ Comunicación Total.</p>
+<h4>Enviando mensajes con caracteres rúnicos</h4>
+<p>Para enviar mensajes con letras rúnicas hay que colocar "&" (y compañía) antes del mensaje. En caso de mensajes de clan o globales hay que colocar "&" después de "*" o "%" respectivamente. Sólo las letras sin acentos del mensaje cambiarán por caracteres élficos. Al presionar "+" del teclado numérico aparece la zona de texto con un "&" al inicio y lista para escribir el mensaje.</p>
+<h4>Escribiendo comandos de texto</h4>
+<p>Los comandos de <a href="#ComandosJugador">jugador</a>, <a href="#ComandosClan">clan</a> y <a href="#ComandosAdministrador">administrador</a> comienzan con el prefijo "/" para diferenciarlos del texto común. Al presionar "/" del teclado numérico aparece la zona de texto con un "/" al inicio y lista para escribir el comando de juego.</p>
+<a href="#Teclas">Volver a "Teclas y Comandos del Juego"</a>
+<br>
+<a name="TeclasJuego"></a>
+<h3>Teclas usadas en el juego</h3>
+<p>La tabla a continuación muestra las teclas usadas en el juego y el efecto producido al presionarlas. Estas teclas no tienen efecto si se está escribiendo un mensaje. El mapeo de teclas a acciones puede cambiarse mediante el menú de teclas rápidas.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Tecla</th><th>Efecto</th></tr>
+<tr><td>Cursores</td><td>Movimiento normal del avatar, primero gira y luego avanza</td></tr>
+<tr><td>NumPad + NumLock</td><td>El avatar se mueve en una dirección sin detenerse hasta el primer obstáculo</td></tr>
+<tr><td>Ctrl (Control)</td><td><a name="AtaqueOfensivo"></a>El avatar realiza un ataque al 100%, debe tener en las manos un arma o por lo menos la mano derecha vacía (Puño)</td></tr>
+<tr><td>Espacio</td><td><a name="AtaqueDefensivo"></a>El avatar ataca al 50% y se prepara para evadir el ataque del enemigo. La bonificación en defensa es mayor si se tiene equipado un escudo y se tiene un buen puntaje en destreza.</td></tr>
+<tr><td>Shift</td><td>El avatar lanza el <a href="#LibroHechizos">hechizo elegido</a>. Algunos hechizos se pueden lanzar a un objetivo marcado, otros sólo funcionan si tienes en las manos un objeto especial. Ej. Para crear un arma mágicas necesitas una gema tallada.</td></tr>
+<tr><td>H</td><td>Para lanzar hechizos sobre sí mismo y no al objetivo seleccionado. Ej. Un avatar que apunta a un monstruo lanza un hechizo de curación: usando esta tecla el avatar se cura a sí mismo, usando "Shift" curaría al monstruo por que le está apuntando.</td></tr>
+<tr><td>A</td><td>(A)lzar los objetos debajo o al frente del avatar y ponerlos en el inventario.</td></tr>
+<tr><td>C</td><td>(C)omer o beber un ítem del inventario.</td></tr>
+<tr><td>D</td><td>(D)escansar para recuperar puntos de salud.</td></tr>
+<tr><td>E</td><td>(E)quipar munición del inventario.</td></tr>
+<tr><td>M</td><td>(M)editar para recuperar puntos de maná.</td></tr>
+<tr><td>R</td><td>(R)evisar objetos de cadáveres o bolsas bajo el avatar.</td></tr>
+<tr><td>S</td><td>(S)oltar el ítem seleccionado del inventario de objetos.</td></tr>
+<tr><td>U</td><td>(U)sar el objeto seleccionado en el inventario de objetos. Dependiendo del objeto el avatar lo equipa, consume o utiliza como herramienta.</td></tr>
+<tr><td>I</td><td>(I)ra: Activa la pericia <a href="#Berserker">Ira Berserker</a>.</td></tr>
+<tr><td>O</td><td>(O)cultarse: Activa la pericia <a href="#Ocultarse">Ocultarse</a>.</td></tr>
+<tr><td>Z</td><td>(Z)oomorfismo: Activa la pericia <a href="#Zoomorfismo">Zoomorfismo</a>.</td></tr>
+<tr><td>X</td><td>Teletransporta a un avatar muerto a una catedral para ser <a href="#PalabraResucitar">resucitado</a>.</td></tr>
+<tr><td>F1</td><td>Muestra una lista resumida de teclas y comandos del jugador.</td></tr>
+<tr><td>F2</td><td>Muestra el menú de teclas rápidas.</td></tr>
+<tr><td>F8</td><td>Reduce el stuttering mandando a pantalla el anterior cuadro antes de preparar el actual. Al desactivar esta opción se manda el cuadro actual inmediatamente esté listo.</td></tr>
+<tr><td>P</td><td>Muestra la posición y número de mapa donde está el avatar.</td></tr>
+</table></center>
+<br>
+<a href="#Teclas">Volver a "Teclas y Comandos del Juego"</a>
+<br>
+<a name="ComandosJugador"></a>
+<h3>Los comandos de jugador</h3>
+<p>Para utilizar los comandos se debe utilizar el prefijo "/" ej: "/SOLTAR" en la <a href="#ZonaTexto">zona de texto</a>. Algunos comandos tienen parámetros, ej. "[cantidad]" o "n1 [n2]". Los corchetes indican que el parámetro es opcional, si no tiene corchetes es un parámetro necesario. Los comandos de la tabla que comienzan con tres mayúsculas pueden ser abreviados a sus tres primeras letras. Por ejemplo da lo mismo escribir "/Sol 10" que "/SOLTAR 10".
+</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th width=112>Comando</th><th>Descripción</th></tr>
+<tr><td>SOLtar [cantidad]</td><td>Permite soltar la cantidad de objetos especificada. Por ejemplo, si deseamos soltar sólo 5 flechas de 20 seleccionamos el icono de las flechas que indica una cantidad de 20 y tecleamos "/SOLTAR 5". Si no indicamos un parámetro soltamos todo, con el mismo efecto de la tecla "S".</td></tr>
+<tr><td>RECoger [cantidad]</td><td>Abre el panel para recoger objetos de una bolsa, tiene el mismo efecto que la tecla "R". Al especificar una cantidad sólo se recoge dicha cantidad. Por ejemplo "/REC 10". Si no indicamos un parámetro recogemos todo, con el mismo efecto de la tecla "R".</td></tr>
+<tr><td>DEScansar</td><td><a name="Descansar"></a>Esta acción permite recuperar puntos de salud. No es posible descansar si el avatar se muere de hambre, si está a la intemperie cuando llueve o nieva o si está <a href="#Veneno">envenenado</a>. Cuando un avatar descansa su defensa baja al mínimo y dejará de descansar si es atacado. Para recuperar más rápidamente puntos de vida el avatar tiene que utilizar vendas, especialmente si sus puntos de vida están en rojo. Descansar cerca de una fogata o frente a una fragua tiene bono de regeneración. Para hacer una fogata se necesita leña, una piedra para afilar y un arma afilable. Primero se "usa" la leña frente al lugar donde desea armar la fogata. Luego el avatar tiene que usar la piedra para afilar teniendo el arma afilable, como una daga, en la mano. La lluvia impide prender fogatas y apaga las que están prendidas.</td></tr>
+<tr><td>MEDitar</td><td><a name="Meditar"></a>Permite al avatar recuperar puntos de maná. Cada cierto tiempo el avatar recupera una fracción de sus puntos de maná. Los magos recuperan adicionalmente un punto de maná. Existen artefactos que aceleran la <a href="#ArtefactosBonoMeditacion">acumulación de maná al meditar</a>. Si el avatar está cerca a una fogata o fragua la regeneración aumenta en 50% redondeado para arriba. Cuando un avatar medita su defensa baja al mínimo y dejará de meditar si es atacado. No se ganan puntos de maná si el avatar se muere de hambre o está a la intemperie mientras llueve o nieva.
+</td></tr>
+<tr><td>COMprar cantidad</td><td>Una vez abierta la ventana de comercio con este comando podemos comprar la cantidad deseada del objeto seleccionado en la lista. Dependiendo del tipo de objeto podremos comprar 1 a 250, 1 a 60, o sólo uno a la vez. Luego el comerciante indicará el precio, el cual podemos rechazar o aceptar.</td></tr>
+<tr><td>VENder [cantidad]</td><td>Permite vender el objeto seleccionado en el inventario de objetos, luego de apuntar y acercarse a un comerciante. El parámetro opcional permite indicar la cantidad que se desea vender. Ej. Quieres vender 50 de un total de 100 pescados, seleccionas los pescados y escribes "/ven 50", si no escribe el parámetro "50" se ofrecerían a la venta los 100 pescados. También se puede vender un objeto del inventario seleccionándolo y haciendo clic derecho. Antes de concretar la venta el comerciante ofrece un monto que puedes aceptar o rechazar. Sólo los mercaderes compran todo tipo de objetos.</td></tr>
+<tr><td>DINero n1 [n2]</td><td><a name="SacandoDinero"></a>Se usa para sacar monedas de oro y plata de tu bolsa de dinero. Una moneda de oro (mo) es equivalente a 100 monedas de plata (mp). Existen varias formas de indicar una cantidad:
+<center><table border=0>
+<tr><td>Con "/din 11" sacas 11 monedas de oro.</td></tr>
+<tr><td>Con "/din 11 6" sacas 11 monedas de oro y 6 de plata.</td></tr>
+<tr><td>Con "/din 5mo" sacas 5 monedas de oro.</td></tr>
+<tr><td>Con "/din 9mp" que es lo mismo que "/din 0 9" sacas 9 monedas de plata.</td></tr>
+<tr><td>Con "/din 3mp 2mo" que es lo mismo que "/din 2mo 3mp" sacas 2 de oro y 3 de plata.</td></tr>
+</table></center>
+</td></tr>
+<tr><td>RESucitar</td><td><a name="PalabraResucitar"></a>Este comando teletransporta al avatar cerca de una catedral para ser resucitado. Un avatar sin honor será resucitado en el infierno con su honor restaurado a la normalidad.</td></tr>
+<tr><td>JUGadores</td><td>Lista los nombres de los avatares en el área actual. Si la opción de "Comunicación Total" está activada en el servidor también se mostrará el total de jugadores conectados al servidor junto con una lista de nombres de los avatares.</td></tr>
+<tr><td>CLAnes</td><td>Lista los nombres de los clanes con miembros activos. Si la opción de "Comunicación Total" está activada en el servidor también se mostrará el total de clanes activos en el servidor junto con la lista de nombres y número de miembros activos por clan.</td></tr>
+<tr><td>CAStillo</td><td>Muestra el nombre del clan que posee el castillo de la zona y las mejoras que realizaron en el castillo.</td></tr>
+<tr><td>CONtraseña actual nueva</td><td>Cambia la contraseña de acceso. El parámetro "actual" es la contraseña actual del usuario y "nueva" es la nueva contraseña que deberá tener entre 4 y 13 caracteres. Las contraseñas quedan visibles al momento de escribirlas, no deben tener espacios y diferencian mayúsculas de minúsculas.</td></tr>
+<tr><td>AVAtar</td><td>Guarda los datos del avatar en un archivo ".avt" en el cliente. Esto permite jugar en un servidor local con un avatar creado en un servidor remoto. El avatar es guardado en la carpeta "avatares" del programa cliente. Para utilizarlo en otro servidor basta copiar el archivo ".avt" a la carpeta "avatares" del servidor local.</td></tr>
+<tr><td>SACar [cantidad]</td><td>Cuando tienes abierto el baúl mágico del castillo permite sacar la cantidad de objetos indicado. Primero hay que seleccionar el objeto que queremos sacar del baul. Por ejemlpo: se pueden sacar 30 de 200 pócimas o 30 de 60 flechas eligiendo el objeto y escribiendo el comando "/sacar 30" o abreviado "/sac 30". </td></tr>
+<tr><td>GUArdar [cantidad]</td><td>Cuando tienes abierto el baúl mágico del castillo permite guardar la cantidad de objetos indicado. Primero hay que seleccionar el objeto en el inventario de objetos. Por ejemplo: para guardar 50 de 100 lingotes de oro seleccionamos los lingotes en el inventario, luego escribimos el comando "/guardar 50" o abreviado "/gua 50".</td></tr>
+<tr><td>GRUpo</td><td>Con este comando invitas al avatar que estas apuntando a unirse a tu <a href="#Grupos">Grupo de combate</a>. También sirve para aceptar una invitación para unirse a otro grupo al apuntar al avatar que te esta invitando y escribir este comando. Si no estas apuntando a un avatar el comando lista los miembros actuales de tu grupo.</td></tr>
+<tr><td>CancelarGrupo</td><td>Disuelve el <a href="#Grupos">Grupo de combate</a> que formaste.</td></tr>
+<tr><td>AGResivo</td><td>Activa y desactiva el modo AGRESIVO que permite atacar a otros avatares. En este modo el borde de la barra de puntos de salud aparece teñida de rojo. Los avatares de un mismo clan no pueden atacarse.</td></tr>
+<tr><td>ATAcar</td><td>Tus monstruos conjurados atacan al objetivo que estés apuntando. Tus monstruos no atacarán avatares ni monstruos de tu clan. Necesitas usar el anillo del control en la casilla de anillos.</td></tr>
+<tr><td>SEGuir</td><td>Tus monstruos conjurados siguen al objetivo que estés apuntando.  Necesitas usar el anillo del control en la casilla de anillos.</td></tr>
+<tr><td>DETener</td><td>Tus monstruos conjurados detienen su ataque o bien dejan de seguir al objetivo que hayas indicado. Necesitas usar el anillo del control en la casilla de anillos.</td></tr>
+<tr><td>SEPPUKU</td><td>En el caso de que el avatar esté atrapado sin salida, o para evitar una deshonrosa derrota puede recurrir al suicidio ritual con este comando.</td></tr>
+<tr><td>HORa</td><td>Muestra la hora en el juego. Un día completo del juego dura aproximadamente 4 horas reales a 4 turnos por segundo.</td></tr>
+<tr><td>VMIdi n</td><td>Ajusta el porcentaje de volumen de la música ".midi", ej: "/vmi 100" ajusta el volumen de música ".midi" al máximo.</td></tr>
+<tr><td>TOCar nombre</td><td>Reproduce el archivo de música indicado. ej: "/toc c.mid" reproduce el midi de introducción.</td></tr>
+</table></center>
+<br>
+<a href="#Teclas">Volver a "Teclas y Comandos del Juego"</a>
+<br>
+<a name="ComandosClan"></a>
+<h3>Los comandos de clan</h3>
+<p>Estos comandos están disponibles para los miembros de clanes y algunos sólo para el fundador del clan. Al escribir el comando se debe incluir al inicio el caracter "/".</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th width=112>Comando</th><th>Descripción</th></tr>
+<tr><td>NOMBRECLAN nombre</td><td>Cambia el nombre del clan. El nombre del clan puede tener espacios. Sólo el fundador del clan puede cambiarlo.</td></tr>
+<tr><td>COLORCLAN</td><td>Con este comando el fundador del clan puede cambiar el color con el que aparece el nombre del clan abajo del nombre del jugador.</td></tr>
+<tr><td>ESTANDARTE</td><td>Abre el editor de estandartes para elegir los colores y el diseño del nuevo estandarte del clan. Para aceptar los cambios hay que presionar el botón "Fijar estandarte". Sólo el fundador del clan puede hacer este cambio.</td></tr>
+<tr><td>RECLUTAR</td><td>Con este comando el líder de clan puede reclutar al avatar apuntado. El avatar apuntado no tiene que tener otro clan.</td></tr>
+<tr><td>MIEMBROS</td><td>Muestra los miembros del clan que están conectados al servidor. Si el líder del clan está conectado aparece su nombre comenzando con un asterisco.</td></tr>
+<tr><td>DEJARCLAN</td><td>El avatar abandona su clan.</td></tr>
+<tr><td>DESPEDIR</td><td>El avatar apuntado es despedido en el clan. Este comando está reservado al líder del clan. Es necesario apuntar a un avatar.</td></tr>
+<tr><td>TESORO</td><td>Muestra la cantidad de monedas de oro y plata en las arcas de un castillo. Es necesario estar frente al castillo del clan.</td></tr>
+<tr><td>RETIRAR [n1] n2</td><td>Permite a los miembros del clan retirar dinero de las arcas de un castillo. La forma de especificar los parámetros es similar a la usada para <a href="#SacandoDinero">sacar monedas</a>.</td></tr>
+<tr><td>DEPOSITAR [n1] n2</td><td>Permite a un miembro del clan depositar dinero en las arcas de un castillo. La forma de especificar los parámetros es similar a la usada para <a href="#SacandoDinero">sacar monedas</a>.</td></tr>
+<tr><td>BAUL</td><td>Abre el baúl mágico del avatar. Es necesario estar frente a uno de los castillos del clan o tener un baúl mágico en la mano derecha.</td></tr>
+<tr><th><a name="MejorasCastillos">MEJORAS PARA CASTILLOS</th><th>Descripción de la mejora y costo en monedas de oro. Los comandos para realizar las mejorar se pueden abreviar a sus primeras tres letras.</th></tr>
+<tr><td>MEJORAR VISión</td><td></a>El guardián del castillo y los monstruos que conjure gana visión verdadera. El costo es de 125 mo.</td></tr>
+<tr><td>MEJORAR ARMadura</td><td></a>El guardián del castillo gana una armadura conjurada que ayuda a desviar los ataques meleé y de rango del enemigo. Incrementa la resistencia de los portícullis del castillo. El costo es de 125 mo.</td></tr>
+<tr><td>MEJORAR GUArdia</td><td>El guardián del castillo puede conjurar un guerrero cuando un enemigo amenaza el castillo. El guerrero conjurado se beneficia de las mejoras en armadura, ataque, fuerza y visión verdadera. El costo es de 250 mo.</td></tr>
+<tr><td>MEJORAR FUErza</td><td>Incrementa el daño de los ataques de los monstruos conjurados. Esta mejora aumenta la resistencia de los portícullis del castillo. El costo es de 500 mo.</td></tr>
+<tr><td>MEJORAR TIEmpo</td><td>Duplica el tiempo de vida de los guerreros conjurados. El costo es de 1000 mo.</td></tr>
+<tr><td>MEJORAR ATAque</td><td>Duplica el número de ataques del guardián y sus guerreros. El costo es de 2000 mo.</td></tr>
+<tr><td>MEJORAR MANá</td><td>Esta mejora incrementa la cantidad de maná que el  guardián del castillo acumula mientras no es atacado. Al tener mayor cantidad de maná el guardián del castillo puede conjurar más guerreros al mismo tiempo. El costo es de 4000 mo</td></tr>
+<tr><td>MEJORAR RESistencia</td><td>Con esta mejora el guardián del castillo gana un bono de regeneración de puntos de salud por turno y puede conjurar monstruos más poderosos. Los portícullis del castillo mejoran en gran medida su resistencia a los arietes. El costo es de 8000 mo.</td></tr>
+</table></center>
+<br>
+<a href="#Teclas">Volver a "Teclas y Comandos del Juego"</a>
+<br>
+<a name="ComandosAdministrador"></a>
+<h3>Los comandos de administración</h3>
+<p>Estos comandos están disponibles sólo para los jugadores con permisos de administración. Todos los comandos comienzan con la barra de división "/".</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Comando de Moderador</th><th>Descripción</th></tr>
+<tr><td>MOVER NroMapa x y </td><td>Teletransporta al mapa "NroMapa" en posición x [0..255], y [0..255]. Si sólo se indican dos parámetros el avatar se moverá a la posición x [0..255], y [0..255] en el mismo mapa. Se puede obtener las coordenadas destino haciendo clic derecho en el minimapa. En modo de pruebas todos los jugadores pueden usar este comando.</td></tr>
+<tr><td>CADAVERES</td><td>Elimina todos los cadáveres de monstruos de todos los mapas. No elimina bolsas, fogatas prendidas, trampas ni cadáveres de avatares.</td></tr>
+<tr><td>CONTROLAR</td><td>Permite controlar el monstruo apuntado. El monstruo seguirá al avatar sin atacarlo. Usado en un monstruo ya controlado lo restaura a la normalidad paralizándolo por unos segundos.</td></tr>
+<tr><td>BUSCAR avatar</td><td>Devuelve la posición del avatar si ha iniciado sesión en el servidor. En modo de pruebas todos los jugadores pueden usar este comando.</td></tr>
+<tr><td>VISITAR avatar</td><td>Teletransporta al administrador cerca del avatar. En modo de pruebas todos los jugadores pueden usar este comando.</td></tr>
+<tr><td>RESTAURAR</td><td>Restaura todos los atributos del avatar apuntado a la normalidad, controlando los mínimos y máximos en habilidades, pericias, puntos de salud, puntos de maná, etc.</td></tr>
+<tr><td>SILENCIAR avatar</td><td>Impide a un jugador mandar mensajes de más de dos caracteres y sólo permite mandar mensajes a su clan o mensajes locales.</td></tr>
+<tr><td>REMOVER_SILENCIAR avatar</td><td>Remueve los efectos del comando silenciar.</td></tr>
+<tr><td>CARCEL avatar</td><td>Envía a prisión a un avatar por 5, 10 o 15 minutos dependiendo de su nivel (1 a 6, 7 a 24, 25+).</td></tr>
+<tr><th>Comando de Administrador</th><th>Descripción</th></tr>
+<tr><td>LIMPIAR_MAPA</td><td>Elimina cadáveres de todos los mapas, incluyendo fogatas prendidas, trampas y bolsas cuyo contenido vale menos de 5mo.</td></tr>
+<tr><td>CONJURAR tipo</td><td>Conjura el tipo de monstruo indicado. El monstruo tiene tiempo de vida indefinido.</td></tr>
+<tr><td>DISOLVER</td><td>Elimina el monstruo apuntado sin dejar un cadáver.</td></tr>
+<tr><td>CONVOCAR avatar</td><td>Convoca al avatar cerca del administrador.</td></tr>
+<tr><td>EXPULSAR avatar</td><td>El avatar es desconectado y no podrá ingresar al servidor. Se puede restaurar un personaje expulsado quitando la extensión ".ban" de su archivo de avatar de la carpeta "avatares" del servidor.</td></tr>
+<tr><td>ANULARCLAN avatar</td><td>Disgrega el clan del avatar indicado. El clan anulado pierde todos sus castillos y su estandarte.</td></tr>
+<tr><th>Comando de Amo del Calabozo</th><th>Descripción</th></tr>
+<tr><td>OBJETO Id Modificador</td><td>Permite crear el objeto "Id" con la cantidad o atributos "Modificador" en la primera casilla del inventario de objetos. Id y Modificador son números de 0 a 255. En modo de pruebas todos los jugadores pueden usar este comando.</td></tr>
+</table></center>
+<br>
+<a href="#Teclas">Volver a "Teclas y Comandos del Juego"</a>
+<br>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Hechizos"></a>
+<h2>Hechicería</h2>
+<p>Esta sección describe los hechizos disponibles, efectos y detalles de cada hechizo, como aprender nuevos hechizos, los amuletos, los artefactos para magos y clérigos y el efecto de algunas gemas.
+</p>
+<ul>
+<li><a href="#TablaHechizos">Tabla de Hechizos</a>
+<li><a href="#NuevosHechizos">Aprendiendo Nuevos Hechizos</a>
+<li><a href="#DescripcionHechizos">Descripción de los Hechizos</a>
+<li><a href="#ResistenciaMágica">Resistencia Mágica</a>
+<li><a href="#ArtefactosMagicos">Artefactos Mágicos</a>
+<li><a href="#AmuletosMagicos">Amuletos Mágicos</a>
+<li><a href="#Pociones">Herbalismo y Pócimas Mágicas</a>
+<li><a href="#Alquimia">Alquimia</a>
+<li><a href="#EscribirMagia">Escribiendo Hechizos en Pergaminos</a>
+<li><a href="#MagiaGuerrera">Artefactos Mágicos para Guerreros</a>
+</ul>
+<a name="TablaHechizos"></a>
+<h3>Tabla de Hechizos</h3>
+<p>La siguiente tabla muestra una descripción general de los hechizos y los requisitos mínimos de Nivel del avatar, Inteligencia, Sabiduría y Maná consumido.
+</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+
+
+
+<tr><th>Nivel</th><th>Nombre</th><th>Escuela</th><th>INT</th><th>SAB</th><th>Maná</th></tr>
+<tr><td> 1</td><td>Ataque psítico</td><td>Alteración</td><td>50%</td><td>45%</td><td>3</td></tr>
+<tr><td> 1</td><td>Curar heridas</td><td>Necromancia</td><td>50%</td><td>60%</td><td>3</td></tr>
+<tr><td> 3</td><td>Identificar objeto</td><td>Adivinación</td><td>55%</td><td>50%</td><td>3</td></tr>
+<tr><td> 4</td><td>Aura ardiente</td><td>Alteración</td><td>45%</td><td>50%</td><td>6</td></tr>
+<tr><td> 5</td><td>Aura de frío</td><td>Alteración</td><td>55%</td><td>50%</td><td>7</td></tr>
+<tr><td> 6</td><td>Cambiar aspecto</td><td>Ilusión</td><td>60%</td><td>55%</td><td>20</td></tr>
+<tr><td> 6</td><td>Meteoro de fuego</td><td>Evocación</td><td>55%</td><td>60%</td><td>9</td></tr>
+<tr><td> 8</td><td>Disipar magia</td><td>Abjuración</td><td>70%</td><td>90%</td><td>18</td></tr>
+<tr><td> 8</td><td>Meteoro de hielo</td><td>Evocación</td><td>65%</td><td>60%</td><td>10</td></tr>
+<tr><td>10</td><td>Rayo psítico</td><td>Evocación</td><td>75%</td><td>60%</td><td>12</td></tr>
+<tr><td>10</td><td>Sanar enfermedad</td><td>Necromancia</td><td>60%</td><td>80%</td><td>18</td></tr>
+<tr><td>11</td><td>Armadura mágica</td><td>Evocación</td><td>70%</td><td>60%</td><td>15</td></tr>
+<tr><td>12</td><td>Vortex congelante</td><td>Evocación</td><td>75%</td><td>70%</td><td>15</td></tr>
+<tr><td>13</td><td>Maldecir objeto</td><td>Encantamiento</td><td>80%</td><td>90%</td><td>30</td></tr>
+<tr><td>14</td><td>Apresurar</td><td>Alteración</td><td>80%</td><td>70%</td><td>20</td></tr>
+<tr><td>14</td><td>Tormenta psítica</td><td>Evocación</td><td>85%</td><td>75%</td><td>18</td></tr>
+<tr><td>15</td><td>Fuerza de gigante</td><td>Alteración</td><td>70%</td><td>60%</td><td>20</td></tr>
+<tr><td>15</td><td>Invisibilidad</td><td>Ilusión</td><td>85%</td><td>75%</td><td>40</td></tr>
+<tr><td>16</td><td>Aturdir</td><td>Encantamiento</td><td>80%</td><td>70%</td><td>30</td></tr>
+<tr><td>16</td><td>Tormenta de fuego</td><td>Evocación</td><td>70%</td><td>80%</td><td>21</td></tr>
+<tr><td>17</td><td>Hechizar objeto</td><td>Encantamiento</td><td>100%</td><td>80%</td><td>50</td></tr>
+<tr><td>17</td><td>Paralizar</td><td>Encantamiento</td><td>80%</td><td>95%</td><td>25</td></tr>
+<tr><td>18</td><td>Arma arcana</td><td>Conjuración</td><td>90%</td><td>80%</td><td>10</td></tr>
+<tr><td>18</td><td>Arma sagrada</td><td>Conjuración</td><td>80%</td><td>90%</td><td>10</td></tr>
+<tr><td>18</td><td>Visión verdadera</td><td>Adivinación</td><td>75%</td><td>85%</td><td>40</td></tr>
+<tr><td>19</td><td>Animar muertos</td><td>Necromancia</td><td>85%</td><td>95%</td><td>30</td></tr>
+<tr><td>19</td><td>Conjurar monstruo</td><td>Conjuración</td><td>95%</td><td>85%</td><td>40</td></tr>
+<tr><td>19</td><td>Resucitar</td><td>Necromancia</td><td>80%</td><td>100%</td><td>24</td></tr>
+<tr><td>20</td><td>Drenaje vampírico</td><td>Necromancia</td><td>100%</td><td>90%</td><td>40</td></tr>
+<tr><td>20</td><td>Protección divina</td><td>Abjuración</td><td>90%</td><td>100%</td><td>30</td></tr>
+
+
+
+
+
+</table></center>
+<br>
+<a href="#Hechizos">Volver a "Hechicería"</a>
+<br>
+<a name="NuevosHechizos"></a>
+<h3>Aprendiendo Nuevos Hechizos</h3>
+<p>Para aprender hechizos es necesario comprar pergaminos arcanos o sagrados. Cada hechizo tiene un nivel mínimo necesario para aprenderlo y es necesario tener el maná al máximo. Si no se cumplen los requisitos de inteligencia y sabiduría es posible fallar el intento de aprender un hechizo a menos que se tenga equipado un libro arcano para magia que necesite más inteligencia o un libro sagrado para magia que necesite más sabiduría. Los hechizos aprendidos son agregados al <a href="#LibroHechizos">Libro de Hechizos</a>.
+</p>
+<a href="#Hechizos">Volver a "Hechicería"</a>
+<br>
+<a name="DescripcionHechizos"></a>
+<h3>Descripción de Hechizos</h3>
+<p>A continuación se describen a fondo las características de cada hechizo disponible.
+</p>
+<a name="HechizosAtaque"></a>
+<h4>Hechizos de ataque (Alteración y Evocación)</h4>
+<p>Los avatares que se dediquen a las artes arcanas disponen de nueve hechizos de combate. Cada hechizo tiene distintos efectos ya sea en la forma de lanzamiento, precisión y tipo de daño causado.</p>
+<center>
+<table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+
+
+
+<tr><th>Nivel</th><th>Nombre</th><th>Maná</th><th>Daño</th><th>Tipo</th><th>Efecto</th><th>Escuela</th></tr>
+<tr><td> 1</td><td>Ataque psítico</td></td><td>3</td><td>5 a 10</td><td>Rayo</td><td>Preciso</td><td>Alteración</td></tr>
+<tr><td> 4</td><td>Aura ardiente</td></td><td>6</td><td>10 a 15</td><td>Fuego</td><td>Preciso</td><td>Alteración</td></tr>
+<tr><td> 5</td><td>Aura de frío</td></td><td>7</td><td>5 a 15</td><td>Hielo</td><td>Preciso</td><td>Alteración</td></tr>
+<tr><td> 6</td><td>Meteoro de fuego</td></td><td>9</td><td>20 a 25</td><td>Fuego</td><td>Lineal</td><td>Evocación</td></tr>
+<tr><td> 8</td><td>Meteoro de hielo</td></td><td>10</td><td>15 a 20</td><td>Hielo</td><td>Lineal</td><td>Evocación</td></tr>
+<tr><td>10</td><td>Rayo psítico</td></td><td>12</td><td>25 a 35</td><td>Rayo</td><td>Lineal</td><td>Evocación</td></tr>
+<tr><td>12</td><td>Vortex congelante</td></td><td>15</td><td>20 a 25</td><td>Hielo</td><td>Zona</td><td>Evocación</td></tr>
+<tr><td>14</td><td>Tormenta psítica</td></td><td>18</td><td>25 a 35</td><td>Rayo</td><td>Zona</td><td>Evocación</td></tr>
+<tr><td>16</td><td>Tormenta de fuego</td></td><td>21</td><td>30 a 40</td><td>Fuego</td><td>Zona</td><td>Evocación</td></tr>
+
+
+</table>
+</center>
+<small><p>* El primer número indica el daño base. El segundo es el límite de daño adicional al azar. Cada nivel el avatar aumenta el daño base en 3.125%. Si el avatar lanza el conjuro sin tener algún tipo de artefacto mágico el daño base se reduce a la mitad. <a href="#ArtefactosModificadoresDaño">Ver tabla de artefactos multiplicadores de daño base.</a></p></small>
+<a name="TipoDaño"></a>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<caption>Tipos de daño</caption>
+<tr><th>Tipo</th><th>Efecto especial</th><th>Protección adecuada</th></tr>
+<tr><td>Cortante</td><td>Ninguno</td><td>Armadura normal</td></tr>
+<tr><td>Punzante</td><td>Ninguno</td><td>Armadura normal</td></tr>
+<tr><td>Contundente</td><td>Ninguno</td><td>Armadura y Yelmo</td></tr>
+<tr><td>Veneno</td><td><a name="Veneno"></a>Envenenamiento (mínimo 4 de daño).<br>Causa 1 a 4 puntos de daño constantes. El personaje sólo puede sanar con magia o pócimas.</td><td>Armadura mágica</td></tr>
+<tr><td>Fuego</td><td>Reduce el tiempo de congelamiento en proporción al daño.</td><td>Armadura mágica</td></tr>
+<tr><td>Hielo</td><td><a name="Hielo"></a>Congelación (mínimo 8 de daño).<br>Hace extremadamente lentos los ataques y movimientos de la víctima.</td><td>Armadura mágica</td></tr>
+<tr><td>Rayo</td><td>Conmoción psítica (mínimo 16 de daño)<br>Pérdida de la mitad de los puntos de maná</td><td>Armadura mágica</td></tr>
+</table></center><br>
+<br>
+<h4>Hechizos de Alteración</h4>
+<h5>Ataque psítico</h5>
+<p>Distorsiona el psique de la víctima, causándole pérdida de puntos de salud y maná en casos extremos. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<h5>Aura Ardiente</h5>
+<p>Acelera bruscamente el metabolismo de la víctima, pero a diferencia del hechizo apresurar el efecto dura apenas un instante siendo tan intenso que la víctima puede llegar a morir. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<h5>Aura de Frío</h5>
+<p>La víctima sufre un descenso brusco de temperatura que puede dejar entumecidas sus articulaciones. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<a name="Apresurar"></a>
+<h5>Apresurar</h5>
+<p>Este hechizo provoca un efecto totalmente contrario a la congelación, duplicando la agilidad del avatar. El avatar puede atacar, lanzar hechizos, trabajar y construir en la mitad del tiempo normal. La duración de este hechizo aumenta con el nivel del avatar. Este hechizo afecta a monstruos y avatares.</p>
+<a name="FuerzaGigante"></a>
+<h5>Fuerza de Gigante</h5>
+<p>En los avatares aumenta el daño del arma en 100%. En los monstruos incrementa el daño base en 10 puntos para ataques del tipo cortante, punzante, punzante envenenado y contundente. La duración de este hechizo aumenta con el nivel del avatar.</p>
+<h4>Hechizos de Evocación</h4>
+<h5>Rayo psítico</h5>
+<p>Un hechizo poderoso pero impreciso. Cuando provoca un daño mayor o igual a 25 logra quitar la mitad de los puntos de maná a la víctima. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<h5>Meteoro de Fuego</h5>
+<p>El hechizo preferido para acabar con muertos vivientes. Si bien poder de daño es elevado es más difícil acertar con este hechizo a un enemigo. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<h5>Meteoro de hielo</h5>
+<p>Ideal para entumecer a varios guerreros y arqueros molestos. Sin embargo es necesario algo de maña para evitar que el enemigo escape de este hechizo. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<h5>Tormenta Psítica</h5>
+<p>Aunque su poder de ataque es elevado, es preferible usar la Tormenta de Fuego para acabar con todo el que cometa el error de acercarse. A menos que se trate de criaturas resistentes al fuego. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<h5>Tormenta de fuego</h5>
+<p>Este hechizo mantendrá alejado a todo guerrero que quiera seguir con vida. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<h5>Vortex congelante</h5>
+<p>Si lo que quieres es congelar a todos los que estén a tu alrededor este es el hechizo ideal. Ver <a href="#HechizosAtaque">hechizos de Ataque</a></p>
+<a name="ArmaduraMagica"></a>
+<h5>Armadura mágica</h5>
+<p>Rodea al avatar de un aura de protección mágica que le permitirá esquivar ataques del enemigo incrementando su defensa en 20%. La duración de este hechizo aumenta con el nivel del avatar. Este hechizo asegura que el daño mágico sea reducido por lo menos en un 20%. Este hechizo pueder ser lanzado a monstruos y avatares.</p>
+<h4>Hechizos Necrománticos</h4>
+<a name="CurarHeridas"></a>
+<h5>Curar Heridas</h5>
+<p>Restaura 2 puntos de salud por cada nivel del avatar que lance el hechizo. Los clérigos pueden curar 8 puntos de vida por punto de maná hasta un máximo de 80, el resto de las clases curan 2 puntos de vida por punto de maná hasta un máximo de 20. El hechizo consume como mínimo 3 puntos de maná y como máximo 10 puntos de maná dependiendo de la cantidad de puntos de vida a curar.</p>
+<a name="SanarEnfermedad"></a>
+<h5>Sanar Enfermedad</h5>
+<p>Este hechizo sana el <a href="#Veneno">envenenamiento</a>, disipa la <a href="#Hielo">congelación</a> y restaura los puntos de salud de un avatar hasta la cuarta parte. Es especialmente efectivo para curar a un avatar a punto de morir. En el caso de los monstruos un clérigo puede sanarlos hasta la mitad de sus puntos de salud mientras que las otras clases sólo pueden sanarlos hasta la cuarta parte.</p>
+<h5>Resucitar</h5>
+<p>Este hechizo resucita un avatar muertos restaurando hasta 50 puntos de vida. Los avatares sin <a href="#Honor">honor</a> sólo recuperan hasta 10 puntos de vida. Si el avatar que lanza este hechizo no es clérigo sus puntos de salud bajarán al mínimo por el esfuerzo realizado.</p>
+<h5>Levantar Muertos</h5>
+<p>Este hechizo anima a un cadáver y lo convierte en no-muerto. Se puede lanzar este hechizo apuntando al enemigo para que el no-muerto se levante cerca y empiece a atacarle. Los hechizos positivos (aceleración, fuerza, etc.) mejoran las capacidades de combate del no-muerto. El tiempo de animación del no-muerto aumenta con el nivel del avatar. La gema del conjurador usada como amuleto incrementa el tiempo de animación del no-muerto al máximo. Puedes controlar al no-muerto con un anillo del control.</p>
+<h5>Drenaje Vampírico</h5>
+<p>Este hechizo drena puntos de salud al enemigo y los convierte en maná para el necromántico. El daño máximo causado a la víctima es igual a la mitad de puntos de maná que le faltan al atacante. Este hechizo afecta a monstruos y avatares, sin embargo no matará a la víctima. El necromántico aumentará su nivel de maná, sin pasar de su nivel máximo, en la misma cantidad de puntos de daño que haga a la víctima. Finalmente se le restará al necromántico el número de puntos de maná consumidos por este conjuro.</p>
+<h4>Hechizos de Adivinación</h4>
+<h5>Identificar Objetos</h5>
+<p>Existen varios tipos de objetos mágicos. Algunos objetos poseen maldiciones y otros bendiciones o efectos positivos. Este hechizo permite conocer con certeza el tipo de objeto que tenemos seleccionado en el inventario, si es mágico, si está maldito o si está envenenado. El objeto quedará identificado para que todos los avatares puedan conocer sus atributos reales.</p>
+<a name="VisionVerdadera"></a>
+<h5>Visión Verdadera</h5>
+<p>Permite ver avatares, monstruos invisibles y objetos mágicos como si estuvieran identificados. La duración de este hechizo aumenta con el nivel del avatar. Este hechizo afecta a monstruos y avatares.</p>
+<h4>Hechizos de Ilusionismo</h4>
+<h5>Cambiar Aspecto</h5>
+<p>Cambia la apariencia externa del avatar o del monstruo. El hechizo se disipa cuando el avatar muere o recibe la abjuración <a href="#DisiparMagia">Disipar magia</a>.</p>
+<a name="Invisibilidad"></a>
+<h5>Invisibilidad</h5>
+<p>El avatar o monstruo afectado no puede ser atacado por hechizos precisos o armas de rango y sólo es algo visible cuando se está moviendo. Es excelente para evadir situaciones peligrosas o para prepararse para apuñalar, sin embargo los monstruos pueden atacar al avatar si se ubica en frente de ellos. La duración de este hechizo aumenta con el nivel del avatar.</p>
+<h4>Hechizos de Abjuración</h4>
+<a name="DisiparMagia"></a>
+<h5>Disipar Magia</h5>
+<p>La abjuración de disipación de magia elimina todos los hechizos negativos y positivos. Este hechizo afecta a monstruos y avatares. Si es lanzado sobre un monstruo conjurado su tiempo de vida restante se reduce al 12.5%. No cura el <a href="#Veneno">veneno</a> ni el <a href="#Hielo">congelamiento</a>. </p>
+<a name="ProteccionDivina"></a>
+<h5>Protección Divina</h5>
+<p>Esta poderosa abjuración protege de todos los hechizos que causen efectos negativos. La duración de este hechizo aumenta con el nivel del avatar. Este hechizo afecta a monstruos y avatares. El hechizo garantiza un 75% de resistencia mágica contra el conjuro <a href="#DisiparMagia">disipar magia</a>. Este hechizo no evita el envenenamiento ni el congelamiento.</p>
+<h4>Hechizos de Conjuración</h4>
+<h5>Conjurar Monstruo</h5>
+<p>Este conjuro invoca a un monstruo. Sólo apunta a la víctima y lanza este conjuro. No podrás controlar al monstruo a menos que tengas el anillo del control. El tiempo de vida del monstruo aumenta con el nivel del avatar. La gema del conjurador usada como amuleto incrementa el tiempo de vida de los monstruos al máximo. Los hechizos positivos mejoran las capacidades de combate de los monstruos conjurados.</p>
+<h5>Conjurar Arma Sagrada / Arma Arcana</h5>
+<p>Este conjuro permite crear armas mágicas a partir de piedras preciosas. La duración del arma mágica depende de la calidad de la gema. Es necesario tener una piedra preciosa del tipo y calidad adecuada en la mano derecha.</p>
+<p><a href="armasmc.html">Lista con la descripción de las armas conjurables</a></p>
+<br>
+<h4>Hechizos de Encantamiento</h4>
+<a name="Paralizar"></a>
+<h5>Paralizar</h5>
+<p>Este encantamiento impide a la víctima moverse y atacar. La duración del encantamiento aumenta o disminuye con la diferencia de nivel entre el atacante y la víctima. Este encantamiento afecta a monstruos y avatares. Este hechizo se puede remover con <a href="#DisiparMagia">"Disipar Magia"</a> o tomando la pócima <a href="#Pociones">"Disipación de Magia"</a></p>
+<h5>Aturdir</h5>
+<p>Este encantamiento reduce la capacidad de combate de la víctima en 40 puntos. El encantamiento no se desvanece con el tiempo. Sólo el hechizo de <a href="#DisiparMagia">"Disipar Magia"</a>, la pócima <a href="#Pociones">"Disipación de Magia"</a> o la Muerte podrán acabar con el encantamiento. Actúa sobre monstruos y avatares.</p>
+<a name="MaldecirObjeto"></a>
+<h5>Maldecir Objeto</h5>
+<p>Este terrible encantamiento afecta a objetos hechizables como armas, armaduras y vestimentas. El encantamiento actúa en un objeto al azar que esté utilizando el avatar. Las armaduras y armas mágicas pierden un nivel de encantamiento por cada maldición que reciban hasta convertirse en objetos comunes. Los objetos no hechizados se convierten en objetos malditos que quitan 40% de ataque o defensa según sean armas o armaduras. Si el objeto ya estaba maldito el encantamiento hace que pierda 8 niveles de daño o armadura según sea arma o armadura.</p>
+<p>La abjuración <a href="#ProteccionDivina">Protección Divina</a> protege de este encantamiento. Otra forma de protegerse es llevar una amatista equipada como amuleto en la casilla respectiva. El porcentaje de valor de la amatista indica su efectividad. Por ejemplo una amatista de 100% de valor impide que el avatar sea afectado por este encantamiento.</p>
+<a name="HechizarObjeto"></a>
+<h5>Hechizar Objeto</h5>
+<p>Mediante este encantamiento se crean armas, escudos, armaduras, brazaletes, cascos, vestimentas y gorros de mago mágicos. El objeto a ser hechizado debe estar en buen estado, por lo menos al 90%.</p>
+<p>Para realizar el encantamiento se coloca en la mano izquierda lingotes de oricalco o una gema que puede ser una Aguamarina, un Zafiro, una Esmeralda, un Rubí o un Brillante de por lo menos 90% de valor. El artefacto a ser hechizado deberá estar seleccionado en el inventario.</p>
+<h6>Efecto del Oricalco</h6>
+<p>Los objetos hechizados con oricalco incrementan el poder de ataque o ayudan a esquivar los ataques dependiendo del tipo de objeto. El modificador máximo es de +40% de ataque para las armas y +40% de defensa para armaduras. La siguiente tabla muestra la cantidad de lingotes de oricalco para cada nivel del hechizo.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Cantidad<br>de lingotes</th><th>Bonificación en<br>Defensa / Ataque</th></tr>
+<tr ALIGN=CENTER><td>1</td><td>+5%</td></tr>
+<tr ALIGN=CENTER><td>4</td><td>+10%</td></tr>
+<tr ALIGN=CENTER><td>9</td><td>+15%</td></tr>
+<tr ALIGN=CENTER><td>16</td><td>+20%</td></tr>
+<tr ALIGN=CENTER><td>25</td><td>+25%</td></tr>
+<tr ALIGN=CENTER><td>36</td><td>+30%</td></tr>
+<tr ALIGN=CENTER><td>49</td><td>+35%</td></tr>
+<tr ALIGN=CENTER><td>64</td><td>+40%</td></tr>
+</table></center>
+<h6>Efecto del Brillante</h6>
+<p>El brillante sólo tiene efecto sobre las armas incrementando su daño hasta un máximo de +8 de daño base. El tipo de daño del arma no varía al aplicar este encantamiento.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Valor<br>de la Gema</th><th>Bono de <br>Daño</th></tr>
+<tr ALIGN=CENTER><td>50% a 79%</td><td>+1</td></tr>
+<tr ALIGN=CENTER><td>80% a 90%</td><td>+2</td></tr>
+<tr ALIGN=CENTER><td>91% a 94%</td><td>+3</td></tr>
+<tr ALIGN=CENTER><td>95% a 96%</td><td>+4</td></tr>
+<tr ALIGN=CENTER><td>97%</td><td>+5</td></tr>
+<tr ALIGN=CENTER><td>98%</td><td>+6</td></tr>
+<tr ALIGN=CENTER><td>99%</td><td>+7</td></tr>
+<tr ALIGN=CENTER><td>100%</td><td>+8</td></tr>
+</table></center>
+<h6>Efecto de las gemas Aguamarina, Zafiro, Esmeralda y Rubí</h6>
+<p>Estas gemas tienen efecto en armas y armaduras cambiando el tipo de daño del arma o agregando protección mágica a una armadura. El tipo de daño y armadura mágica agregada varía con la gema: Una Aguamarina tiene efecto sobre el hielo, el Zafiro sobre el rayo, la Esmeralda sobre el veneno y el Rubí sobre el fuego. El modificador máximo es de +8 de daño para armas o bien +8 en nivel de armadura mágica.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Valor<br>de la Gema</th><th>Bono de <br>Daño</th><th>Armadura<br>Mágica</th></tr>
+<tr ALIGN=CENTER><td>90% a 92%</td><td>+1</td><td>20%</td></tr>
+<tr ALIGN=CENTER><td>93% a 94%</td><td>+2</td><td>34%</td></tr>
+<tr ALIGN=CENTER><td>95%</td><td>+3</td><td>43%</td></tr>
+<tr ALIGN=CENTER><td>96%</td><td>+4</td><td>50%</td></tr>
+<tr ALIGN=CENTER><td>97%</td><td>+5</td><td>56%</td></tr>
+<tr ALIGN=CENTER><td>98%</td><td>+6</td><td>60%</td></tr>
+<tr ALIGN=CENTER><td>99%</td><td>+7</td><td>64%</td></tr>
+<tr ALIGN=CENTER><td>100%</td><td>+8</td><td>67%</td></tr>
+</table></center>
+<br>
+<a href="#Hechizos">Volver a "Hechicería"</a><br>
+<br>
+<a name="ResistenciaMágica"></a>
+<h3>Resistencia Mágica</h3>
+<p>La resistencia mágica impide el efecto de un conjuro sobre un monstruo o un avatar. Cuando un avatar falla el hechizo a causa de resistencia mágica no consume sus puntos de maná.</p>
+<p>Los niveles de resistencia mágica varían desde 0%, 50%, 75% y 100% (Invulnerables a los hechizos). Un 75% de resistencia mágica significa que el 75% del tiempo el hechizo fallará.</p>
+<p>La resistencia mágica no tiene efecto sobre los <a href="#HechizosAtaque">hechizos de ataque</a> y actúa en la misma forma para hechizos positivos y negativos.</p>
+<br>
+<a href="#Hechizos">Volver a "Hechicería"</a><br>
+<br>
+<a name="ArtefactosMagicos"></a>
+<h3>Artefactos Mágicos</h3>
+<p>Esta sección describe los artefactos mágicos que sirven de apoyo en el combate para todos los héroes según sean magos, clérigos o guerreros.</p>
+<a name="ArtefactosModificadoresDaño"></a>
+<h4>Artefactos que multiplican el daño base de los conjuros</h4>
+<p>Los magos y clérigos disponen de varios artefactos que incrementan el poder de ataque de sus conjuros de combate. Estos objetos deben ser llevados en la mano derecha.</p>
+<center>
+<table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Artefacto</th><th>Daño</th><th>Clase de Avatar</th></tr>
+<tr><td>Sin artefacto</td><td>100%</td><td>Todos</td></tr>
+<tr><td>Símbolo clerical</td><td>200%</td><td>Clérigo, Montaraz y Paladín</td></tr>
+<tr><td>Cayado mágico</td><td>200%</td><td>Mago, Guerrero Mago y Bardo</td></tr>
+<tr><td>Símbolo clerical de plata</td><td>300%</td><td>Clérigo y Paladín</td></tr>
+<tr><td>Símbolo sagrado de oro</td><td>400%</td><td>Clérigo</td></tr>
+<tr><td>Báculo de Mago</td><td>400%</td><td>Mago y Guerrero Mago</td></tr>
+<tr><td>Cetro de archimago</td><td>500%</td><td>Mago</td></tr>
+</table></center>
+<a name="ArtefactosBonoMeditacion"></a>
+<h4>Artefactos que aceleran la acumulación de maná</h4>
+<p>Al equipar uno de los siguientes artefactos en la mano derecha es posible acelerar la acumulación de puntos de maná al <a href="#Meditar">meditar</a>. Para recuperar puntos de maná sin meditar es necesario equipar un <a href="#AmuletoMago">amuleto de mago</a> en la casilla para amuletos.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Artefacto</th><th>Bono</th></tr>
+<tr><td>Símbolo clerical</td><td>+1</td></tr>
+<tr><td>Símbolo clerical de plata</td><td>+2</td></tr>
+<tr><td>Símbolo sagrado de oro</td><td>+3</td></tr>
+<tr><td>Libro sagrado</td><td>+4</td></tr>
+<tr><td>Cayado de mago</td><td>+1</td></tr>
+<tr><td>Báculo de mago</td><td>+2</td></tr>
+<tr><td>Cetro de archimago</td><td>+3</td></tr>
+<tr><td>Libro arcano</td><td>+4</td></tr>
+</table></center><br>
+<h4>Varitas Mágicas</h4>
+<p>Las varitas mágicas acumulan maná y son uno de los artefactos más importantes para un mago. Al usar una varita mágica vacía se transfieren todos los puntos de maná del avatar a la varita mágica. Estos objectos sirven como un "depósito extra" de maná.<p>
+<p>Por ejemplo: Un paladín quiere lanzar un hechizo que necesita 30 puntos de maná pero sólo puede acumular hasta un total de 20 puntos de maná. Usando una varita mágica, con por lo menos 10 puntos de maná, podrá lanzar el conjuro que consumirá sus 20 puntos de maná y 10 de la varita mágica.</p>
+<h4>Trampas Mágicas</h4>
+<p>Este artefacto creado por alquimistas <a href="#Paralizar">paralizará</a> por un momento al monstruo o al avatar que pase encima la trampa. La trampa es desactivada al recogerla.</p>
+<a name="BaulMagico"></a>
+<h4>Baúl Mágico</h4>
+<p>Este artefacto permite guardar pertenencias del mismo modo que el baúl mágico del <a href="#BaulMagico">castillo de un clan</a>. Este objeto no se cae al morir.</p>
+<br>
+<a href="#Hechizos">Volver a "Hechicería"</a><br>
+<br>
+<a name="AmuletosMagicos"></a>
+<h3>Amuletos Mágicos</h3>
+<p>Los amuletos mágicos se compran de los joyeros en la ciudades y se los tiene que llevar puestos (casilla para amuletos) para que hagan efecto. Sólo se puede usar un amuleto a la vez.</p>
+<a name="AmuletoConservacion"></a><h4>Amuleto de conservación</h4>
+<p>Evita perder los objetos del inventario cuando el avatar muere. Este amuleto se desvanece con la muerte del avatar luego de cumplir su finalidad. Hay que llevarlo puesto en la casilla de amuletos para proteger pertenencias valiosas.</p>
+<a name="AmuletoGuerrero"></a><h4>Amuleto de guerrero</h4>
+<p>Este amuleto incrementa la eficacia de los ataques en el combate cuerpo a cuerpo. Puede ser fabricado por los <a href="#Alquimia">alquimistas</a> y su efectividad varía con la calidad de la gema con la que fué construido.</p>
+<a name="AmuletoCamuflaje"></a><h4>Amuleto de camuflaje</h4>
+<p>Sólo funciona si el avatar tiene la pericia <a href="#Ocultarse">ocultarse</a>. El amuleto impide que el avatar pierda su camuflaje al moverse y anula parcialmente el efecto del hechizo <a href="#VisionVerdadera">visión verdadera</a> al evitar que su portador pueda ser atacado con armas de rango o le lancen hechizos de precisión mientras esté inmóvil.</p>
+<a name="AmuletoPrecision"></a><h4>Amuleto de precisión</h4>
+<p>Una buena compra si usas armas de rango. Este amuleto incrementa la puntería del avatar. Puede ser fabricado por los <a href="#Alquimia">alquimistas</a> y su efectividad varía con la calidad de la gema con la que fue construido.</p>
+<h4>Amuleto de persistencia</h4>
+<p>Duplica la duración de todos los hechizos, brebajes y efectos temporales tanto positivos como negativos. La acumulación de maná al meditar y la recuperación de puntos de salud al descansar toman el doble de tiempo. También disminuye a la mitad el consumo de comida cuando el avatar no está trabajando.</p>
+<h4>Amuleto de Visión Verdadera</h4>
+<p>Permite ver a monstruos y avatares invisibles. También revela la verdadera naturaleza de los objetos mágicos y envenenados. Su efecto perdura mientras se tenga equipado el amuleto.</p>
+<a name="AmuletoRegeneracion"></a>
+<h4>Amuleto de Regeneración</h4>
+<p>Asegura la recuperación de puntos de salud continuamente sin necesidad de descansar. Avatares con 100% en constitución ganan el doble de puntos de salud con este amuleto.</p>
+<a name="AmuletoMago"></a>
+<h4>Amuleto de Mago</h4>
+<p>Este amuleto permite la recuperación de puntos de maná sin meditar. Normalmente se recupera sólo un punto de maná. Con 100% en inteligencia o sabiduría se recupera un punto más hasta un máximo de tres puntos si se tiene 100% en ambas habilidades. No se puede recuperar puntos de maná si el avatar se muere de hambre.</p>
+<h4>Gemas Protectoras</h4>
+<p>Las siguientes gemas, llevadas en la casilla para amuletos, reducen el daño causado por el fuego, hielo, rayo y el veneno en las proporciones indicadas por la tabla.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Tipo de Gema</th><th>Protección</th></tr>
+<tr><td>Amatista</td><td><a href="#MaldecirObjeto">Maldecir Objeto</a></td></tr>
+<tr><td>Zafiro</td><td>Rayo</td></tr>
+<tr><td>Agua Marina</td><td>Hielo</td></tr>
+<tr><td>Esmeralda</td><td>Veneno</td></tr>
+<tr><td>Rubí</td><td>Fuego</td></tr>
+</table><br><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Calidad<br>de la Gema</th><th>Reducción<br>de daño</th></tr>
+<tr><td>32% a 63%</td><td>20%</td></tr>
+<tr><td>64% a 95%</td><td>34%</td></tr>
+<tr><td>96% a 100%</td><td>43%</td></tr>
+</table></center><br>
+<a href="#Hechizos">Volver a "Hechicería"</a><br>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Combate"></a>
+<h2>Sistema de Combate</h2>
+<p>En esta sección se describen los detalles del combate meleé (cuerpo a cuerpo), el combate con armas de rango, el efecto del ambiente en el combate y los tipos de armas y armaduras disponibles.</p>
+<ul>
+<li><a href="#SistemaCombate">El Sistema de Combate</a>
+<li><a href="#ArmasMelee">Combate con Armas Meleé</a>
+<li><a href="#ArmasRango">Combate con Armas de Rango</a>
+<li><a href="#AmbienteYCombate">Efecto del Ambiente en el Combate</a>
+<li><a href="#MagiaGuerrera">Artefactos Mágicos para guerreros</a>
+<li><a href="#RepararArmamento">Reparación de Armamento</a>
+<li><a href="#RecuperarSalud">Recuperación de puntos de salud</a>
+<li><a href="#Envenenamiento">El Envenenamiento</a>
+<li><a href="#Grupos">Grupos de Combate</a>
+<li><a href="#TablaArmas">Las Armas</a>
+<li><a href="armas.html">Lista de armas disponibles</a>
+<li><a href="#TablaArmaduras">Las Armaduras</a>
+<li><a href="armaduras.html">Lista de armaduras disponibles</a>
+</ul>
+<a name="SistemaCombate"></a>
+<h3>El Sistema de Combate</h3>
+<p>El sistema de combate está basado en porcentajes de ataque y defensa que representan las probabilidades relativas de acertar un golpe o esquivar un golpe. El nivel de daño de las armas y protección de las armaduras influyen en el número de puntos de salud que se perderán si el ataque es exitoso. Es posible que un avatar con elevada defensa pueda esquivar la mayoría de los ataques sin sufrir daño por cada ataque esquivado. También es posible que un avatar con bajo nivel de defensa pero con una tremenda armadura pueda recibir gran cantidad de ataques sin esquivarlos y perder pocos puntos de vida por la protección de su armadura. El daño mínimo por golpe exitoso es de un punto de salud. El sistema de combate garantiza que al menos el 5% de los ataques sean exitosos.</p>
+<p>Las armaduras y vestimentas no mágicas se deterioran con cada golpe que reciben, sin embargo al momento de deteriorarse disminuyen aún más el daño que recibirá el avatar. Las <a href="#HechizarObjeto">armaduras mágicas</a> incrementan el nivel de defensa y algunas incluso logran reducir mucho más el nivel de daño que sufrirá el avatar por cada golpe exitoso del enemigo sin que la armadura se deteriore. Sólo el encantamiento <a href="#MaldecirObjeto">maldecir objeto</a> puede destruir las propiedades mágicas de un arma o armadura encantada.</p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="ArmasMelee"></a>
+<h3>Combate con Armas Meleé</h3>
+<p>Existen dos alternativas al momento de atacar cuerpo a cuerpo: El combate enfocado al <a href="#AtaqueOfensivo">ataque</a> y el enfocado a <a href="#AtaqueDefensivo">defensa</a>. El tipo de arma influye bastante en el combate. Las armas pesadas hacen más daño pero tienen penalizaciones en el nivel de ataque y no permiten que se utilice otra arma adicional. Las armas ligeras generalmente tendrán bonificación en el nivel de ataque y se podrán usar dos al mismo tiempo pero su nivel de daño es menor. Para neutralizar las penalizaciones en el manejo de armas los guerreros y pícaros pueden <a href="#EspecialidadArmas">especializarse</a> en el manejo del arma que prefieran. Por cada nivel el avatar gana un bono de 3.125% de daño al hacer un ataque cuerpo a cuerpo. Por ejemplo en nivel 32 el avatar ganará 100% de daño adicional con ataques meleé.</p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="ArmasRango"></a>
+<h3>Combate con Armas de Rango</h3>
+<p>Para usar este tipo de armas se necesita colocar la munición adecuada en la casilla para municiones. Para marcar el objetivo con la mira se usa el botón derecho del ratón. La mira cambia de color de acuerdo a la agresividad de los monstruos de verde a rojo. Cuanto menor sea la distancia y cuanto mayor sea el tamaño del monstruo será más fácil acertar. Es necesario que no existan obstáculos entre el avatar y el objetivo apuntado.</p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="AmbienteYCombate"></a>
+<h3>Efecto del Ambiente en el Combate</h3>
+<p>El ambiente afecta sólo al combate con armas de rango. Las armas de rango se deterioran al doble de velocidad de lo normal cuando está lloviendo. En mapas oscuros o en la noche se tiene un bono en defensa de 15% contra atacantes con armas de rango sin infravisión. Si el atacante posee infravisión el bono se reduce al 5%. En la niebla el bono de defensa es de 15% contra atacantes con armas de rango tengan o no infravisión.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Tipo de clima</th><th>Efecto en el juego</th></tr>
+<tr><td>Lluvia</td><td>Deterioro de armas de rango</td></tr>
+<tr><td>Niebla</td><td>Defensa +15%</td></tr>
+<tr><td>Noche</td><td>Defensa +15%</td></tr>
+<tr><td>Noche + Infravisión</td><td>Defensa +5%</td></tr>
+</table></center><br>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="MagiaGuerrera"></a>
+<h3>Artefactos Mágicos para guerreros</h3>
+<p>Esta sección describe los artefactos que incrementa en nivel de combate, ataque, 
+defensa, etc. de los guerreros.</p>
+<h4>Armas y armaduras hechizadas:</h4>
+<p>El guerrero puede llevar armas y armaduras mejoradas mediante el encantamiento <a href="#HechizarObjeto">"Hechizar objeto"</a> para que incrementen sus niveles de defensa, armadura, ataque y daño. Este tipo de artefactos no se venden en los comercios y tienen que ser elaborados por un mago de alto nivel.</p>
+<h4>Municiones paralizantes:</h4>
+<p>Estas municiones pueden paralizar a la víctima por unos segundos. Para prepararlas se necesita untar un <a href="#Pociones">brebaje paralizante</a> en municiones de armas de rango. Los dardos de ballesta de mano untados con este brebaje tienen 50% de chance de paralizar a la víctima. Cualquier otra munición debe hacer 10 o más puntos de daño para paralizar. Las resistencias naturales de los monstruos pueden impedir que sean paralizados.</p>
+<h4>Amuletos para el combate:</h4>
+<p>Los amuletos recomendados son: <a href="#AmuletoGuerrero">Amuleto de guerrero </a>(combate meleé),<a href="#AmuletoPrecision"> Amuleto de precisión </a>(armas de rango) y<a href="#AmuletoRegeneracion"> Amuleto de Regeneración</a> para recuperar puntos de salud durante el combate.</p>
+<h4>La música en el combate:</h4>
+<p>El efecto de la <a href="#Juglaria">juglaría</a> de los <a href="#ElBardo">bardos</a> incrementa la efectividad del ataque en 10% y prolonga el efecto (incremento temporal en defensa) de un movimiento defensivo. También se pueden obtener resultados similares tocando el <a href="#CuernoGuerra">cuerno de guerra.</a></p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="RepararArmamento"></a>
+<h3>Reparación de Armamento</h3>
+<p>Las armas, arcos, ballestas, armaduras, vestimentas, etc. se deterioran por efectos del combate. Cuando un objeto llega al 0% queda inutilizado y es necesario repararlo. La calidad de la reparación depende del nivel, habilidades y pericias del avatar y sólo se podrán reparar los objetos permitidos por clase y raza de avatar. El objeto a ser reparado se coloca en la mano derecha y se selecciona la herramienta de reparación adecuada al objeto: piedra para afilar, martillo de herrero, aceite para cuerda de arco o tijeras y aguja. Cada vez que una armadura, vestimenta, casco, escudo o brazalete se deteriora amortigua a la mitad el daño que recibe el avatar. El deterioro es proporcional al daño amortiguado.</p>
+<h4>Armas afilables</h4>
+<p>Las armas punzantes y cortantes se pueden reparar con la "Piedra para afilar". Los herreros reparan mucho mejor este tipo de armas. Por las chispas que saltan al afilar un arma se pueden encender fogatas preparadas.</p>
+<h4>Reparando con el martillo de herrero</h4>
+<p>Armaduras de metal, armas contundentes y el arcabuz sólo se pueden reparar en un yunque y con un martillo de herrero. Los herreros reparan mucho mejor este tipo de armamento.</p>
+<h4>Arcos y ballestas</h4>
+<p>Para reparar este tipo de armas es necesario usar el aceite para cuerda de arco. Los carpinteros reparan mucho mejor este tipo de armas.</p>
+<h4>Vestimentas, gorros de mago y armaduras de cuero</h4>
+<p>Estos objetos se reparan con las tijeras y agujas. Los sastres reparan mucho mejor este tipo de objetos.</p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="RecuperarSalud"></a>
+<h3>Recuperación de puntos de salud</h3>
+<p>Existen varias formas de recuperar puntos de salud: <a href="#CurarHeridas">Hechizo de curación</a>, <a href="#SanarEnfermedad">Hechizo de sanación</a>, <a href="#Pociones">pócimas de regeneración física y sanación</a> y finalmente <a href="#Descansar">descansando</a>. El nivel máximo de puntos de vida depende de la clase, nivel y <a href="#Constitucion">constitución</a> del avatar.</p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="Envenenamiento"></a>
+<h3>El Envenenamiento</h3>
+<p>El avatar puede terminar envenenado como consecuencia del combate cuerpo a cuerpo con criaturas ponzoñosas. La forma más económica de curar el veneno es tomar la bebida "jugo de hierbas", vendida por hosteleros, con un chance del 33% de curarse. También curan el envenenamiento la <a href="#Pociones">pócima de sanación</a> y el <a href="#SanarEnfermedad">Hechizo de sanación</a>.</p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+
+<a name="Grupos"></a>
+<h3>Grupos de Combate</h3>
+<p>Los grupos de combate permiten ganar la mitad de puntos de experiencia que gana un compañero de grupo al matar a un monstruo tan sólo por verlo matar al monstruo. Todos los jugadores pueden crear un grupo de combate.</p>
+<p>Para invitar a un avatar a tu grupo tienes que apuntarle y usar el comando "/grupo". Si te mueves antes que el otro avatar acepte entonces la invitación es cancelada. El otro avatar es invitado a unirse al grupo y puede aceptar apuntando a tu avatar y usando el comando "/grupo".</p>
+<p>Se puede invitar al grupo a un avatar siempre que este vivo. Al aceptar la invitación el otro avatar forma parte de tu grupo y a la vez tu avatar formará parte de su grupo. Un grupo puede tener hasta cinco miembros como máximo y se disuelven al salir del juego. Si un avatar muere o se retira del juego deja de compartir experiencia y es removido de los otros grupos de combate.</p>
+<p>Para ver los miembros de tu grupo usa el comando "/grupo" sin apuntar a un avatar. Para dejar de compartir experiencia y desbandar tu grupo usa el comando "/CancelarGrupo". Tu grupo es cancelado también si tu avatar muere o sale del juego.</p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+
+<a name="TablaArmas"></a><h3>Las Armas</h3>
+<p>El daño y la probabilidad de acertar en el ataque también dependen del tipo, tamaño y peso del arma. Las armas pequeñas y ligeras producen menos daño pero tienen un modificador de ataque positivo (son más fáciles de manejar). Las armas grandes y pesadas pueden hacer mayor daño pero su modificador de ataque es negativo (es más difícil realizar movimientos ágiles y diestros con estas armas). Las armas encantadas pueden tener bonificación de ataque o bonificación en daño.
+</p>
+<p><a href="armas.html">Tabla con la descripción de las armas disponibles</a></p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a name="TablaArmaduras"></a><h3>Las Armaduras</h3>
+<p>Las armaduras reducen el daño que recibe el avatar al ser atacado. El nivel de reducción del daño aumenta con el nivel de la armadura. Las armaduras y cascos incrementan el nivel de armadura punzante, cortante y contundente. Los objetos bajo el encantamiento <a href="#HechizarObjeto">"Hechizar objeto"</a> elevan el nivel de armadura mágica que protege de daños especiales (fuego, hielo, rayo, veneno). Los escudos y brazaletes actúan incrementando el nivel de defensa para esquivar los golpes.</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Nivel de<br>Armadura</th><th>Reducción<br>de Daño</th></tr>
+<tr><td>1</td><td>20%</td></tr>
+<tr><td>2</td><td>34%</td></tr>
+<tr><td>3</td><td>43%</td></tr>
+<tr><td>4</td><td>50%</td></tr>
+<tr><td>5</td><td>56%</td></tr>
+<tr><td>6</td><td>60%</td></tr>
+<tr><td>7</td><td>64%</td></tr>
+<tr><td>8</td><td>67%</td></tr>
+</table>
+<p>Reducción de Daño = Nivel de Armadura / (4 + Nivel de Armadura).</p>
+</center>
+<p><a href="armaduras.html">Tabla con la descripción de las armaduras disponibles</a></p>
+<a href="#Combate">Volver a "Sistema de Combate"</a><br>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+
+<a name="LaMuerte"></a>
+<h2>Muerte y Resurrección</h2>
+<br>
+<p>Esta sección describe los efectos de la muerte sobre los avatares y como se los puede resucitar.
+</p>
+<h4>Efectos de la Muerte</h4>
+<p>Al morir el avatar pierde sus puntos de vida, sus puntos de maná, su comida así como todos los efectos de conjuros y enfermedades. El avatar aparece en pantalla con un efecto de semitransparencia azul brillosa con una apariencia de acuerdo a su nivel y con el rostro en gris. El avatar al morir deja caer todos los objetos de su inventario que cuestan más de 4 monedas de oro, excepto el <a href="#BaulMagico">baúl mágico, objetos hechizados que no se pierden al morir, y llaves no comunes.</a>. Si lleva un <a href="#AmuletoConservacion">amuleto de conservación</a> el avatar no deja caer ninguna de sus pertenencias. El avatar no pierde su dinero ni los objetos que tenga equipados al morir.
+</p>
+<h4>Formas de volver a la vida</h4>
+<p>La forma más rápida es haciendo clic en el rostro del personaje para teletransportarse cerca de una catedral y ser resucitado. Otra forma es buscar una catedral y acercarse a la entrada para resucitar. Los clérigos pueden aprender el conjuro de resurección al primer intento si tienen en las manos un libro sagrado, otras clases necesitan realizar varios intentos o tener suficiente sabiduría e inteligencia para no fallar.
+</p>
+<h4>Efectos de la Resurección</h4>
+<p>Si el avatar es <a href="#Honor">honorable</a> recupera hasta 50 puntos de vida y el 50% de comida, de lo contrario recupera hasta 15 puntos de vida y 15% de comida. Existe una penalización en experiencia proporcional al nivel del avatar y llega al 100% a partir de nivel 32. Para niveles menores es 3% por cada nivel del avatar, 3.125% para ser exactos.</p>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Comercio"></a>
+<h2>El Comercio</h2>
+<p>Esta sección describe el sistema de precios que manejan los comerciantes y la forma que el precio se ve influenciado por las pericias, nivel, honor y castillos de los clanes.</p>
+<h4>Comprando de los comerciantes</h4>
+<p>Existen varios comerciantes que venden gran variedad de mercancías. Algunos venden armas y armaduras, otros pociones, algunos comida, herramientas, vestimentas, etc. Para acercarse a un comerciante basta hacer clic izquierdo en el personaje. Si estamos suficientemente cerca y hacemos clic nuevamente aparecerá el menú de comercio. Con el menú de comercio abierto podemos comprar el objeto seleccionado de la lista haciendo clic en un objeto seleccionado o en el botón para comprar. También podemos vender un objeto del inventario haciendo clic izquierdo sobre el objeto seleccionado o en el botón para vender. Al hacer clic sobre el icono de una armadura o arma a la venta aparecerá la descripción detallada de defensa/armadura o ataque/daño según corresponda. Antes de comprar o vender un objeto aparecerá un mensaje de confirmación con el precio para aceptarlo o rechazarlo.</p>
+<h4>El sistema de precios</h4>
+<p>El precio de los objetos varía dependiendo de la oferta y demanda. Cada vez que un avatar compra un objeto su precio aumenta, cada vez que vende un objeto su precio baja. Los precios tienen mínimos y máximos. El precio de compra varía de 75% a 125%, siendo inicialmente 100%. El precio de venta al comerciante es la mitad del precio de compra. Los precios son afectados por la pericia elocuencia, el nivel de honor y territorio de los clanes.</p>
+<h4>La pericia Elocuencia</h4>
+<p>Un avatar con esta pericia tiene mejores precios de compra y venta a medida que sube de nivel. Sólo con esta pericia se tienen mejores precios de venta de recursos como pieles, minerales, gemas u objetos fabricados por el avatar.</p>
+<h4>El nivel de honor</h4>
+<p>Un avatar con honor tiene un pequeño descuento al comprar objetos de los comerciantes. El descuento es mayor a medida que aumenta el nivel de honor.</p>
+<h4>Clanes y territorio</h4>
+<p>Si el comerciante trabaja en una zona controlada por un clan los miembros de dicho clan tendrán descuento al momento de comprar objetos, además de beneficiar con impuestos al tesoro del clan.</p>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Clanes"></a>
+<h2>Los clanes de avatares</h2>
+<p>Ser parte de un clan permite conquistar castillos, evita ser atacado accidentalmente por los miembros del mismo clan y facilita la comunicación entre sus miembros. La sección de <a href="#ComandosClan">comandos de clan</a> detalla las acciones disponibles para el líder del clan y sus miembros.</p>
+<a name="FundarClan"></a>
+<h4>Fundación de clanes</h4>
+<p>Para fundar un clan es necesario tener la pericia elocuencia, nivel 15 como mínimo y no pertenecer a otro clan. La fundación del clan se realiza al entrar al centro de la zona de invocación de clanes con una gema de mando en las manos.</p>
+<p>La gema de mando puede obtenerse a cambio de una gema sol oscuro tallado. En las minas de arcanita está ubicado un artefacto mágico que realiza la transformación. Para llegar al artefacto mágico es necesario entrar a las minas por la torre custodiada por contempladores en el bosque del oso pardo. Antes es necesario una gema "agua marina" para cruzar el portal de fuego que lleva a la zona de los contempladores y una llave de plata para entrar en las mazmorras de la torre. El área de invocación de clanes está ubicada en la isla de hielo, es necesario una llave de oro para acceder a la zona.</p>
+<h4>Conquista de Castillos</h4>
+<p>Para conquistar un castillo es necesario pertenecer a un clan y derrotar al guardián del castillo. Una vez que el guardián ha sido derrotado los estandartes del clan conquistador ondearán en el castillo.</p>
+<p>La principal ventaja de poseer castillos son los ingresos por impuestos cobrados a todos los comercios de la zona. Los impuestos cobrados corresponden al 12.5% del precio final de venta de cualquier objeto. Sólo se cobran impuestos por los objetos que vendan los comerciantes a los avatares.</p>
+<a name="BaulMagico"></a>
+<h4>Baúl mágico</h4>
+<p>Los miembros del clan pueden acceder al baúl mágico que puede ser abierto desde cualquier castillo del clan del avatar. Por ejemplo si el avatar guarda una gema en el baúl mágico del castillo de la "isla de hielo", luego viaja al castillo del "bosque del oso pardo" y abre el baúl mágico encontrará la misma gema que guardó anteriormente.</p>
+<h4>Mejorando la defensa de los Castillos</h4>
+<p>Aunque no es fácil derrotar al guardián del castillo es posible mejorar sus habilidades de defensa por un precio por cada mejora realizada. La lista completa de comandos para habilitar las mejoras está detallada en la sección de <a href="#MejorasCastillos">comandos de clanes para mejoras de castillos</a>.</p>
+<a href="#Contenido">Tabla de contenido</a>
+<hr>
+<a name="Configurando"></a>
+<h2>Configuraciones del Cliente y Servidor</h2>
+<p>Esta sección describe varias opciones de personalización y configuraciones tanto para el programa cliente como para el servidor.</p>
+<ul>
+<li><a href="#OpcionesCliente">El archivo opciones.txt del Cliente</a>
+<li><a href="#OpcionesServidor">El archivo opciones.txt del Servidor</a>
+<li><a href="#MenuServidor">El menú de opciones del servidor</a>
+<li><a href="#PuertosYFirewall">Puertos de comunicación y cortafuegos (firewall)</a>
+</ul>
+<a name="OpcionesCliente"></a><h3>El archivo opciones.txt del Cliente</h3>
+<p>A continuación se describe cómo utilizar el archivo <tt>opciones.txt</tt> para conectarse a un servidor y otras opciones de configuración del juego.
+</p>
+<p>Este archivo está ubicado en el directorio "Laa" donde también está el archivo Laa.exe de la "aplicación cliente" del juego. Este archivo contiene información de configuración para el cliente y se puede modificar con el block de notas.
+</p>
+<h4>Indicando el servidor de juego</h4>
+<p>Para jugar en un servidor remoto es necesario conocer el nombre o el IP de una máquina con un servidor de juego activado. La máquina puede estar en una red de área local o en internet. Si el IP de la máquina fuera: <tt>200.10.10.10</tt> o tuviera el nombre: <tt>miservidor.com</tt> la configuración correspondiente sería:
+</p>
+<pre>SERVIDOR=200.10.10.10</pre>
+<p>Si conocemos el IP, o en el caso que se conociera el nombre:</p>
+<pre>SERVIDOR=miservidor.com</pre>
+<p>Si es necesario también se puede modificar el puerto de comunicaciones predefinido. Por ejemplo el puerto 80 es el estándar usado para páginas WEB, pero también podemos activar un servidor que se comunique mediante ese puerto, Ej:
+</p>
+<pre>PUERTO=80</pre>
+<a name="ModoLento"></a><h4>Modo para máquinas lentas</h4>
+<p>En máquinas lentas que no pueden mostrar 30 frames por segundo es posible reducirlos a la mitad agregando la línea: <tt>MODO LENTO=SI</tt></p>
+<h4>Personalizando el uso del ratón</h4>
+<p>Con la configuración predefinida el botón izquierdo del ratón se usa para moverse y el izquierdo para apuntar. Agregando la línea <tt>MOVER CON BOTON DERECHO=SI</tt> permite usar el botón derecho para moverse y el izquierdo para apuntar.</p>
+<h4>Opciones de sonido</h4>
+<p>Para desactivar la música de fondo hay que cambiar el texto <tt>MUSICA=MIDI</tt> por <tt>MUSICA=NO</tt>.</p>
+<h4>Personalizando la música del juego</h4>
+<p>El juego permite utilizar música .mp3, para lo que primero es necesario modificar la línea <tt>MUSICA=MIDI</tt> por <tt>MUSICA=MP3</tt>, o agregar dicha línea si no existiera, para que el programa intente abrir primero un archivo mp3. Finalmente es necesario copiar los archivos <tt>.mp3</tt> a la carpeta /snd y cambiarles el nombre para que concuerden con el archivo <tt>.mid</tt> correspondiente.</p>
+Ejemplo para cambiar la música de introducción:
+<p>El archivo con la música de fundación de clan se llama <tt>c.mid</tt>, ubicado en la carpeta <tt>Laa\snd</tt>. Para escuchar otra música de introducción basta copiar en esa carpeta un archivo <tt>c.mp3</tt>. Luego cambiar la línea <tt>MUSICA=MIDI</tt> por <tt>MUSICA=MP3</tt>, o agregar dicha línea si no existiera.</p>
+<a href="#Configurando">Volver a "Configuraciones"</a><br>
+
+<a name="OpcionesServidor"></a><h3>El archivo opciones.txt del Servidor</h3>
+<p>Este archivo está ubicado en el directorio "Servidor" donde también está el archivo "Arkhos.exe" de la aplicación servidor del juego. Este archivo contiene información de configuración para el servidor y se puede modificar con el block de notas.
+</p>
+<h4>Número de mapas</h4>
+<p>Configura el número de mapas activos en el servidor. Los mapas tienen que tener los nombres correspondiendes a los números desde el 0 hasta el número indicado en este parámetro.</p>
+<p>Ej. Si tenemos <tt>Número de mapas=3</tt>, deberán existir los mapas <tt>0.mpv</tt>, <tt>1.mpv</tt>, <tt>2.mpv</tt> y <tt>3.mpv</tt>. Para que el servidor funcione correctamente es necesario que por lo menos exista el mapa <tt>0.mpv</tt>.</p>
+<h4>Posición Base</h4>
+<p>Define la posición inicial de los avatares dependiendo de su raza (elfo, humano, etc). El parámetro requiere de cuatro números: el primero es el código del tipo de monstruo del avatar, luego está el número de mapa y finalmente la posición en el mapa indicada por dos números (x,y).</p>
+<pre>
+//Define la posición inicial de los humanos:
+Posición Base=0,1,220,62</p>
+</pre>
+<h4>Parámetros predefinidos</h4>
+<p>Estas configuraciones sirven para indicar los valores predefinidos de algunas opciones configurables desde el menú del servidor. Por ejemplo las siguientes líneas corresponden a la configuración original:</p>
+<pre>
+Puerto=15715
+Turnos de reengendro=150
+Comunicación total=si
+Múltiples sesiones=si
+Mantener Registro=no
+Fecha y Hora en Registro=no
+</pre>
+<a href="#Configurando">Volver a "Configuraciones"</a><br>
+
+<a name="MenuServidor"></a><h3>El menú de opciones del servidor</h3>
+<p>Desde este submenú es posible activar y desactivar el servidor, además de configurar algunas opciones antes y durante el tiempo que el servidor esté activo. El servidor acepta conexiones para ingresar a jugar o crear avatares sólo cuando está activo (el color del programa se torna azul).
+</p>
+<center><table class="tabla1" cellpadding=5 border=1 cellspacing=0>
+<tr><th>Opciones</th><th>Efecto</th></tr>
+<tr><td>Modo de Pruebas</td><td><a name="ModoPruebas"></a>Activa y desactiva el modo de pruebas. Un servidor en modo de pruebas no guarda cambios que ocurran en los avatares, sus objetos, los mapas, clanes, castillos u otra información del juego. Tampoco permite crear nuevos avatares.</td></tr>
+<tr><td>Cambiar Puerto...</td><td>Si por alguna razón el puerto predefinido no está disponible con esta opción se puede utilizar un puerto alternativo. Todo jugador que quiera conectarse al servidor tendrá que seleccionar el mismo número puerto en el programa cliente.</td></tr>
+<tr><th>Parámetros</th><th>Efecto</th></tr>
+<tr><td>Mantener Registro</td><td>Al activar esta opción los mensajes del servidor serán guardados en un archivo de registro.</td></tr>
+<tr><td>Fecha y Hora en Registro</td><td>Agrega la fecha (año/mes/día) y hora de cada evento en el registro del servidor.</td></tr>
+<tr><td>Turnos/Seg.</td><td>Menor número de turnos por segundo permite reducir el consumo de ancho de banda, pero baja el ritmo del juego.</td></tr>
+<tr><td>Comunicación...</td><td>Esta opción activada permite que cualquier jugador envíe mensajes a todos los jugadores conectados.</td></tr>
+<tr><td>Ver conexiones...</td><td>Muestra detalles de los intentos de conexión no aceptados por el servidor.</td></tr>
+<tr><td>Permitir múltiples...</td><td>Activa y desactiva la posibilidad que un jugador pueda jugar con varios avatares al mismo tiempo desde una misma máquina abriendo varios clientes.</td></tr>
+<tr><td>Fijar Tiempo de Reengendro</td><td>Fija el número de turnos que tienen que pasar antes de que un monstruo muerto sea reengendrado.</td></tr>
+</table></center>
+<p>
+Sólo se puede cambiar la configuración del submenú Servidor/Opciones si el servidor está desactivado. Las configuraciones del submenú Servidor/Parámetros son modificables todo el tiempo.
+</p>
+<a name="PuertosYFirewall"></a><h3>Puertos de comunicación y cortafuegos (firewall)</h3>
+<p>El programa cliente utiliza el puerto 15715 (TCP) para conectarse con el servidor, enviar y recibir información del juego.</p>
+<p>El servidor utiliza el puerto 15715 (TCP) para mantener comunicación con cada uno de los jugadores a través del programa cliente. Mediante este puerto el servidor recibe los comandos de los jugadores y también envía la información del servidor para que los jugadores puedan informarse de los cambios que suceden en el juego.</p>
+<p>Si existe un firewall instalado el cliente y el servidor necesitan tener habilitado el puerto TCP 15715 tanto para entrada y salida de datos.</p>
+<a href="#Configurando">Volver a "Configuraciones"</a><br>
+<a href="#Contenido">Tabla de contenido</a>
+
+</div>
+</td>
+<td class="img_bg5"></td>
+</tr>
+<tr>
+<td class="img_bg6"></td>
+<td class="img_bg7"></td>
+<td class="img_bg7"></td>
+<td class="img_bg7"></td>
+<td class="img_bg7"></td>
+<td class="img_bg7"></td>
+<td class="img_bg7"></td>
+<td class="img_bg8"></td>
+</tr>
+</table></div>
+</body></html>
+

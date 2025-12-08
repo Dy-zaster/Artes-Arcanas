@@ -68,7 +68,7 @@ public sealed class MonsterRenderer
         }
     }
 
-    public void Draw(SpriteBatch spriteBatch, Camera2D camera)
+public void Draw(SpriteBatch spriteBatch, Camera2D camera)
     {
         if (spriteBatch is null) throw new ArgumentNullException(nameof(spriteBatch));
         if (camera is null) throw new ArgumentNullException(nameof(camera));

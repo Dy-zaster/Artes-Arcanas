@@ -32,7 +32,7 @@ Status legend: ✅ done, ⏳ planned/not started, 🛠️ in progress.
 
 ### 1. Asset + data pipeline
 - Reverse engineer Delphi resource loaders (graphics, animations, map definitions) and describe each format in `Docs/Formats/*.md`. **Status:** ✅ Complete extraction suite implemented under `Tools/LegacyDataExtractor`; integration plan documented in `Docs/Formats/IntegrationPlan.md`.
-- Build CLI converters (could be dotnet tools or scripts) to emit MonoGame-friendly formats (PNG, JSON, TMX, etc.). **Status:** ⏳ runtime loads BMPs directly from `Original Pascal/Laa/grf` (or `content/graphics`); migration to packaged atlases still pending.
+- Build CLI converters (could be dotnet tools or scripts) to emit MonoGame-friendly formats (PNG, JSON, TMX, etc.). **Status:** ✅ runtime now consumes packaged atlases under `content/graphics`; legacy `grf` is only a source for the extractors.
 - Extend `Content/Content.mgcb` with folders per asset type and integrate into CI so `dotnet build` fails on missing content. **Status:** ⏳.
 
 ### 2. Engine foundation
