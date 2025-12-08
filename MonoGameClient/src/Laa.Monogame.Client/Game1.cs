@@ -47,7 +47,6 @@ public class Game1 : Game
     private AnimationTextureProvider? _animationTextureProvider;
     private AnimationPreviewPlayer? _animationPreview;
     private MonsterRenderer? _monsterRenderer;
-    private MonsterSimulation? _monsterSimulation;
     private MapOverlayRenderer? _overlayRenderer;
     private DebugTextRenderer? _debugTextRenderer;
     private TilePalette? _tilePalette;
@@ -459,7 +458,6 @@ public class Game1 : Game
                 _animationTextureProvider,
                 _animationCatalog.Animations.Select(a => a.Key));
             _monsterRenderer = new MonsterRenderer(_animationTextureProvider);
-            _monsterSimulation = new MonsterSimulation();
             RebuildMonsterEntities();
         }
         if (_graphicsCatalog is not null)
@@ -550,7 +548,6 @@ public class Game1 : Game
         _cameraController?.Update(gameTime, keyboard, mouse, !hudCapturedScroll);
         UpdatePlayerMovement(gameTime, keyboard);
         _animationPreview?.Update(gameTime);
-        _monsterSimulation?.Update(gameTime);
         // Selection labels now updated via event handler.
         UpdateHudText();
         UpdateMonsterRenderer(gameTime);
@@ -839,32 +836,9 @@ public class Game1 : Game
 
     private void RebuildMonsterEntities()
     {
-        var monsters = new List<MonsterEntity>();
-        if (_activeMap is not null && _monsterDocument is not null)
-        {
-            var monsterLookup = _monsterDocument.Monsters
-                .GroupBy(m => (int)m.TypeId)
-                .ToDictionary(g => g.Key, g => g.First(), comparer: EqualityComparer<int>.Default);
-
-            var identifier = 0;
-            foreach (var nest in _activeMap.Nests)
-            {
-                if (!monsterLookup.TryGetValue(nest.Type, out var descriptor))
-                {
-                    continue;
-                }
-
-                var key = $"m{descriptor.TypeId}";
-                var anchor = new Vector2(
-                    (nest.X + 0.5f) * TileWidth,
-                    (nest.Y + 1f) * TileHeight);
-                monsters.Add(new MonsterEntity(identifier++, descriptor, anchor, key));
-            }
-        }
-
-        _worldState.SetMonsters(monsters);
+        // Monsters will be provided by the server; client no longer seeds fake spawns.
+        _worldState.SetMonsters(Array.Empty<MonsterEntity>());
         _monsterRenderer?.SetMonsters(_worldState.Monsters);
-        _monsterSimulation?.SetMonsters(_worldState.Monsters);
     }
 
     private void UpdateMonsterRenderer(GameTime gameTime)

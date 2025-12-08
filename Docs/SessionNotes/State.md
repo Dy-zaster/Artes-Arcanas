@@ -17,6 +17,7 @@
   - El set de avatares tiene 5 direcciones (N, S, W, diag-izq, diag-der); no hay columnas específicas para derecha.
   - Se usa el mapeo original `MC_DirAnimacion` (Pascal) y se espeja (`SpriteEffects.FlipHorizontally`) para las direcciones hacia la derecha (E, NE, SE). El cálculo de posición ya contempla el espejo.
   - Nota para monstruos: varias animaciones de monstruos usan el mismo patrón (falta columna derecha); reutilizar la dirección izquierda con espejo al implementarlos.
+- **Monstruos en cliente**: ya no se generan spawns locales ni simulación; el cliente espera que el servidor envíe las instancias/posiciones y solo renderizará lo que reciba.
 
 ## Servidor (net8, TCP 127.0.0.1:7667)
 
@@ -32,6 +33,7 @@
   - `CharacterRecord` incluye: raza, clase, pericias (mask), stats base, evasión, nivel, experiencia, mapa/pos, HP/MP max/actual, oro, plata, comida, honor (1–5), armadura, resistencia mágica, inventario (itemId, amount, equippedSlot), hechizos (spellId).
   - Spawn inicial según raza:
     - Humano→mapa1 (220,62), Elfo→4 (138,232), Enano→6 (46,53), Gnomo→1 (206,51), Semielfo→4 (138,232), Orco→8 (33,107), Drow→12 (138,104).
+- **Datos de monstruos en servidor**: se copió `monsters.json` a `src/Laa.Server/data/` para que el servidor resuelva tipos/animaciones/atributos al instanciarlos. El servidor aún no envía spawns al cliente; se añadirá al definir el protocolo de mundo.
 - **Handlers**:
   - Login valida usuario/clave (creación de cuentas externa).
   - CharacterList entrega hasta 5 personajes con todos los campos.
