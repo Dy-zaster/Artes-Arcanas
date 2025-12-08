@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Laa.Content.Core.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,7 +24,7 @@ public sealed class StaticGraphicRenderer : IDisposable
         _fallbackTexture.SetData(new[] { Color.White });
     }
 
-    public void Draw(SpriteBatch spriteBatch, IReadOnlyList<StaticGraphic> graphics, Camera2D camera)
+    public void Draw(SpriteBatch spriteBatch, IReadOnlyList<StaticGraphic> graphics, Camera2D camera, int mapHeightTiles)
     {
         if (spriteBatch is null) throw new ArgumentNullException(nameof(spriteBatch));
         if (camera is null) throw new ArgumentNullException(nameof(camera));
@@ -53,11 +51,11 @@ public sealed class StaticGraphicRenderer : IDisposable
                 ? SpriteEffects.FlipHorizontally
                 : SpriteEffects.None;
 
-            var baseX = (graphic.X - OccupiedMaskHalfWidth) * _tileWidth;
-            var baseY = graphic.Y * _tileHeight - entry.AlignY * _tileHeight;
+            var baseX = (graphic.X - OccupiedMaskHalfWidth) * _tileWidth + (_tileWidth / 2); // slight right shift to align with terrain
+            var baseY = graphic.Y * _tileHeight - entry.AlignY * _tileHeight + (_tileHeight / 2); // small down shift to match legacy anchoring
             var offsetX = effects == SpriteEffects.FlipHorizontally ? entry.ReflectedOffsetX : entry.OffsetX;
             var drawPosition = new Vector2(baseX + offsetX, baseY + entry.OffsetY);
-            var layerDepth = MathHelper.Clamp(graphic.SubLayer / 32f, 0f, 1f);
+            var layerDepth = ComputeDepth(graphic, mapHeightTiles);
 
             spriteBatch.Draw(
                 entry.Texture,
@@ -88,5 +86,13 @@ public sealed class StaticGraphicRenderer : IDisposable
             _tileWidth,
             _tileHeight);
         spriteBatch.Draw(_fallbackTexture, destination, Color.DimGray * 0.75f);
+    }
+
+    private static float ComputeDepth(StaticGraphic graphic, int mapHeightTiles)
+    {
+        if (mapHeightTiles <= 0) return 0.4f;
+        var yNorm = Math.Clamp(graphic.Y / (float)mapHeightTiles, 0f, 1f);
+        var subLayerNorm = graphic.SubLayer / 32f;
+        return MathHelper.Clamp(0.05f + yNorm * 0.7f + subLayerNorm * 0.01f, 0f, 0.9f);
     }
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Laa.Content.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -81,13 +77,13 @@ public sealed class GraphicTextureProvider : IDisposable
         }
         _ownedTextures.Add(texture);
 
-            var created = new GraphicTextureEntry(
-                texture,
-                null,
-                descriptor.PosX,
-                descriptor.PosY,
-                descriptor.ReflectedPosX,
-                descriptor.AlignY);
+        var created = new GraphicTextureEntry(
+            texture,
+            null,
+            descriptor.PosX,
+            descriptor.PosY,
+            descriptor.ReflectedPosX,
+            descriptor.AlignY);
 
         _cache[descriptorIndex] = created;
         entry = created;

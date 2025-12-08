@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Laa.Content.Core.Graphics;
 
 public sealed record TerrainTileSet(

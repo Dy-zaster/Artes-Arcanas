@@ -18,6 +18,7 @@
   - Se usa el mapeo original `MC_DirAnimacion` (Pascal) y se espeja (`SpriteEffects.FlipHorizontally`) para las direcciones hacia la derecha (E, NE, SE). El cálculo de posición ya contempla el espejo.
   - Nota para monstruos: varias animaciones de monstruos usan el mismo patrón (falta columna derecha); reutilizar la dirección izquierda con espejo al implementarlos.
 - **Monstruos en cliente**: ya no se generan spawns locales ni simulación; el cliente espera que el servidor envíe las instancias/posiciones y solo renderizará lo que reciba.
+- **Protocolo de entidades**: se usa `EntitySnapshot` (MessageId 30) para que el servidor envíe los monstruos del mapa actual (id, tipo, posición, dirección, espejo, acción, HP). El cliente los crea y los dibuja; no hay IA ni updates incrementales aún.
 
 ## Servidor (net8, TCP 127.0.0.1:7667)
 

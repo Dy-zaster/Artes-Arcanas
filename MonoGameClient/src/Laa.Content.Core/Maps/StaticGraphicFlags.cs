@@ -1,5 +1,3 @@
-using System;
-
 namespace Laa.Content.Core.Maps;
 
 [Flags]

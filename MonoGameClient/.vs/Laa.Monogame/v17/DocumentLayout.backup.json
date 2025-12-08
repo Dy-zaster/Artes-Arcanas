@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\world\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\world\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\rendering\\staticgraphicrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\rendering\\staticgraphicrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\rendering\\monsterrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\rendering\\monsterrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A4F3E5B-29D4-4AF6-8A44-3FA74F5327A4}|src\\Laa.Server\\Laa.Server.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.server\\world\\monsterworldservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A4F3E5B-29D4-4AF6-8A44-3FA74F5327A4}|src\\Laa.Server\\Laa.Server.csproj|solutionrelative:src\\laa.server\\world\\monsterworldservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\world\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\world\\playerentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4A4F3E5B-29D4-4AF6-8A44-3FA74F5327A4}|src\\Laa.Server\\Laa.Server.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.server\\networking\\serverhost.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,10 +47,6 @@
       "RelativeMoniker": "D:0:0:{3CDB7476-C7C3-4589-A9E8-6501805F7068}|src\\Laa.Content.Json\\Laa.Content.Json.csproj|solutionrelative:src\\laa.content.json\\repositories\\jsonterraintilesetrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\rendering\\staticgraphicrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\rendering\\staticgraphicrenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|c:\\users\\pablo\\desktop\\github\\artes-arcanas\\monogameclient\\src\\laa.monogame.client\\rendering\\graphictextureprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{94893333-90B1-4556-8C93-44E60E531102}|src\\Laa.Monogame.Client\\Laa.Monogame.Client.csproj|solutionrelative:src\\laa.monogame.client\\rendering\\graphictextureprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -60,11 +68,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
+              "Title": "MonsterWorldService.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Server\\World\\MonsterWorldService.cs",
+              "RelativeDocumentMoniker": "src\\Laa.Server\\World\\MonsterWorldService.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Server\\World\\MonsterWorldService.cs",
+              "RelativeToolTip": "src\\Laa.Server\\World\\MonsterWorldService.cs",
+              "ViewState": "AgIAADkAAAAAAAAAAAAawEsAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-08T03:19:03.872Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "PlayerEntity.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\World\\PlayerEntity.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\World\\PlayerEntity.cs",
@@ -77,7 +98,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "ServerHost.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Server\\Networking\\ServerHost.cs",
               "RelativeDocumentMoniker": "src\\Laa.Server\\Networking\\ServerHost.cs",
@@ -85,11 +106,12 @@
               "RelativeToolTip": "src\\Laa.Server\\Networking\\ServerHost.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAHAAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-08T00:06:04.305Z"
+              "WhenOpened": "2025-12-08T00:06:04.305Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "DebugTextRenderer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\DebugTextRenderer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\DebugTextRenderer.cs",
@@ -97,11 +119,12 @@
               "RelativeToolTip": "src\\Laa.Monogame.Client\\Rendering\\DebugTextRenderer.cs",
               "ViewState": "AgIAADIAAAAAAAAAAAAAAB0AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-06T19:18:05.792Z"
+              "WhenOpened": "2025-12-06T19:18:05.792Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 8,
               "Title": "HudPaperDollWidget.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\UI\\HudPaperDollWidget.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\UI\\HudPaperDollWidget.cs",
@@ -109,11 +132,12 @@
               "RelativeToolTip": "src\\Laa.Monogame.Client\\UI\\HudPaperDollWidget.cs",
               "ViewState": "AgIAABoAAAAAAAAAAAAAACUAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-06T18:02:09.46Z"
+              "WhenOpened": "2025-12-06T18:02:09.46Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "MapTransformer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Content.Json\\Internal\\MapTransformer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Content.Json\\Internal\\MapTransformer.cs",
@@ -121,11 +145,12 @@
               "RelativeToolTip": "src\\Laa.Content.Json\\Internal\\MapTransformer.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAawB0AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-06T06:29:30.377Z"
+              "WhenOpened": "2025-12-06T06:29:30.377Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "ServerCommandDecoder.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Networking\\ServerCommandDecoder.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Networking\\ServerCommandDecoder.cs",
@@ -137,19 +162,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Game1.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Game1.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Game1.cs",
-              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Game1.cs",
-              "RelativeToolTip": "src\\Laa.Monogame.Client\\Game1.cs",
-              "ViewState": "AgIAAAQMAAAAAAAAAAAuwBEMAAAwAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Game1.cs*",
+              "RelativeToolTip": "src\\Laa.Monogame.Client\\Game1.cs*",
+              "ViewState": "AgIAAJIAAAAAAAAAAAAAAFIAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-06T01:57:57.668Z"
+              "WhenOpened": "2025-12-06T01:57:57.668Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\Tools\\AtlasBuilder\\Program.cs",
               "RelativeDocumentMoniker": "..\\Tools\\AtlasBuilder\\Program.cs",
@@ -161,7 +187,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "TerrainRenderer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\TerrainRenderer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\TerrainRenderer.cs",
@@ -169,11 +195,12 @@
               "RelativeToolTip": "src\\Laa.Monogame.Client\\Rendering\\TerrainRenderer.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAAADMAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T16:05:40.577Z"
+              "WhenOpened": "2025-12-05T16:05:40.577Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "JsonTerrainTileSetRepository.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
               "RelativeDocumentMoniker": "src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
@@ -181,11 +208,12 @@
               "RelativeToolTip": "src\\Laa.Content.Json\\Repositories\\JsonTerrainTileSetRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T06:26:09.236Z"
+              "WhenOpened": "2025-12-05T06:26:09.236Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "GraphicTextureProvider.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\GraphicTextureProvider.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\GraphicTextureProvider.cs",
@@ -193,23 +221,38 @@
               "RelativeToolTip": "src\\Laa.Monogame.Client\\Rendering\\GraphicTextureProvider.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAawCIAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T05:35:31.504Z"
+              "WhenOpened": "2025-12-05T05:35:31.504Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 1,
               "Title": "StaticGraphicRenderer.cs",
               "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
               "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
               "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
               "RelativeToolTip": "src\\Laa.Monogame.Client\\Rendering\\StaticGraphicRenderer.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAawEsAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAACkAAAAAAAAAAAAuwEEAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T05:35:29.833Z"
+              "WhenOpened": "2025-12-05T05:35:29.833Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 2,
+              "Title": "MonsterRenderer.cs",
+              "DocumentMoniker": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\MonsterRenderer.cs",
+              "RelativeDocumentMoniker": "src\\Laa.Monogame.Client\\Rendering\\MonsterRenderer.cs",
+              "ToolTip": "C:\\Users\\Pablo\\Desktop\\GitHub\\Artes-Arcanas\\MonoGameClient\\src\\Laa.Monogame.Client\\Rendering\\MonsterRenderer.cs",
+              "RelativeToolTip": "src\\Laa.Monogame.Client\\Rendering\\MonsterRenderer.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAawDoAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-08T04:38:33.555Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "MonoGame.Content.Builder.Task.targets",
               "DocumentMoniker": "C:\\Users\\Pablo\\.nuget\\packages\\monogame.content.builder.task\\3.8.4.1\\build\\MonoGame.Content.Builder.Task.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\.nuget\\packages\\monogame.content.builder.task\\3.8.4.1\\build\\MonoGame.Content.Builder.Task.targets",

@@ -1,8 +1,9 @@
+using Laa.Protocol;
+using Laa.Server.Accounts;
+using Laa.Server.World;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Laa.Protocol;
-using Laa.Server.Accounts;
 
 namespace Laa.Server.Networking;
 
@@ -12,6 +13,8 @@ public sealed class ServerHost
     private const int Port = 7667;
     private const int ReceiveBufferSize = 4096;
     private readonly AccountStore _accounts = new(Path.Combine(AppContext.BaseDirectory, "accounts"));
+    private readonly MonsterWorldService _monsterWorld = new(AppContext.BaseDirectory);
+    private readonly MapCollisionService _mapCollision = new(AppContext.BaseDirectory);
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
@@ -199,10 +202,22 @@ public sealed class ServerHost
 
     private async Task HandleEnterWorldAsync(NetworkStream stream, ReadOnlyMemory<byte> payload, CancellationToken cancellationToken)
     {
-        var name = Encoding.UTF8.GetString(payload.Span);
-        Console.WriteLine($"[SERVER] EnterWorld requested for '{name}'.");
-        var packet = PacketWriter.Write(MessageId.EnterWorldResponse, Array.Empty<byte>());
-        await stream.WriteAsync(packet, cancellationToken);
+        if (payload.IsEmpty)
+        {
+            await SendErrorAsync(stream, 1, "Payload de ingreso inválido.", cancellationToken);
+            return;
+        }
+
+        var mapId = payload.Span[0];
+        var name = Encoding.UTF8.GetString(payload.Span[1..]);
+        Console.WriteLine($"[SERVER] EnterWorld requested for '{name}' on map {mapId}.");
+
+        var response = PacketWriter.Write(MessageId.EnterWorldResponse, Array.Empty<byte>());
+        await stream.WriteAsync(response, cancellationToken);
+
+        var snapshot = _monsterWorld.BuildSnapshotPayload(mapId);
+        var snapshotPacket = PacketWriter.Write(MessageId.EntitySnapshot, snapshot);
+        await stream.WriteAsync(snapshotPacket, cancellationToken);
     }
 
     private static async Task HandlePingAsync(NetworkStream stream, ReadOnlyMemory<byte> payload, CancellationToken cancellationToken)
@@ -274,6 +289,11 @@ public sealed class ServerHost
             return false;
         }
 
+        if (CountBits(perkMask) != 3)
+        {
+            return false;
+        }
+
         if (!reader.TryReadByte(out var str) || !reader.TryReadByte(out var con) || !reader.TryReadByte(out var intel) ||
             !reader.TryReadByte(out var wis) || !reader.TryReadByte(out var dex))
         {
@@ -309,6 +329,17 @@ public sealed class ServerHost
             Inventory: new List<CharacterItem>(),
             Spells: new List<CharacterSpell>());
         return true;
+    }
+
+    private static int CountBits(uint value)
+    {
+        var count = 0;
+        while (value != 0)
+        {
+            value &= value - 1;
+            count++;
+        }
+        return count;
     }
 
     private static byte[] BuildCharacterListPayload(List<CharacterRecord> characters)

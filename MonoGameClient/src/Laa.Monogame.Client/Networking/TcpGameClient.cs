@@ -1,6 +1,6 @@
+using Laa.Protocol;
 using System.Net.Sockets;
 using System.Text;
-using Laa.Protocol;
 
 namespace Laa.Monogame.Client.Networking;
 

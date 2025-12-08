@@ -1,4 +1,3 @@
-using System;
 using Laa.Content.Core.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

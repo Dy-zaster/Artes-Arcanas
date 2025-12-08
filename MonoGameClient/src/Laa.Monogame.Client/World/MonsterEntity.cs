@@ -1,4 +1,3 @@
-using System;
 using Laa.Content.Core.Monsters;
 using Microsoft.Xna.Framework;
 
@@ -23,6 +22,10 @@ public sealed class MonsterEntity : IWorldEntity
         AnimationKey = animationKey ?? throw new ArgumentNullException(nameof(animationKey));
         Action = MonsterAction.Idle;
         FacingSeed = id;
+        Direction = 0;
+        Mirror = false;
+        Health = descriptor.AverageHp;
+        MaxHealth = descriptor.AverageHp;
     }
 
     public int Id { get; }
@@ -39,9 +42,26 @@ public sealed class MonsterEntity : IWorldEntity
 
     public int FacingSeed { get; }
 
+    public byte Direction { get; private set; }
+
+    public bool Mirror { get; private set; }
+
+    public ushort Health { get; private set; }
+
+    public ushort MaxHealth { get; private set; }
+
     public void SetAction(MonsterAction action)
     {
         Action = action;
+    }
+
+    public void SetState(byte direction, bool mirror, MonsterAction action, ushort health, ushort maxHealth)
+    {
+        Direction = direction;
+        Mirror = mirror;
+        Action = action;
+        Health = health;
+        MaxHealth = maxHealth == 0 ? (ushort)1 : maxHealth;
     }
 
     public void SetPosition(Vector2 position)

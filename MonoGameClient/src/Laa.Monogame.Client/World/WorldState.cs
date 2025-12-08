@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Laa.Monogame.Client.World;
 
 public sealed class WorldState

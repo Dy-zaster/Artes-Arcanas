@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Laa.Content.Core.Animations;
 
 public sealed record AnimationDocument(IReadOnlyList<AnimationEntry> Animations);

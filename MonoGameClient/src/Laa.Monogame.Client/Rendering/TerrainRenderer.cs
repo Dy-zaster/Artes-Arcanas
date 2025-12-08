@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using Laa.Content.Core.Maps;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,7 +18,7 @@ public sealed class TerrainRenderer : IDisposable
     private const int VariationStrideY = SheetTileHeight * VariationRows;
     private const int LiquidTerrainStart = 28;
     private const float EdgeThicknessRatio = 0.35f;
-    private const float LiquidAnimationSpeed = 4f;
+    private const float LiquidAnimationSpeed = 7f;
 
     private static readonly string[] TerrainSheetCandidates =
     {

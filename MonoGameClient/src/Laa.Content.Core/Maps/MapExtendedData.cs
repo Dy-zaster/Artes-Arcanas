@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Laa.Content.Core.Maps;
 
 public sealed record MapExtendedData(

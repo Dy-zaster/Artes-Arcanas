@@ -1,5 +1,3 @@
-using System;
-
 namespace Laa.Content.Json.Internal;
 
 using System.IO;

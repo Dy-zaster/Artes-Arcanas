@@ -1,5 +1,3 @@
-using System;
-
 namespace Laa.Monogame.Client.Rendering;
 
 [Flags]

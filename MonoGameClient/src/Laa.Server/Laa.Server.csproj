@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="../Laa.Protocol/Laa.Protocol.csproj" />
+    <ProjectReference Include="../Laa.Content.Core/Laa.Content.Core.csproj" />
+    <ProjectReference Include="../Laa.Content.Json/Laa.Content.Json.csproj" />
   </ItemGroup>
 
   <ItemGroup>

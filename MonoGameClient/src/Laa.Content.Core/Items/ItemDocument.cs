@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Laa.Content.Core.Items;
 
 public sealed record ItemDocument(

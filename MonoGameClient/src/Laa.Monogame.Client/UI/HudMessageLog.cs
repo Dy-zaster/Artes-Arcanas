@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Laa.Monogame.Client.UI;
 
 public sealed class HudMessageLog

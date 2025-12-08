@@ -1,17 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using Laa.Content.Core.Commerce;
-using Laa.Content.Core.Graphics;
-using Laa.Content.Core.Items;
-using Laa.Content.Core.Mappings;
-using Laa.Content.Core.Monsters;
-using Laa.Content.Core.Maps;
 using Laa.Content.Core.Repositories;
-using Laa.Content.Core.Spells;
 using Laa.Content.Json.Repositories;
+using System.Text.Json;
 
 namespace Laa.Monogame.Client.Content;
 

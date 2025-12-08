@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using Laa.Content.Core.Animations;
 using Laa.Content.Core.Commerce;
 using Laa.Content.Core.Graphics;
@@ -20,6 +15,8 @@ using Laa.Protocol;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Buffers.Binary;
+using System.Text;
 
 namespace Laa.Monogame.Client;
 
@@ -56,6 +53,10 @@ public class Game1 : Game
     private KeyboardState _previousKeyboard;
     private MouseState _previousMouse;
     private IReadOnlyList<StaticGraphic> _sortedStaticGraphics = Array.Empty<StaticGraphic>();
+    private IReadOnlyList<StaticGraphic> _floorStaticGraphics = Array.Empty<StaticGraphic>();
+    private IReadOnlyList<StaticGraphic> _overlayStaticGraphics = Array.Empty<StaticGraphic>();
+    private bool[,] _collisionGrid = new bool[0, 0];
+    private readonly List<StaticGraphic> _overlayBuffer = new();
     private readonly WorldState _worldState = new();
     private UiManager? _uiManager;
     private UiPanel? _uiHudPanel;
@@ -81,7 +82,7 @@ public class Game1 : Game
     private HudQuickActionWidget? _hudQuickActionWidget;
     private UiLabel? _uiMapNameLabel;
     private string _welcomeMessage =
-        "Bienvenido al mundo de Artes Arcanas\nEl servidor permite usar varios avatares al mismo tiempo.";
+        "Bienvenido al mundo de Artes Arcanas";
     private Vector2 _welcomeMessagePosition = new(16f, 96f);
     private UiLabel? _uiHudHintLabel;
     private UiLabel? _uiHudStatsLabel;
@@ -590,8 +591,17 @@ public class Game1 : Game
         }
 
         _terrainRenderer.Draw(_spriteBatch, _activeMap, _camera, _tilePalette, gameTime);
+        var mapHeightTiles = _activeMap?.Terrain.Count ?? 0;
+        _staticGraphicRenderer?.Draw(_spriteBatch, _floorStaticGraphics, _camera, mapHeightTiles);
         DrawMonsters();
-        _staticGraphicRenderer?.Draw(_spriteBatch, _sortedStaticGraphics, _camera);
+        var overlayList = _overlayStaticGraphics;
+        if (_playerEntity is not null)
+        {
+            var ptX = (int)(_playerEntity.Position.X / TileWidth);
+            var ptY = (int)(_playerEntity.Position.Y / TileHeight) - 1;
+            overlayList = FilterOverlaysForPlayer(ptX, ptY);
+        }
+        _staticGraphicRenderer?.Draw(_spriteBatch, overlayList, _camera, mapHeightTiles);
         DrawAnimationPreview();
         _overlayRenderer?.Draw(_spriteBatch, _activeMap, _camera, _overlayLayers);
         DrawResourceBars();
@@ -754,6 +764,181 @@ public class Game1 : Game
         return next < 0 ? next + modulo : next;
     }
 
+    private void BuildStaticLayersAndCollision()
+    {
+        if (_activeMap is null)
+        {
+            _floorStaticGraphics = Array.Empty<StaticGraphic>();
+            _overlayStaticGraphics = Array.Empty<StaticGraphic>();
+            _collisionGrid = new bool[0, 0];
+            return;
+        }
+
+        var width = _activeMap.Terrain.FirstOrDefault()?.Count ?? 0;
+        var height = _activeMap.Terrain.Count;
+        _collisionGrid = new bool[width, height];
+
+        var floors = new List<StaticGraphic>();
+        var overlays = new List<StaticGraphic>();
+
+        foreach (var graphic in _sortedStaticGraphics)
+        {
+            var descriptor = ResolveGraphicDescriptor(graphic);
+            var type = descriptor?.Type ?? 0;
+
+            if (type >= 2)
+            {
+                floors.Add(graphic); // pisos/puentes debajo de sprites
+            }
+            else
+            {
+                overlays.Add(graphic); // normales/techos sobre sprites
+            }
+
+            if (descriptor is not null)
+            {
+                ApplyOccupiedMask(graphic, descriptor);
+            }
+        }
+
+        _floorStaticGraphics = floors;
+        _overlayStaticGraphics = overlays;
+
+        ApplyTerrainCollision();
+    }
+
+    private GraphicDescriptor? ResolveGraphicDescriptor(StaticGraphic graphic)
+    {
+        if (_graphicsCatalog is null)
+        {
+            return null;
+        }
+
+        var index = graphic.CodeFlags & 0x03FF;
+        if (index < 0 || index >= _graphicsCatalog.Descriptors.Count)
+        {
+            return null;
+        }
+
+        return _graphicsCatalog.Descriptors[index];
+    }
+
+    private IReadOnlyList<StaticGraphic> FilterOverlaysForPlayer(int playerTileX, int playerTileY)
+    {
+        _overlayBuffer.Clear();
+        foreach (var graphic in _overlayStaticGraphics)
+        {
+            var descriptor = ResolveGraphicDescriptor(graphic);
+            if (descriptor is null)
+            {
+                _overlayBuffer.Add(graphic);
+                continue;
+            }
+
+            if (descriptor.Type == 1 && IsTileHiddenByGraphic(graphic, descriptor, playerTileX, playerTileY))
+            {
+                continue; // hide this roof when player is under it
+            }
+
+            _overlayBuffer.Add(graphic);
+        }
+
+        return _overlayBuffer;
+    }
+
+    private bool IsTileHiddenByGraphic(StaticGraphic graphic, GraphicDescriptor descriptor, int tileX, int tileY)
+    {
+        var baseX = graphic.X - 4;
+        var baseY = graphic.Y - descriptor.AlignY;
+        if (tileX < baseX || tileX >= baseX + 8)
+        {
+            return false;
+        }
+
+        var relX = tileX - baseX;
+        var relY = tileY - baseY;
+        if (relY < 0 || relY >= descriptor.HiddenMask.Count)
+        {
+            return false;
+        }
+
+        var mask = descriptor.HiddenMask[relY];
+        return (mask & (1 << relX)) != 0;
+    }
+
+    private void ApplyOccupiedMask(StaticGraphic graphic, GraphicDescriptor descriptor)
+    {
+        var baseX = graphic.X - 4;
+        var baseY = graphic.Y - descriptor.AlignY;
+        for (var row = 0; row < descriptor.OccupiedMask.Count; row++)
+        {
+            var mask = descriptor.OccupiedMask[row];
+            if (mask == 0)
+            {
+                continue;
+            }
+
+            for (var bit = 0; bit < 8; bit++)
+            {
+                if ((mask & (1 << bit)) == 0)
+                {
+                    continue;
+                }
+
+                var tx = baseX + bit;
+                var ty = baseY + row;
+                if (tx >= 0 && ty >= 0 && tx < _collisionGrid.GetLength(0) && ty < _collisionGrid.GetLength(1))
+                {
+                    _collisionGrid[tx, ty] = true;
+                }
+            }
+        }
+    }
+
+    private void ApplyTerrainCollision()
+    {
+        if (_activeMap is null)
+        {
+            return;
+        }
+
+        for (var y = 0; y < _activeMap.Terrain.Count; y++)
+        {
+            var row = _activeMap.Terrain[y];
+            for (var x = 0; x < row.Count; x++)
+            {
+                if (IsTerrainBlocked(row[x]))
+                {
+                    _collisionGrid[x, y] = true;
+                }
+            }
+        }
+    }
+
+    private static bool IsTerrainBlocked(byte code)
+    {
+        // Liquid / fire tiles (28..31) are treated as non-walkable for now.
+        return code >= 28;
+    }
+
+    private bool IsBlocked(Vector2 position)
+    {
+        if (_collisionGrid.Length == 0)
+        {
+            return false;
+        }
+
+        var tileX = (int)(position.X / TileWidth);
+        var tileY = (int)(position.Y / TileHeight) - 1;
+
+        if (tileX < 0 || tileY < 0 || tileX >= _collisionGrid.GetLength(0) || tileY >= _collisionGrid.GetLength(1))
+        {
+            return true;
+        }
+
+        return _collisionGrid[tileX, tileY];
+    }
+
     private void UpdateAvatarPreviewAnimation()
     {
         if (!_avatarPreviewMode || _animationPreview is null || _animationMapping is null)
@@ -825,6 +1010,9 @@ public class Game1 : Game
         if (_activeMap?.Graphics is null || _activeMap.Graphics.Count == 0)
         {
             _sortedStaticGraphics = Array.Empty<StaticGraphic>();
+            _floorStaticGraphics = Array.Empty<StaticGraphic>();
+            _overlayStaticGraphics = Array.Empty<StaticGraphic>();
+            _collisionGrid = new bool[0, 0];
             return;
         }
 
@@ -832,6 +1020,8 @@ public class Game1 : Game
             .OrderBy(g => ((g.Y << 9) | g.SubLayer))
             .ThenBy(g => g.X)
             .ToArray();
+
+        BuildStaticLayersAndCollision();
     }
 
     private void RebuildMonsterEntities()
@@ -1821,8 +2011,8 @@ public class Game1 : Game
                 PortraitIndex = _hudPortraitIndex,
                 Offset = HudPoint(432f, 86f)
             };
-        _hudPortraitWidget.PortraitClicked += HandlePortraitClicked;
-        hudPanel.AddWidget(_hudPortraitWidget);
+            _hudPortraitWidget.PortraitClicked += HandlePortraitClicked;
+            hudPanel.AddWidget(_hudPortraitWidget);
 
             _hudPaperDollWidget = new HudPaperDollWidget(_uiSpriteLibrary);
             _hudPaperDollWidget.GridModeChanged += mode => UpdateHudTabLabels();
@@ -2154,7 +2344,10 @@ public class Game1 : Game
             }
 
             var bytes = Encoding.UTF8.GetBytes(name.Name);
-            await _tcpClient!.SendAsync(MessageId.EnterWorldRequest, bytes);
+            var payload = new byte[1 + bytes.Length];
+            payload[0] = name.MapId;
+            Array.Copy(bytes, 0, payload, 1, bytes.Length);
+            await _tcpClient!.SendAsync(MessageId.EnterWorldRequest, payload);
         });
     }
 
@@ -2247,9 +2440,9 @@ public class Game1 : Game
             return;
         }
 
-        if (_createSelectedPerks.Count > 3)
+        if (_createSelectedPerks.Count != 3)
         {
-            UpdateCreateStatus("Máximo 3 pericias.", Color.OrangeRed);
+            UpdateCreateStatus("Debes elegir exactamente 3 pericias.", Color.OrangeRed);
             return;
         }
 
@@ -2383,6 +2576,9 @@ public class Game1 : Game
                 break;
             case MessageId.EnterWorldResponse:
                 HandleEnterWorldResponse();
+                break;
+            case MessageId.EntitySnapshot:
+                HandleEntitySnapshot(packet.Payload.Span);
                 break;
             case MessageId.ErrorResponse:
                 HandleErrorResponse(packet.Payload.Span);
@@ -2541,6 +2737,60 @@ public class Game1 : Game
         SetStage(ClientStage.InGame);
     }
 
+    private void HandleEntitySnapshot(ReadOnlySpan<byte> payload)
+    {
+        if (_monsterDocument is null || payload.Length < 1)
+        {
+            return;
+        }
+
+        var count = payload[0];
+        var offset = 1;
+        var entrySize = 16;
+        var required = offset + count * entrySize;
+        if (payload.Length < required)
+        {
+            Console.Error.WriteLine($"[NET] EntitySnapshot truncated: expected {required} bytes, got {payload.Length}.");
+            return;
+        }
+
+        var monsters = new List<MonsterEntity>(count);
+        var lookup = _monsterDocument.Monsters
+            .GroupBy(m => (int)m.TypeId)
+            .ToDictionary(g => g.Key, g => g.First());
+
+        for (var i = 0; i < count; i++)
+        {
+            var slice = payload.Slice(offset + i * entrySize, entrySize);
+            var entityId = BinaryPrimitives.ReadInt32LittleEndian(slice);
+            var typeId = BinaryPrimitives.ReadUInt16LittleEndian(slice.Slice(4));
+            var mapId = slice[6]; // reserved for future use
+            var x = slice[7];
+            var y = slice[8];
+            var direction = slice[9];
+            var mirror = slice[10] != 0;
+            var action = (MonsterAction)slice[11];
+            var hp = BinaryPrimitives.ReadUInt16LittleEndian(slice.Slice(12));
+            var maxHp = BinaryPrimitives.ReadUInt16LittleEndian(slice.Slice(14));
+
+            if (!lookup.TryGetValue(typeId, out var descriptor))
+            {
+                continue;
+            }
+
+            var key = $"m{typeId}";
+            var anchor = new Vector2(
+                (x + 0.5f) * TileWidth,
+                (y + 1f) * TileHeight);
+            var entity = new MonsterEntity(entityId, descriptor, anchor, key);
+            entity.SetState(direction, mirror, action, hp, maxHp);
+            monsters.Add(entity);
+        }
+
+        _worldState.SetMonsters(monsters);
+        _monsterRenderer?.SetMonsters(_worldState.Monsters);
+    }
+
     private void UpdatePlayerMovement(GameTime gameTime, KeyboardState keyboard)
     {
         if (_playerEntity is null || _camera is null || gameTime is null)
@@ -2580,7 +2830,14 @@ public class Game1 : Game
         const float speed = 90f; // pixels per second
         var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
         var displacement = move * speed * delta;
-        var next = _playerEntity.Position + displacement;
+        var current = _playerEntity.Position;
+        var next = current + displacement;
+
+        if (IsBlocked(next))
+        {
+            _playerAction = MonsterAction.Idle;
+            next = current;
+        }
 
         // Clamp to map bounds
         if (_activeMap is not null)
@@ -3283,7 +3540,7 @@ public class Game1 : Game
             return;
         }
 
-        _monsterRenderer.Draw(_spriteBatch, _camera);
+        _monsterRenderer.Draw(_spriteBatch, _camera, _activeMap);
 
         if (_playerEntity is not null && _animationTextureProvider is not null)
         {
@@ -3329,8 +3586,21 @@ public class Game1 : Game
             transformMatrix: camera.GetViewMatrix());
 
         var effects = _playerMirror ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-        spriteBatch.Draw(_playerAnimation.Texture, position2, frame.Source, Color.White, 0f, Vector2.Zero, Vector2.One, effects, 0.7f);
+        var depth = ComputeEntityDepth(player.Position);
+        spriteBatch.Draw(_playerAnimation.Texture, position2, frame.Source, Color.White, 0f, Vector2.Zero, Vector2.One, effects, depth);
         spriteBatch.End();
+    }
+
+    private float ComputeEntityDepth(Vector2 position)
+    {
+        var mapHeight = _activeMap?.Terrain.Count ?? 0;
+        if (mapHeight == 0)
+        {
+            return 0.65f;
+        }
+
+        var yNorm = Math.Clamp(position.Y / (mapHeight * TileHeight), 0f, 1f);
+        return MathHelper.Clamp(0.45f + yNorm * 0.4f, 0.45f, 0.9f);
     }
 
     private string BuildInfoPanelText()

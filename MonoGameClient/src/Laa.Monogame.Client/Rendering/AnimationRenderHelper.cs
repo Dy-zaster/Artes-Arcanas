@@ -1,5 +1,3 @@
-using System;
-using Laa.Content.Core.Animations;
 using Microsoft.Xna.Framework;
 
 namespace Laa.Monogame.Client.Rendering;

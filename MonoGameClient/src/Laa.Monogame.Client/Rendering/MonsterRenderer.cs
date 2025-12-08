@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Laa.Content.Core.Maps;
 using Laa.Monogame.Client.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -45,7 +43,7 @@ public sealed class MonsterRenderer
                 continue;
             }
 
-            var directionIndex = PickDirection(animation, entity.FacingSeed);
+            var directionIndex = PickDirection(animation, entity.Direction, entity.FacingSeed);
             var frameDuration = DefaultFrameDuration;
             var sprite = new MonsterSprite(entity, animation, directionIndex, frameDuration);
             _sprites.Add(sprite);
@@ -68,7 +66,7 @@ public sealed class MonsterRenderer
         }
     }
 
-public void Draw(SpriteBatch spriteBatch, Camera2D camera)
+    public void Draw(SpriteBatch spriteBatch, Camera2D camera, MapDocument? map)
     {
         if (spriteBatch is null) throw new ArgumentNullException(nameof(spriteBatch));
         if (camera is null) throw new ArgumentNullException(nameof(camera));
@@ -76,6 +74,8 @@ public void Draw(SpriteBatch spriteBatch, Camera2D camera)
         {
             return;
         }
+
+        var mapHeight = map?.Terrain.Count ?? 0;
 
         spriteBatch.Begin(
             samplerState: SamplerState.PointClamp,
@@ -99,7 +99,7 @@ public void Draw(SpriteBatch spriteBatch, Camera2D camera)
                 Vector2.Zero,
                 Vector2.One,
                 sprite.Mirror ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-                0.65f);
+                ComputeDepth(sprite.Anchor, mapHeight));
         }
 
         spriteBatch.End();
@@ -110,14 +110,16 @@ public void Draw(SpriteBatch spriteBatch, Camera2D camera)
         return entity.AnimationKey;
     }
 
-    private static int PickDirection(AnimationTexture animation, int seed)
+    private static int PickDirection(AnimationTexture animation, int direction, int seed)
     {
         if (animation.Directions.Count == 0)
         {
             return 0;
         }
 
-        var preferred = Math.Abs(seed) % animation.Directions.Count;
+        var preferred = direction >= 0 && direction < animation.Directions.Count
+            ? direction
+            : Math.Abs(seed) % animation.Directions.Count;
         if (HasUsableFrames(animation.Directions[preferred]))
         {
             return preferred;
@@ -137,6 +139,13 @@ public void Draw(SpriteBatch spriteBatch, Camera2D camera)
     private static bool HasUsableFrames(AnimationDirectionSlice direction)
     {
         return direction.Frames.Any(frame => frame.Source != Rectangle.Empty);
+    }
+
+    private static float ComputeDepth(Vector2 anchor, int mapHeightTiles)
+    {
+        if (mapHeightTiles <= 0) return 0.6f;
+        var yNorm = Math.Clamp(anchor.Y / (mapHeightTiles * 16f), 0f, 1f);
+        return MathHelper.Clamp(0.4f + yNorm * 0.4f, 0.4f, 0.92f);
     }
 
     private sealed class MonsterSprite
@@ -160,7 +169,7 @@ public void Draw(SpriteBatch spriteBatch, Camera2D camera)
             Animation = animation;
             DirectionIndex = directionIndex;
             _frameDuration = frameDuration;
-            _mirror = (entity.FacingSeed & 1) != 0;
+            _mirror = entity.Mirror;
             var direction = animation.Directions[directionIndex];
             _allFrames = BuildFrames(direction, Enumerable.Range(0, direction.Frames.Count).ToArray());
             _actionFrames = new Dictionary<MonsterAction, List<int>>
